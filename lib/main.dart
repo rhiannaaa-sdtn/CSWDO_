@@ -1,4 +1,5 @@
 import 'package:cwsdo/views/food_assistance.dart';
+import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_test/pages/home_page.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomePage(),
         '/foodassistance': (context) => const Foodassistance(),
-        // '/FoodAssistance': (context) => const Medical(),
+        '/medicalassistance': (context) => const MedicalAssistance(),
       },
       // home: const HomePage(),
     );
