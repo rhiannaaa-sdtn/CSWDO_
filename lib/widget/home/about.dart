@@ -144,7 +144,7 @@ class Row1 extends StatelessWidget {
                                   //     color: Colors.red)
                                 )),
                                 backgroundColor: const WidgetStatePropertyAll(
-                                    Color.fromARGB(125, 125, 125, 125))),
+                                    Color.fromRGBO(78, 115, 222, 1))),
                             child: Row(
                               children: [
                                 Image.asset("images/Caduceus.png",
@@ -152,6 +152,7 @@ class Row1 extends StatelessWidget {
                                 const Text(
                                     style: TextStyle(
                                       fontSize: 30,
+                                      color: Color.fromRGBO(255, 255, 255, 1),
                                       fontWeight: FontWeight.bold,
                                     ),
                                     'Medical Assistance')
@@ -183,13 +184,14 @@ class Row1 extends StatelessWidget {
                                   //     color: Colors.red)
                                 )),
                                 backgroundColor: const WidgetStatePropertyAll(
-                                    Color.fromARGB(125, 125, 125, 125))),
+                                    Color.fromRGBO(78, 115, 222, 1))),
                             child: Row(
                               children: [
                                 Image.asset("images/Food.png",
                                     width: 100, height: 100, fit: BoxFit.cover),
                                 const Text(
                                     style: TextStyle(
+                                      color: Color.fromRGBO(255, 255, 255, 1),
                                       fontSize: 30,
                                       fontWeight: FontWeight.bold,
                                     ),

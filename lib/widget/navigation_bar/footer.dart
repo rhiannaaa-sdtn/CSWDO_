@@ -9,7 +9,7 @@ class Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 150,
-      color: const Color.fromRGBO(125, 125, 125, 125),
+      color: const Color.fromRGBO(78, 115, 222, 1),
       child: Row(
         mainAxisAlignment:
             MainAxisAlignment.center, //Center Column contents vertically,
