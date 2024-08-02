@@ -23,7 +23,16 @@ class NavBar extends StatelessWidget {
         for (int i = 0; i < navTitles.length; i++)
           Padding(
             padding: const EdgeInsets.only(right: 30),
-            child: CustomWidg(txt: navTitles[i], fsize: 30),
+            child: GestureDetector(
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => const Footer()),
+                  // );
+                  Navigator.pushNamed(context, navLinks[i]);
+                },
+                child: CustomWidg(txt: navTitles[i], fsize: 30)),
           )
       ]),
     );

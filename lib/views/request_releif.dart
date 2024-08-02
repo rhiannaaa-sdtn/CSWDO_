@@ -359,12 +359,124 @@ class _NeedsInputState extends State<NeedsInput> {
   }
 }
 
-class CredentialsInput extends StatelessWidget {
+class CredentialsInput extends StatefulWidget {
   const CredentialsInput({super.key});
 
   @override
+  State<CredentialsInput> createState() => _CredentialsInputState();
+}
+
+class _CredentialsInputState extends State<CredentialsInput> {
+  @override
   Widget build(BuildContext context) {
-    return (const Text('adsads'));
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 50, top: 50, bottom: 30),
+      child: Container(
+        width: MediaQuery.of(context).size.height * 1.5,
+        // alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.grey,
+                blurRadius: 5,
+                spreadRadius: 1,
+                offset: Offset(4, 4)),
+          ],
+          color: const Color.fromARGB(255, 246, 246, 246),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.all(25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 40),
+                child: Text('Upload Credentials',
+                    style: TextStyle(
+                        color: Color.fromRGBO(78, 115, 222, 1), fontSize: 30)),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Column(
+                    children: [
+                      PicField(
+                        txtID: 'Valid ID *',
+                        txtdesc: 'Clear Picure of your Valid ID',
+                      ),
+                      PicField(
+                        txtID: 'Indigency *',
+                        txtdesc: 'Clear Picure of your Indigency',
+                      ),
+                      PicField(
+                        txtID: 'Authorization Letter (if applicable) *',
+                        txtdesc: '(.jp .png .pdf)',
+                      ),
+                      // PicField(),
+                    ],
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PicField extends StatefulWidget {
+  final String txtdesc, txtID;
+  // final String txtinput;
+
+  const PicField({
+    super.key,
+    required this.txtdesc,
+    required this.txtID,
+  });
+  @override
+  State<PicField> createState() => _PicFieldState();
+}
+
+class _PicFieldState extends State<PicField> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(size: 100, Icons.image),
+        // Image.asset("images/SpcLogo.png",
+        //     width: 100, height: 100, fit: BoxFit.cover),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.txtID),
+            Text(widget.txtdesc),
+            ElevatedButton(
+              style: ButtonStyle(
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    // side: const BorderSide(
+                    //     color: Colors.red)
+                  )),
+                  backgroundColor: const WidgetStatePropertyAll(
+                      Color.fromRGBO(78, 115, 222, 1))),
+              child: const Row(
+                children: [
+                  Text(
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color.fromRGBO(255, 255, 255, 1),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      'Upload File')
+                ],
+              ),
+              onPressed: () {},
+            ),
+          ],
+        )
+      ],
+    );
   }
 }
 

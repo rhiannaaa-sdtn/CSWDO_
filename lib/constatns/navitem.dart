@@ -5,3 +5,10 @@ List<String> navTitles = [
   "Request Relief",
   "Admin",
 ];
+List<String> navLinks = [
+  "/",
+  "/",
+  "/",
+  "/requestrelief",
+  "Admin",
+];
