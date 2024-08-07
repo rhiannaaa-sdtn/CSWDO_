@@ -43,3 +43,67 @@ class CustomWidg extends StatelessWidget {
     );
   }
 }
+
+class Sbutton extends StatelessWidget {
+  final String btndesc, btnlogo, btnlink;
+
+  const Sbutton(
+      {super.key,
+      required this.btndesc,
+      required this.btnlogo,
+      required this.btnlink});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Alert Dialog Example'),
+                content: Text(btnlink),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text('OK')),
+                ],
+              );
+            });
+      },
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment:
+                MainAxisAlignment.start, //Center Column contents vertically,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(btnlogo, width: 40, height: 40, fit: BoxFit.cover),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                btndesc,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.white),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          const Divider(
+            color: Colors.white,
+            thickness: 2,
+            // endIndent: 300,
+          ),
+        ],
+      ),
+    );
+  }
+}

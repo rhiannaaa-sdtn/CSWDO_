@@ -1,3 +1,4 @@
+import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:cwsdo/views/food_assistance.dart';
 import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/views/request_releif.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/foodassistance': (context) => const Foodassistance(),
         '/medicalassistance': (context) => const MedicalAssistance(),
         '/requestrelief': (context) => const RequestRelief(),
+        '/sidebar': (context) => const Sidebar(),
       },
       // home: const HomePage(),
     );
