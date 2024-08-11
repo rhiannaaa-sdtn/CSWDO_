@@ -1,6 +1,8 @@
+import 'package:cwsdo/widget/admin/addBeneficiary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/admin/side.dart';
+import 'package:cwsdo/widget/admin/totaltally.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -26,10 +28,6 @@ class _SidebarState extends State<Sidebar> {
               ),
               width: 240.0,
               child: const Sidebuttons(),
-              // rgb(22, 97, 152)
-              // height: MediaQuery.of(context).size.height * .9,
-              // height: double.infinity,
-              // color: Color.fromARGB(255, 190, 39, 39),
             ),
 
             // main content
@@ -37,18 +35,15 @@ class _SidebarState extends State<Sidebar> {
               flex: 5,
               child: Container(
                 width: 100.0,
-                // height: MediaQuery.of(context).size.height * .9,
-                // height: double.infinity,
                 color: const Color.fromARGB(255, 227, 232, 238),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     //  header
                     Expanded(
                       flex: 1,
                       child: Container(
-                        // width: 100.0,
-                        // height: MediaQuery.of(context).size.height * .9,
-                        // height: double.infinity,
                         color: const Color.fromARGB(255, 22, 97, 152),
                         child: const Padding(
                           padding: EdgeInsets.only(right: 50),
@@ -96,11 +91,8 @@ class _SidebarState extends State<Sidebar> {
                     Expanded(
                       flex: 6,
                       child: Container(
-                        // width: 100.0,
-                        // height: MediaQuery.of(context).size.height * .9,
-                        // height: double.infinity,
-                        // color: const Color.fromARGB(255, 170, 231, 29),
-                        child: const TotalTally(),
+                        // child: const TotalTally(),
+                        child: const Addbeneficiary(),
                       ),
                     )
                   ],
@@ -109,129 +101,6 @@ class _SidebarState extends State<Sidebar> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class TotalTally extends StatelessWidget {
-  const TotalTally({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: 100,
-        left: 100,
-      ),
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Total Tally',
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-          ),
-          Column(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * .7,
-                    color: Colors.amber,
-                    child: Text('asda'),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * .7,
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 50, top: 30, bottom: 30, right: 50),
-                          child: TableList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class TableList extends StatelessWidget {
-  const TableList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(),
-      columnWidths: <int, TableColumnWidth>{
-        0: FixedColumnWidth(MediaQuery.of(context).size.width * .12),
-        1: FixedColumnWidth(MediaQuery.of(context).size.width * .12),
-        2: FixedColumnWidth(MediaQuery.of(context).size.width * .12),
-        3: FixedColumnWidth(MediaQuery.of(context).size.width * .12),
-        4: FixedColumnWidth(MediaQuery.of(context).size.width * .12),
-      },
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: <TableRow>[
-        TableRow(
-          children: <Widget>[
-            Tcell(
-              txtcell: 'txtcell',
-              heightcell: 50,
-              colorcell: Color.fromRGBO(227, 232, 238, 1),
-            ),
-            Tcell(
-              txtcell: 'txtcell',
-              heightcell: 50,
-              colorcell: Color.fromRGBO(227, 232, 238, 1),
-            ),
-            Tcell(
-              txtcell: 'txtcell',
-              heightcell: 50,
-              colorcell: Color.fromRGBO(227, 232, 238, 1),
-            ),
-            Tcell(
-              txtcell: 'txtcell',
-              heightcell: 50,
-              colorcell: Color.fromRGBO(227, 232, 238, 1),
-            ),
-            Tcell(
-              txtcell: 'txtcell',
-              heightcell: 50,
-              colorcell: Color.fromRGBO(227, 232, 238, 1),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class Tcell extends StatelessWidget {
-  final String txtcell;
-  final double heightcell;
-  final Color colorcell;
-  const Tcell(
-      {super.key,
-      required this.txtcell,
-      required this.heightcell,
-      required this.colorcell});
-
-  @override
-  Widget build(BuildContext context) {
-    return TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Container(
-        height: heightcell,
-        color: colorcell,
-        child: Text(txtcell),
       ),
     );
   }

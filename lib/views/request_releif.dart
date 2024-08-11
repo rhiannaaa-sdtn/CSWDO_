@@ -246,7 +246,7 @@ class PersonalInput extends StatelessWidget {
                 txtinput: 'Enter address',
               ),
               InptBX(
-                txtdesc: 'Mobile Barangay',
+                txtdesc: 'Barangay',
                 txtinput: 'Enter Barangay',
               ),
             ],
@@ -474,49 +474,6 @@ class _PicFieldState extends State<PicField> {
               onPressed: () {},
             ),
           ],
-        )
-      ],
-    );
-  }
-}
-
-class InptBX extends StatelessWidget {
-  final String txtdesc, txtinput;
-  // final String txtinput;
-
-  const InptBX({
-    super.key,
-    required this.txtdesc,
-    required this.txtinput,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(txtdesc,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                    decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  hintText: txtinput,
-                )),
-              ),
-            ],
-          ),
         )
       ],
     );
