@@ -96,10 +96,8 @@ List<dynamic> bgrgyList = [
   ['80', 'Bagong Pook IV-A'],
 ];
 
-
-
-// 
-// 
+//
+//
 // BARANGAY II-B
 // BARANGAY II-C
 // BARANGAY II-D
@@ -176,3 +174,17 @@ List<dynamic> bgrgyList = [
 // BARANGAY STA.ANA
 // BARANGAY STA.CRUZ
 // BARANGAY STO. CRISTO
+
+List<TableEntry> entries = [
+  TableEntry(name: 'John Doe', age: 28, email: 'john.doe@example.com'),
+  TableEntry(name: 'Jane Smith', age: 34, email: 'jane.smith@example.com'),
+  // Add more entries as needed
+];
+
+class TableEntry {
+  final String name;
+  final int age;
+  final String email;
+
+  TableEntry({required this.name, required this.age, required this.email});
+}

@@ -2,6 +2,7 @@ import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:cwsdo/views/food_assistance.dart';
 import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/views/request_releif.dart';
+import 'package:cwsdo/widget/admin/reliefRequest.dart';
 // import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_test/pages/home_page.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/medicalassistance': (context) => const MedicalAssistance(),
         '/requestrelief': (context) => const RequestRelief(),
         '/sidebar': (context) => const Sidebar(),
+        // '/try': (context) => NumberInputWidget(),
       },
       // home: const HomePage(),
     );

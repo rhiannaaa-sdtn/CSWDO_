@@ -267,7 +267,7 @@ class NeedsInput extends StatefulWidget {
 class _NeedsInputState extends State<NeedsInput> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController _dateController = TextEditingController();
+    TextEditingController dateController = TextEditingController();
     Future<void> _selectedDate() async {
       DateTime? _picked = await showDatePicker(
           context: context,
@@ -276,9 +276,14 @@ class _NeedsInputState extends State<NeedsInput> {
           lastDate: DateTime(2100));
 
       if (_picked != null) {
-        setState(() {
-          _dateController.text = _picked.toString().split(" ")[0];
-        });
+        debugPrint(_picked.toString().split(" ")[0]);
+        // setState(() {
+        //   dateController.text = '_picked.toString().split(" ")[0]';
+        // });
+
+        dateController.text = _picked.toString().split(" ")[0];
+
+        // dateController.text = 'asdsadsadsadkshagfjsahgfhkjsdagflksagkfjhgsalkf';
       }
     }
 
@@ -333,7 +338,7 @@ class _NeedsInputState extends State<NeedsInput> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        controller: _dateController,
+                        controller: dateController,
                         decoration: const InputDecoration(
                             labelText: 'Date',
                             filled: true,

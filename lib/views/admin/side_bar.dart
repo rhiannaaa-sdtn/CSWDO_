@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/admin/side.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
+import 'package:cwsdo/widget/admin/reliefRequest.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -91,9 +92,9 @@ class _SidebarState extends State<Sidebar> {
                     Expanded(
                       flex: 6,
                       child: Container(
-                        // child: const TotalTally(),
-                        child: const Addbeneficiary(),
-                      ),
+                          // child: const TotalTally(),
+                          // child: const Addbeneficiary(),
+                          child: Reliefrequest()),
                     )
                   ],
                 ),
