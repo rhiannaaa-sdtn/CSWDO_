@@ -1,9 +1,11 @@
 import 'package:cwsdo/widget/custom/custom_widget.dart';
 import 'package:cwsdo/widget/navigation_bar/footer.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/navigation_bar/navigation_bar.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
+import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/';
 
 const List<String> list = <String>['Food Assitance', 'Medical Assistance'];
 
@@ -367,7 +369,6 @@ class _NeedsInputState extends State<NeedsInput> {
 class CredentialsInput extends StatefulWidget {
   const CredentialsInput({super.key});
 
-  @override
   State<CredentialsInput> createState() => _CredentialsInputState();
 }
 
@@ -443,6 +444,23 @@ class PicField extends StatefulWidget {
 }
 
 class _PicFieldState extends State<PicField> {
+  Future<void> _selectedFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+
+      // print(file.path);
+      // print(file.name);
+      // print(file.bytes);
+      // print(file.size);
+      // print(file.extension);
+      // print(file.path);
+    } else {
+      // User canceled the picker
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -476,7 +494,9 @@ class _PicFieldState extends State<PicField> {
                       'Upload File')
                 ],
               ),
-              onPressed: () {},
+              onPressed: () {
+                _selectedFile();
+              },
             ),
           ],
         )
