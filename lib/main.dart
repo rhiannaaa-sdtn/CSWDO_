@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_test/pages/home_page.dart';
 import 'package:cwsdo/views/home_page.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() {
   usePathUrlStrategy();

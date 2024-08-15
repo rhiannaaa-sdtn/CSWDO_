@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "425863721054",
+    "project_id": "cswdo-app",
+    "storage_bucket": "cswdo-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425863721054:android:3283877ca2946983c744cf",
+        "android_client_info": {
+          "package_name": "com.cswdo.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAResQi7k-_E_ZEIMdiw-UtPz9fekkItWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
