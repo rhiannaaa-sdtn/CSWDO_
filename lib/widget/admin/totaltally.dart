@@ -36,7 +36,7 @@ class TotalTally extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width * .78,
                     color: Colors.white,
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

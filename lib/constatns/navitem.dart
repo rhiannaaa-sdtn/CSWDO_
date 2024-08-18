@@ -10,7 +10,7 @@ List<String> navLinks = [
   "/",
   "/",
   "/requestrelief",
-  "Admin",
+  "/",
 ];
 
 List<dynamic> bgrgyList = [

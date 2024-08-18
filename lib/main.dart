@@ -2,6 +2,7 @@ import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:cwsdo/views/food_assistance.dart';
 import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/views/request_releif.dart';
+import 'package:cwsdo/views/login.dart';
 import 'package:cwsdo/widget/admin/reliefRequest.dart';
 // import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,11 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() {
+import 'package:firebase_auth/firebase_auth.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   usePathUrlStrategy();
   runApp(const MyApp());
 }
@@ -32,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/medicalassistance': (context) => const MedicalAssistance(),
         '/requestrelief': (context) => const RequestRelief(),
         '/sidebar': (context) => const Sidebar(),
+        '/login': (context) => LoginScreen(),
         // '/try': (context) => NumberInputWidget(),
       },
       // home: const HomePage(),

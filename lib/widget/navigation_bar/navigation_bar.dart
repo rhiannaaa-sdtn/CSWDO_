@@ -1,6 +1,11 @@
 import 'package:cwsdo/constatns/navitem.dart';
+import 'package:cwsdo/views/admin/side_bar.dart';
+import 'package:cwsdo/views/login.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/custom/custom_widget.dart';
+import 'dart:developer';
+
+// import 'package:flutter/src/widgets/navigator.dart';
 // import 'package:cswdo/constants/navitem.dart';
 
 class NavBar extends StatelessWidget {
@@ -30,7 +35,13 @@ class NavBar extends StatelessWidget {
                   //   MaterialPageRoute(
                   //       builder: (context) => const Footer()),
                   // );
-                  Navigator.pushNamed(context, navLinks[i]);
+                  if (navTitles[i] == 'Admin') //
+                  {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const Sidebar()),
+                    );
+                  } else
+                    Navigator.pushNamed(context, navLinks[i]);
                 },
                 child: CustomWidg(txt: navTitles[i], fsize: 30)),
           )
