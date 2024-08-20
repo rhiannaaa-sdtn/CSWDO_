@@ -457,13 +457,12 @@ class _CredentialsInputState extends State<CredentialsInput> {
 
   Future<void> _clearFile() async {
     widget.fullname.text = '';
-
-    widget.mobileNum.text;
-    widget.dob.text;
-    widget.govtid.text;
-    widget.familynum.text;
-    widget.address.text;
-    widget.barangay.text;
+    widget.mobileNum.text = '';
+    widget.dob.text = '';
+    widget.govtid.text = '';
+    widget.familynum.text = '';
+    widget.address.text = '';
+    widget.barangay.text = '';
   }
 
   @override
