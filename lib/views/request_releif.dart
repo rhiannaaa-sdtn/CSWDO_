@@ -1,3 +1,4 @@
+import 'package:cwsdo/services/firestore.dart';
 import 'package:cwsdo/widget/custom/custom_widget.dart';
 import 'package:cwsdo/widget/navigation_bar/footer.dart';
 // import 'package:flutter/cupertino.dart';
@@ -9,9 +10,14 @@ import 'package:file_picker/file_picker.dart';
 
 const List<String> list = <String>['Food Assitance', 'Medical Assistance'];
 
-class RequestRelief extends StatelessWidget {
+class RequestRelief extends StatefulWidget {
   const RequestRelief({super.key});
 
+  @override
+  State<RequestRelief> createState() => _RequestReliefState();
+}
+
+class _RequestReliefState extends State<RequestRelief> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +63,7 @@ class RequestRelief extends StatelessWidget {
     );
   }
 }
+
 // child: Padding(
 //                 padding: const EdgeInsets.only(left: 200, top: 50),
 
@@ -101,9 +108,21 @@ class FoodHEad extends StatelessWidget {
   }
 }
 
-class FormRegister extends StatelessWidget {
+class FormRegister extends StatefulWidget {
   const FormRegister({super.key});
 
+  @override
+  State<FormRegister> createState() => _FormRegisterState();
+}
+
+class _FormRegisterState extends State<FormRegister> {
+  final TextEditingController _fullname = TextEditingController();
+  final TextEditingController _mobilenum = TextEditingController();
+  final TextEditingController _dob = TextEditingController();
+  final TextEditingController _govtid = TextEditingController();
+  final TextEditingController _familynum = TextEditingController();
+  final TextEditingController _address = TextEditingController();
+  final TextEditingController _barangay = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -163,18 +182,35 @@ class FormRegister extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Expanded(
+              Expanded(
                 flex: 5,
                 child:
                     // color: Colors.amber,
-                    const PersonalInput(),
+                    PersonalInput(
+                        fullname: _fullname,
+                        mobilenum: _mobilenum,
+                        dob: _dob,
+                        govtid: _govtid,
+                        familynum: _familynum,
+                        address: _address,
+                        barangay: _barangay),
               ),
               Expanded(
                 flex: 5,
                 child: Container(
                   // color: const Color.fromARGB(255, 30, 58, 73),
-                  child: const Column(
-                    children: [NeedsInput(), CredentialsInput()],
+                  child: Column(
+                    children: [
+                      NeedsInput(),
+                      CredentialsInput(
+                          fullname: _fullname,
+                          mobileNum: _mobilenum,
+                          dob: _dob,
+                          govtid: _govtid,
+                          familynum: _familynum,
+                          address: _address,
+                          barangay: _barangay)
+                    ],
                   ),
                 ),
               ),
@@ -190,9 +226,30 @@ class FormRegister extends StatelessWidget {
   }
 }
 
-class PersonalInput extends StatelessWidget {
-  const PersonalInput({super.key});
+class PersonalInput extends StatefulWidget {
+  final TextEditingController fullname,
+      mobilenum,
+      dob,
+      govtid,
+      familynum,
+      address,
+      barangay;
+  PersonalInput({
+    super.key,
+    required this.fullname,
+    required this.mobilenum,
+    required this.dob,
+    required this.govtid,
+    required this.familynum,
+    required this.address,
+    required this.barangay,
+  });
 
+  @override
+  State<PersonalInput> createState() => _PersonalInputState();
+}
+
+class _PersonalInputState extends State<PersonalInput> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -211,45 +268,52 @@ class PersonalInput extends StatelessWidget {
           ],
           color: const Color.fromARGB(255, 246, 246, 246),
         ),
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(25.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(bottom: 40),
                 child: Text('Personal information',
                     style: TextStyle(
                         color: Color.fromRGBO(78, 115, 222, 1), fontSize: 30)),
               ),
-              InptBX(
+              InptBox(
                 txtdesc: 'Full name',
                 txtinput: 'Enter Full Name',
+                inputText: widget.fullname,
               ),
-              InptBX(
+              InptBox(
                 txtdesc: 'Mobile Number',
                 txtinput: 'Enter Mobile Number',
+                inputText: widget.mobilenum,
               ),
-              InptBX(
+              InptBox(
                 txtdesc: 'Date of Birth',
                 txtinput: 'Enter Date of Birth',
+                inputText: widget.dob,
               ),
-              InptBX(
+              InptBox(
                 txtdesc: 'Any Govt. Issued ID',
                 txtinput: 'Enter any Govt. Issued ID',
+                inputText: widget.govtid,
               ),
-              InptBX(
+              InptBox(
                 txtdesc: 'Number of Family Member',
                 txtinput: 'Enter Number of Family Member',
+                inputText: widget.familynum,
               ),
-              InptBX(
+              InptBox(
                 txtdesc: 'Address',
                 txtinput: 'Enter address',
+                inputText: widget.address,
               ),
-              InptBX(
+              InptBox(
                 txtdesc: 'Barangay',
                 txtinput: 'Enter Barangay',
+                inputText: widget.barangay,
               ),
             ],
           ),
@@ -367,12 +431,41 @@ class _NeedsInputState extends State<NeedsInput> {
 }
 
 class CredentialsInput extends StatefulWidget {
-  const CredentialsInput({super.key});
+  final TextEditingController fullname,
+      mobileNum,
+      dob,
+      govtid,
+      familynum,
+      address,
+      barangay;
+
+  const CredentialsInput(
+      {super.key,
+      required this.fullname,
+      required this.mobileNum,
+      required this.dob,
+      required this.govtid,
+      required this.familynum,
+      required this.address,
+      required this.barangay});
 
   State<CredentialsInput> createState() => _CredentialsInputState();
 }
 
 class _CredentialsInputState extends State<CredentialsInput> {
+  final FireStoreService fireStoreService = FireStoreService();
+
+  Future<void> _clearFile() async {
+    widget.fullname.text = '';
+
+    widget.mobileNum.text;
+    widget.dob.text;
+    widget.govtid.text;
+    widget.familynum.text;
+    widget.address.text;
+    widget.barangay.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -391,37 +484,72 @@ class _CredentialsInputState extends State<CredentialsInput> {
           ],
           color: const Color.fromARGB(255, 246, 246, 246),
         ),
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(25.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(bottom: 40),
                 child: Text('Upload Credentials',
                     style: TextStyle(
                         color: Color.fromRGBO(78, 115, 222, 1), fontSize: 30)),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                   child: Column(
                     children: [
                       PicField(
-                        txtID: 'Valid ID *',
-                        txtdesc: 'Clear Picure of your Valid ID',
-                      ),
+                          txtID: 'Valid ID *',
+                          txtdesc: 'Clear Picure of your Valid ID',
+                          fullname: widget.fullname),
                       PicField(
-                        txtID: 'Indigency *',
-                        txtdesc: 'Clear Picure of your Indigency',
-                      ),
+                          txtID: 'Indigency *',
+                          txtdesc: 'Clear Picure of your Indigency',
+                          fullname: widget.fullname),
                       PicField(
-                        txtID: 'Authorization Letter (if applicable) *',
-                        txtdesc: '(.jp .png .pdf)',
-                      ),
+                          txtID: 'Authorization Letter (if applicable) *',
+                          txtdesc: '(.jp .png .pdf)',
+                          fullname: widget.fullname),
                       // PicField(),
                     ],
-                  ))
+                  )),
+              ElevatedButton(
+                style: ButtonStyle(
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      // side: const BorderSide(
+                      //     color: Colors.red)
+                    )),
+                    backgroundColor: const WidgetStatePropertyAll(
+                        Color.fromRGBO(78, 115, 222, 1))),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        'Submit')
+                  ],
+                ),
+                onPressed: () {
+                  fireStoreService.addRequest(
+                      widget.fullname.text,
+                      widget.mobileNum.text,
+                      widget.dob.text,
+                      widget.govtid.text,
+                      widget.familynum.text,
+                      widget.address.text,
+                      widget.barangay.text);
+
+                  _clearFile();
+                },
+              )
             ],
           ),
         ),
@@ -432,18 +560,23 @@ class _CredentialsInputState extends State<CredentialsInput> {
 
 class PicField extends StatefulWidget {
   final String txtdesc, txtID;
+  final TextEditingController fullname;
+
   // final String txtinput;
 
   const PicField({
     super.key,
     required this.txtdesc,
     required this.txtID,
+    required this.fullname,
   });
   @override
   State<PicField> createState() => _PicFieldState();
 }
 
 class _PicFieldState extends State<PicField> {
+  final FireStoreService fireStoreService = FireStoreService();
+
   Future<void> _selectedFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -495,7 +628,9 @@ class _PicFieldState extends State<PicField> {
                 ],
               ),
               onPressed: () {
-                _selectedFile();
+                // fireStoreService.addRequest(
+                //     widget.fullname.text, 00, 'dateOfBirth');
+                // _selectedFile();
               },
             ),
           ],

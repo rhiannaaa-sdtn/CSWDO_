@@ -108,16 +108,22 @@ class Sbutton extends StatelessWidget {
   }
 }
 
-class InptBX extends StatelessWidget {
+class InptBox extends StatefulWidget {
   final String txtdesc, txtinput;
+  final TextEditingController inputText;
   // final String txtinput;
 
-  const InptBX({
+  const InptBox({
     super.key,
     required this.txtdesc,
     required this.txtinput,
+    required this.inputText,
   });
+  @override
+  State<InptBox> createState() => _InptBoxState();
+}
 
+class _InptBoxState extends State<InptBox> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -130,18 +136,19 @@ class InptBX extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(txtdesc,
+                child: Text(widget.txtdesc,
                     style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                    controller: widget.inputText,
                     decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  hintText: txtinput,
-                )),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      hintText: widget.txtinput,
+                    )),
               ),
             ],
           ),
