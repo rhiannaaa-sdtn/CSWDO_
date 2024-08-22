@@ -537,16 +537,38 @@ class _CredentialsInputState extends State<CredentialsInput> {
                   ],
                 ),
                 onPressed: () {
-                  fireStoreService.addRequest(
-                      widget.fullname.text,
-                      widget.mobileNum.text,
-                      widget.dob.text,
-                      widget.govtid.text,
-                      widget.familynum.text,
-                      widget.address.text,
-                      widget.barangay.text);
+                  if (widget.fullname.text == '' ||
+                      widget.mobileNum.text == '' ||
+                      widget.dob.text == '' ||
+                      widget.govtid.text == '' ||
+                      widget.familynum.text == '' ||
+                      widget.address.text == '' ||
+                      widget.barangay.text == '') {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Input Error'),
+                            content: Text('Please Fillup all fields'),
+                            actions: <Widget>[
+                              TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('OK')),
+                            ],
+                          );
+                        });
+                  } else {
+                    fireStoreService.addRequest(
+                        widget.fullname.text,
+                        widget.mobileNum.text,
+                        widget.dob.text,
+                        widget.govtid.text,
+                        widget.familynum.text,
+                        widget.address.text,
+                        widget.barangay.text);
 
-                  _clearFile();
+                    _clearFile();
+                  }
                 },
               )
             ],
