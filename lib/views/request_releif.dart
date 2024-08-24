@@ -478,23 +478,53 @@ class _CredentialsInputState extends State<CredentialsInput> {
             );
           });
     } else {
+      // ------------------------file1----------------------
+      final FirebaseStorage _storage1 = FirebaseStorage.instance;
       var path1 = 'files/${pickedfile1!.name}';
-      var path2 = 'files/${pickedfile2!.name}';
-      var file1 = File(pickedfile1!.path!);
-      var file2 = File(pickedfile2!.path!);
+      // var file3 = File(pickedfile3!.path!);
+      Uint8List? fileBytes1 = pickedfile1!.bytes;
+      if (fileBytes1 != null) {
+        // Create a reference to the Firebase Storage location
+        Reference storageRef =
+            _storage1.ref().child('uploads/${pickedfile3!.name}');
+        // Upload the file
+        UploadTask uploadTask = storageRef.putData(fileBytes1);
+        // Monitor upload progress
+        uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+          double progress = snapshot.bytesTransferred.toDouble() /
+              snapshot.totalBytes.toDouble();
+          print('Upload is ${progress * 100} % complete.');
+        });
+        // Await completion
+        await uploadTask;
+        // Get the download URL
+        String downloadURL = await storageRef.getDownloadURL();
+        print('File uploaded successfully! Download URL: $downloadURL');
+      }
 
-      var ref1 = FirebaseStorage.instance.ref().child(path1);
-      var ref2 = FirebaseStorage.instance.ref().child(path2);
-
-      uploadTask = ref1.putFile(file1);
-      var snapshot1 = await uploadTask!.whenComplete(() {});
-      var urlDownload1 = await snapshot1.ref.getDownloadURL();
-      print('Download Link: $urlDownload1');
-
-      uploadTask = ref2.putFile(file2);
-      var snapshot2 = await uploadTask!.whenComplete(() {});
-      var urlDownload2 = await snapshot2.ref.getDownloadURL();
-      print('Download Link: $urlDownload2');
+      // -------------file2-------------
+      final FirebaseStorage _storage2 = FirebaseStorage.instance;
+      var path2 = 'files/${pickedfile3!.name}';
+      // var file3 = File(pickedfile3!.path!);
+      Uint8List? fileBytes2 = pickedfile2!.bytes;
+      if (fileBytes2 != null) {
+        // Create a reference to the Firebase Storage location
+        Reference storageRef =
+            _storage2.ref().child('uploads/${pickedfile2!.name}');
+        // Upload the file
+        UploadTask uploadTask = storageRef.putData(fileBytes2);
+        // Monitor upload progress
+        uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+          double progress = snapshot.bytesTransferred.toDouble() /
+              snapshot.totalBytes.toDouble();
+          print('Upload is ${progress * 100} % complete.');
+        });
+        // Await completion
+        await uploadTask;
+        // Get the download URL
+        String downloadURL = await storageRef.getDownloadURL();
+        print('File uploaded successfully! Download URL: $downloadURL');
+      }
     }
 
     //----------------------- authletter---------------------------
