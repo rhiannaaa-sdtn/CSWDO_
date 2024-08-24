@@ -1,6 +1,9 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:cwsdo/services/firestore.dart';
 import 'package:cwsdo/widget/custom/custom_widget.dart';
 import 'package:cwsdo/widget/navigation_bar/footer.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/navigation_bar/navigation_bar.dart';
@@ -138,7 +141,7 @@ class _FormRegisterState extends State<FormRegister> {
         //       spreadRadius: 1,
         //       offset: Offset(4, 4)),
         // ],
-        color: const Color.fromRGBO(227, 232, 238, 1),
+        color: Color.fromRGBO(227, 232, 238, 1),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -173,7 +176,7 @@ class _FormRegisterState extends State<FormRegister> {
             ),
           ),
           const Padding(
-            padding: const EdgeInsets.only(left: 50, right: 50, top: 50),
+            padding: EdgeInsets.only(left: 50, right: 50, top: 50),
             child: Text(
               'Fill out the form for Registration',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
@@ -201,7 +204,7 @@ class _FormRegisterState extends State<FormRegister> {
                   // color: const Color.fromARGB(255, 30, 58, 73),
                   child: Column(
                     children: [
-                      NeedsInput(),
+                      const NeedsInput(),
                       CredentialsInput(
                           fullname: _fullname,
                           mobileNum: _mobilenum,
@@ -234,7 +237,7 @@ class PersonalInput extends StatefulWidget {
       familynum,
       address,
       barangay;
-  PersonalInput({
+  const PersonalInput({
     super.key,
     required this.fullname,
     required this.mobilenum,
@@ -269,7 +272,7 @@ class _PersonalInputState extends State<PersonalInput> {
           color: const Color.fromARGB(255, 246, 246, 246),
         ),
         child: Padding(
-          padding: EdgeInsets.all(25.0),
+          padding: const EdgeInsets.all(25.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,13 +451,151 @@ class CredentialsInput extends StatefulWidget {
       required this.familynum,
       required this.address,
       required this.barangay});
-
+  @override
   State<CredentialsInput> createState() => _CredentialsInputState();
 }
 
 class _CredentialsInputState extends State<CredentialsInput> {
   final FireStoreService fireStoreService = FireStoreService();
+  PlatformFile? pickedfile1;
+  PlatformFile? pickedfile2;
+  PlatformFile? pickedfile3;
+  UploadTask? uploadTask;
 
+  Future _onSubmit() async {
+    if (pickedfile1 == null || pickedfile2 == null) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Credential Error'),
+              content: const Text('Please Add Valid ID and indigency file'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK')),
+              ],
+            );
+          });
+    } else {
+      var path1 = 'files/${pickedfile1!.name}';
+      var path2 = 'files/${pickedfile2!.name}';
+      var file1 = File(pickedfile1!.path!);
+      var file2 = File(pickedfile2!.path!);
+
+      var ref1 = FirebaseStorage.instance.ref().child(path1);
+      var ref2 = FirebaseStorage.instance.ref().child(path2);
+
+      uploadTask = ref1.putFile(file1);
+      var snapshot1 = await uploadTask!.whenComplete(() {});
+      var urlDownload1 = await snapshot1.ref.getDownloadURL();
+      print('Download Link: $urlDownload1');
+
+      uploadTask = ref2.putFile(file2);
+      var snapshot2 = await uploadTask!.whenComplete(() {});
+      var urlDownload2 = await snapshot2.ref.getDownloadURL();
+      print('Download Link: $urlDownload2');
+    }
+
+    //----------------------- authletter---------------------------
+    if (pickedfile3 != null) {
+      final FirebaseStorage _storage3 = FirebaseStorage.instance;
+      var path3 = 'files/${pickedfile3!.name}';
+      // var file3 = File(pickedfile3!.path!);
+      Uint8List? fileBytes3 = pickedfile3!.bytes;
+      if (fileBytes3 != null) {
+        // Create a reference to the Firebase Storage location
+        Reference storageRef =
+            _storage3.ref().child('uploads/${pickedfile3!.name}');
+        // Upload the file
+        UploadTask uploadTask = storageRef.putData(fileBytes3);
+        // Monitor upload progress
+        uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+          double progress = snapshot.bytesTransferred.toDouble() /
+              snapshot.totalBytes.toDouble();
+          print('Upload is ${progress * 100} % complete.');
+        });
+        // Await completion
+        await uploadTask;
+        // Get the download URL
+        String downloadURL = await storageRef.getDownloadURL();
+        print('File uploaded successfully! Download URL: $downloadURL');
+      }
+    }
+
+    if (widget.fullname.text == '' ||
+        widget.mobileNum.text == '' ||
+        widget.dob.text == '' ||
+        widget.govtid.text == '' ||
+        widget.familynum.text == '' ||
+        widget.address.text == '' ||
+        widget.barangay.text == '') {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Input Error'),
+              content: const Text('Please Fillup all fields'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK')),
+              ],
+            );
+          });
+    } else {
+      fireStoreService.addRequest(
+        widget.fullname.text,
+        widget.mobileNum.text,
+        widget.dob.text,
+        widget.govtid.text,
+        widget.familynum.text,
+        widget.address.text,
+        widget.barangay.text,
+        'files/${pickedfile1!.name}',
+        'files/${pickedfile2!.name}',
+        pickedfile3 != null ? 'files/${pickedfile3!.name}' : '',
+        // pickedfile3 != null ? pickedfile1.path : '',
+        // pickedfile2.path,
+        // pickedfile3.path,
+      );
+// if (pickedfile3 != null) {}
+
+      _clearFile();
+    }
+  }
+
+  Future<void> _selectedFile(String type) async {
+    // FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (type == 'type1') {
+      final result = await FilePicker.platform.pickFiles();
+      // widget.result = result;
+      if (result == null) return;
+      setState(() {
+        pickedfile1 = result.files.first;
+      });
+    }
+    if (type == 'type2') {
+      final result = await FilePicker.platform.pickFiles();
+      // widget.result = result;
+      if (result == null) return;
+      setState(() {
+        pickedfile2 = result.files.first;
+      });
+    }
+    if (type == 'type3') {
+      final result = await FilePicker.platform.pickFiles();
+      // widget.result = result;
+      if (result == null) return;
+      setState(() {
+        pickedfile3 = result.files.first;
+      });
+    }
+  }
+
+  final file1 = '';
+  final file2 = '';
+  final file3 = '';
   Future<void> _clearFile() async {
     widget.fullname.text = '';
     widget.mobileNum.text = '';
@@ -484,7 +625,7 @@ class _CredentialsInputState extends State<CredentialsInput> {
           color: const Color.fromARGB(255, 246, 246, 246),
         ),
         child: Padding(
-          padding: EdgeInsets.all(25.0),
+          padding: const EdgeInsets.all(25.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -499,19 +640,130 @@ class _CredentialsInputState extends State<CredentialsInput> {
                   padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                   child: Column(
                     children: [
-                      PicField(
-                          txtID: 'Valid ID *',
-                          txtdesc: 'Clear Picure of your Valid ID',
-                          fullname: widget.fullname),
-                      PicField(
-                          txtID: 'Indigency *',
-                          txtdesc: 'Clear Picure of your Indigency',
-                          fullname: widget.fullname),
-                      PicField(
-                          txtID: 'Authorization Letter (if applicable) *',
-                          txtdesc: '(.jp .png .pdf)',
-                          fullname: widget.fullname),
-                      // PicField(),
+                      // file1
+                      Row(
+                        children: [
+                          Icon(size: 100, Icons.image),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Valid ID *'),
+                              pickedfile1 != null
+                                  ? Text(pickedfile1!.name)
+                                  : Text('Clear Picure of your Valid ID'),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    )),
+                                    backgroundColor:
+                                        const WidgetStatePropertyAll(
+                                            Color.fromRGBO(78, 115, 222, 1))),
+                                child: const Row(
+                                  children: [
+                                    Text(
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromRGBO(255, 255, 255, 1),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        'Upload File'),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  _selectedFile('type1');
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      // file2
+                      Row(
+                        children: [
+                          Icon(size: 100, Icons.image),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Indigency *'),
+                              pickedfile2 != null
+                                  ? Text(pickedfile2!.name)
+                                  : Text('Clear Picure of your Indigency'),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    )),
+                                    backgroundColor:
+                                        const WidgetStatePropertyAll(
+                                            Color.fromRGBO(78, 115, 222, 1))),
+                                child: const Row(
+                                  children: [
+                                    Text(
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromRGBO(255, 255, 255, 1),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        'Upload File'),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  _selectedFile('type2');
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+
+                      // file3
+                      Row(
+                        children: [
+                          Icon(size: 100, Icons.image),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Authorization Letter (if applicable) *'),
+                              pickedfile3 != null
+                                  ? Text(pickedfile3!.name)
+                                  : const Text('(.jpg .png .pdf)'),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    )),
+                                    backgroundColor:
+                                        const WidgetStatePropertyAll(
+                                            Color.fromRGBO(78, 115, 222, 1))),
+                                child: const Row(
+                                  children: [
+                                    Text(
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromRGBO(255, 255, 255, 1),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        'Upload File'),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  _selectedFile('type3');
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ],
                   )),
               ElevatedButton(
@@ -537,38 +789,7 @@ class _CredentialsInputState extends State<CredentialsInput> {
                   ],
                 ),
                 onPressed: () {
-                  if (widget.fullname.text == '' ||
-                      widget.mobileNum.text == '' ||
-                      widget.dob.text == '' ||
-                      widget.govtid.text == '' ||
-                      widget.familynum.text == '' ||
-                      widget.address.text == '' ||
-                      widget.barangay.text == '') {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('Input Error'),
-                            content: Text('Please Fillup all fields'),
-                            actions: <Widget>[
-                              TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: Text('OK')),
-                            ],
-                          );
-                        });
-                  } else {
-                    fireStoreService.addRequest(
-                        widget.fullname.text,
-                        widget.mobileNum.text,
-                        widget.dob.text,
-                        widget.govtid.text,
-                        widget.familynum.text,
-                        widget.address.text,
-                        widget.barangay.text);
-
-                    _clearFile();
-                  }
+                  _onSubmit();
                 },
               )
             ],
@@ -579,87 +800,77 @@ class _CredentialsInputState extends State<CredentialsInput> {
   }
 }
 
-class PicField extends StatefulWidget {
-  final String txtdesc, txtID;
-  final TextEditingController fullname;
+// class PicField extends StatefulWidget {
+//   final String txtdesc, txtID;
+//   final TextEditingController fullname;
+//   // final File result;
 
-  // final String txtinput;
+//   // final String txtinput;
 
-  const PicField({
-    super.key,
-    required this.txtdesc,
-    required this.txtID,
-    required this.fullname,
-  });
-  @override
-  State<PicField> createState() => _PicFieldState();
-}
+//   const PicField({
+//     super.key,
+//     required this.txtdesc,
+//     required this.txtID,
+//     required this.fullname,
+//     // required this.result,
+//   });
+//   @override
+//   State<PicField> createState() => _PicFieldState();
+// }
 
-class _PicFieldState extends State<PicField> {
-  final FireStoreService fireStoreService = FireStoreService();
+// class _PicFieldState extends State<PicField> {
+//   final FireStoreService fireStoreService = FireStoreService();
+//   PlatformFile? pickedfile;
 
-  Future<void> _selectedFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+//   Future<void> _selectedFile() async {
+//     // FilePickerResult? result = await FilePicker.platform.pickFiles();
+//     final result = await FilePicker.platform.pickFiles();
+//     // widget.result = result;
+//     if (result == null) return;
+//     setState(() {
+//       pickedfile = result.files.first;
+//     });
+//   }
 
-    if (result != null) {
-      PlatformFile file = result.files.first;
-
-      // print(file.path);
-      // print(file.name);
-      // print(file.bytes);
-      // print(file.size);
-      // print(file.extension);
-      // print(file.path);
-    } else {
-      // User canceled the picker
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(size: 100, Icons.image),
-        // Image.asset("images/SpcLogo.png",
-        //     width: 100, height: 100, fit: BoxFit.cover),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.txtID),
-            Text(widget.txtdesc),
-            ElevatedButton(
-              style: ButtonStyle(
-                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    // side: const BorderSide(
-                    //     color: Colors.red)
-                  )),
-                  backgroundColor: const WidgetStatePropertyAll(
-                      Color.fromRGBO(78, 115, 222, 1))),
-              child: const Row(
-                children: [
-                  Text(
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color.fromRGBO(255, 255, 255, 1),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      'Upload File')
-                ],
-              ),
-              onPressed: () {
-                // fireStoreService.addRequest(
-                //     widget.fullname.text, 00, 'dateOfBirth');
-                // _selectedFile();
-              },
-            ),
-          ],
-        )
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: [
+//         Icon(size: 100, Icons.image),
+//         Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(widget.txtID),
+//             pickedfile != null ? Text(pickedfile!.name) : Text(widget.txtdesc),
+//             ElevatedButton(
+//               style: ButtonStyle(
+//                   shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(20),
+//                   )),
+//                   backgroundColor: const WidgetStatePropertyAll(
+//                       Color.fromRGBO(78, 115, 222, 1))),
+//               child: const Row(
+//                 children: [
+//                   Text(
+//                       style: TextStyle(
+//                         fontSize: 15,
+//                         color: Color.fromRGBO(255, 255, 255, 1),
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                       'Upload File'),
+//                 ],
+//               ),
+//               onPressed: () {
+//                 _selectedFile();
+//               },
+//             ),
+//           ],
+//         )
+//       ],
+//     );
+//   }
+// }
 
 class DropButton extends StatefulWidget {
   const DropButton({super.key});
