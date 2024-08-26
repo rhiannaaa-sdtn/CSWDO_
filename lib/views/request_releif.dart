@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:cwsdo/services/firestore.dart';
 import 'package:cwsdo/widget/custom/custom_widget.dart';
@@ -337,20 +336,20 @@ class _NeedsInputState extends State<NeedsInput> {
   @override
   Widget build(BuildContext context) {
     TextEditingController dateController = TextEditingController();
-    Future<void> _selectedDate() async {
-      DateTime? _picked = await showDatePicker(
+    Future<void> selectedDate() async {
+      DateTime? picked = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(2100));
 
-      if (_picked != null) {
-        debugPrint(_picked.toString().split(" ")[0]);
+      if (picked != null) {
+        debugPrint(picked.toString().split(" ")[0]);
         // setState(() {
         //   dateController.text = '_picked.toString().split(" ")[0]';
         // });
 
-        dateController.text = _picked.toString().split(" ")[0];
+        dateController.text = picked.toString().split(" ")[0];
 
         // dateController.text = 'asdsadsadsadkshagfjsahgfhkjsdagflksagkfjhgsalkf';
       }
@@ -418,7 +417,7 @@ class _NeedsInputState extends State<NeedsInput> {
                                 borderSide: BorderSide(color: Colors.blue))),
                         readOnly: true,
                         onTap: () {
-                          _selectedDate();
+                          selectedDate();
                         },
                       ),
                     ),
@@ -479,14 +478,14 @@ class _CredentialsInputState extends State<CredentialsInput> {
           });
     } else {
       // ------------------------file1----------------------
-      final FirebaseStorage _storage1 = FirebaseStorage.instance;
+      final FirebaseStorage storage1 = FirebaseStorage.instance;
       var path1 = 'files/${pickedfile1!.name}';
       // var file3 = File(pickedfile3!.path!);
       Uint8List? fileBytes1 = pickedfile1!.bytes;
       if (fileBytes1 != null) {
         // Create a reference to the Firebase Storage location
         Reference storageRef =
-            _storage1.ref().child('uploads/${pickedfile3!.name}');
+            storage1.ref().child('uploads/${pickedfile3!.name}');
         // Upload the file
         UploadTask uploadTask = storageRef.putData(fileBytes1);
         // Monitor upload progress
@@ -503,14 +502,14 @@ class _CredentialsInputState extends State<CredentialsInput> {
       }
 
       // -------------file2-------------
-      final FirebaseStorage _storage2 = FirebaseStorage.instance;
+      final FirebaseStorage storage2 = FirebaseStorage.instance;
       var path2 = 'files/${pickedfile3!.name}';
       // var file3 = File(pickedfile3!.path!);
       Uint8List? fileBytes2 = pickedfile2!.bytes;
       if (fileBytes2 != null) {
         // Create a reference to the Firebase Storage location
         Reference storageRef =
-            _storage2.ref().child('uploads/${pickedfile2!.name}');
+            storage2.ref().child('uploads/${pickedfile2!.name}');
         // Upload the file
         UploadTask uploadTask = storageRef.putData(fileBytes2);
         // Monitor upload progress
@@ -529,14 +528,14 @@ class _CredentialsInputState extends State<CredentialsInput> {
 
     //----------------------- authletter---------------------------
     if (pickedfile3 != null) {
-      final FirebaseStorage _storage3 = FirebaseStorage.instance;
+      final FirebaseStorage storage3 = FirebaseStorage.instance;
       var path3 = 'files/${pickedfile3!.name}';
       // var file3 = File(pickedfile3!.path!);
       Uint8List? fileBytes3 = pickedfile3!.bytes;
       if (fileBytes3 != null) {
         // Create a reference to the Firebase Storage location
         Reference storageRef =
-            _storage3.ref().child('uploads/${pickedfile3!.name}');
+            storage3.ref().child('uploads/${pickedfile3!.name}');
         // Upload the file
         UploadTask uploadTask = storageRef.putData(fileBytes3);
         // Monitor upload progress
@@ -673,15 +672,15 @@ class _CredentialsInputState extends State<CredentialsInput> {
                       // file1
                       Row(
                         children: [
-                          Icon(size: 100, Icons.image),
+                          const Icon(size: 100, Icons.image),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Valid ID *'),
+                              const Text('Valid ID *'),
                               pickedfile1 != null
                                   ? Text(pickedfile1!.name)
-                                  : Text('Clear Picure of your Valid ID'),
+                                  : const Text('Clear Picure of your Valid ID'),
                               ElevatedButton(
                                 style: ButtonStyle(
                                     shape: WidgetStatePropertyAll(
@@ -714,15 +713,15 @@ class _CredentialsInputState extends State<CredentialsInput> {
                       // file2
                       Row(
                         children: [
-                          Icon(size: 100, Icons.image),
+                          const Icon(size: 100, Icons.image),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Indigency *'),
+                              const Text('Indigency *'),
                               pickedfile2 != null
                                   ? Text(pickedfile2!.name)
-                                  : Text('Clear Picure of your Indigency'),
+                                  : const Text('Clear Picure of your Indigency'),
                               ElevatedButton(
                                 style: ButtonStyle(
                                     shape: WidgetStatePropertyAll(
@@ -735,7 +734,7 @@ class _CredentialsInputState extends State<CredentialsInput> {
                                 child: const Row(
                                   children: [
                                     Text(
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 15,
                                           color:
                                               Color.fromRGBO(255, 255, 255, 1),
@@ -756,12 +755,12 @@ class _CredentialsInputState extends State<CredentialsInput> {
                       // file3
                       Row(
                         children: [
-                          Icon(size: 100, Icons.image),
+                          const Icon(size: 100, Icons.image),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Authorization Letter (if applicable) *'),
+                              const Text('Authorization Letter (if applicable) *'),
                               pickedfile3 != null
                                   ? Text(pickedfile3!.name)
                                   : const Text('(.jpg .png .pdf)'),

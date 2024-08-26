@@ -1,9 +1,10 @@
-import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:cwsdo/views/food_assistance.dart';
 import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/views/request_releif.dart';
 import 'package:cwsdo/views/login.dart';
+import 'package:cwsdo/widget/admin/addBeneficiary.dart';
 import 'package:cwsdo/widget/admin/reliefRequest.dart';
+import 'package:cwsdo/widget/admin/totaltally.dart';
 // import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_test/pages/home_page.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,8 +36,11 @@ class MyApp extends StatelessWidget {
         '/foodassistance': (context) => const Foodassistance(),
         '/medicalassistance': (context) => const MedicalAssistance(),
         '/requestrelief': (context) => const RequestRelief(),
-        '/sidebar': (context) => const Sidebar(),
-        '/login': (context) => LoginScreen(),
+        // '/sidebar': (context) => const Sidebar(),
+        '/login': (context) => const LoginScreen(),
+        '/reliefrequest': (context) => const ReliefrequestMain(),
+        '/addbeneficiary': (context) => const AddBeneficiaryMain(),
+        '/totaltally': (context) => const TotalTallyMain(),
         // '/try': (context) => NumberInputWidget(),
       },
       // home: const HomePage(),

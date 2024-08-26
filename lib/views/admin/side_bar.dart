@@ -1,12 +1,9 @@
-import 'package:cwsdo/widget/admin/addBeneficiary.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/admin/side.dart';
-import 'package:cwsdo/widget/admin/totaltally.dart';
-import 'package:cwsdo/widget/admin/reliefRequest.dart';
 
 class Sidebar extends StatefulWidget {
-  const Sidebar({super.key});
+  final Widget content;
+  const Sidebar({super.key, required this.content});
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -94,7 +91,8 @@ class _SidebarState extends State<Sidebar> {
                       child: Container(
                           // child: const TotalTally(),
                           // child: const Addbeneficiary(),
-                          child: Reliefrequest()),
+                          // child: Reliefrequest()
+                          child: widget.content),
                     )
                   ],
                 ),

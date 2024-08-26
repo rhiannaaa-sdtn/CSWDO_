@@ -1,5 +1,20 @@
 import 'package:cwsdo/constatns/navitem.dart';
+import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:flutter/material.dart';
+
+class TotalTallyMain extends StatefulWidget {
+  const TotalTallyMain({super.key});
+
+  @override
+  State<TotalTallyMain> createState() => _TotalTallyMainState();
+}
+
+class _TotalTallyMainState extends State<TotalTallyMain> {
+  @override
+  Widget build(BuildContext context) {
+    return const Sidebar(content: TotalTally());
+  }
+}
 
 class TotalTally extends StatelessWidget {
   const TotalTally({super.key});
@@ -7,7 +22,7 @@ class TotalTally extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 50,
         left: 50,
       ),
@@ -15,123 +30,88 @@ class TotalTally extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Total Tally',
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * .78,
-                    color: const Color.fromARGB(255, 22, 97, 152),
-                    height: 50,
-                    // child: Text('asda'),
+          Container(
+            width: MediaQuery.of(context).size.width * .78,
+            color: const Color.fromARGB(255, 22, 97, 152),
+            height: 50,
+            // child: Text('asda'),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * .60,
+            width: MediaQuery.of(context).size.width * .78,
+            color: Colors.white,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Table(
+                border: TableBorder.all(),
+                columnWidths: <int, TableColumnWidth>{
+                  0: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+                  1: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+                  2: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+                  3: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+                  4: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: <TableRow>[
+                  const TableRow(
+                    children: <Widget>[
+                      TcellHeader(
+                        txtcell: 'BARANGAY NO.',
+                        heightcell: 50,
+                      ),
+                      TcellHeader(
+                        txtcell: 'NAME OF BARANGAY',
+                        heightcell: 50,
+                      ),
+                      TcellHeader(
+                        txtcell: 'TOTAL BENEFICIARY',
+                        heightcell: 50,
+                      ),
+                      TcellHeader(
+                        txtcell: 'FOOD ASSISTANCE',
+                        heightcell: 50,
+                      ),
+                      TcellHeader(
+                        txtcell: 'MEDICAL ASSISTANCE',
+                        heightcell: 50,
+                      ),
+                    ],
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * .78,
-                    color: Colors.white,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Scrollbar(
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 50, top: 30, bottom: 30, right: 50),
-                              child: Column(
-                                children: [
-                                  TableList(),
-                                ],
-                              ),
-                            ),
-                          ),
+                  for (int i = 0; i < bgrgyList.length; i++)
+                    TableRow(
+                      children: <Widget>[
+                        TcellData(
+                          txtcell: bgrgyList[i][0],
+                          heightcell: 50,
+                        ),
+                        TcellData(
+                          txtcell: bgrgyList[i][1],
+                          heightcell: 50,
+                        ),
+                        const TcellData(
+                          txtcell: '2',
+                          heightcell: 50,
+                        ),
+                        const TcellData(
+                          txtcell: '1',
+                          heightcell: 50,
+                        ),
+                        const TcellData(
+                          txtcell: '1',
+                          heightcell: 50,
                         ),
                       ],
                     ),
-                  ),
                 ],
               ),
-            ],
-          )
+            ),
+          ),
         ],
       ),
-    );
-  }
-}
-
-class TableList extends StatelessWidget {
-  const TableList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(),
-      columnWidths: <int, TableColumnWidth>{
-        0: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-        1: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-        2: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-        3: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-        4: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-      },
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: <TableRow>[
-        const TableRow(
-          children: <Widget>[
-            TcellHeader(
-              txtcell: 'BARANGAY NO.',
-              heightcell: 50,
-            ),
-            TcellHeader(
-              txtcell: 'NAME OF BARANGAY',
-              heightcell: 50,
-            ),
-            TcellHeader(
-              txtcell: 'TOTAL BENEFICIARY',
-              heightcell: 50,
-            ),
-            TcellHeader(
-              txtcell: 'FOOD ASSISTANCE',
-              heightcell: 50,
-            ),
-            TcellHeader(
-              txtcell: 'MEDICAL ASSISTANCE',
-              heightcell: 50,
-            ),
-          ],
-        ),
-        for (int i = 0; i < bgrgyList.length; i++)
-          TableRow(
-            children: <Widget>[
-              TcellData(
-                txtcell: bgrgyList[i][0],
-                heightcell: 50,
-              ),
-              TcellData(
-                txtcell: bgrgyList[i][1],
-                heightcell: 50,
-              ),
-              TcellData(
-                txtcell: '2',
-                heightcell: 50,
-              ),
-              TcellData(
-                txtcell: '1',
-                heightcell: 50,
-              ),
-              TcellData(
-                txtcell: '1',
-                heightcell: 50,
-              ),
-            ],
-          ),
-      ],
     );
   }
 }
@@ -155,11 +135,11 @@ class TcellHeader extends StatelessWidget {
       verticalAlignment: TableCellVerticalAlignment.middle,
       child: Container(
         height: heightcell,
-        color: const Color.fromRGBO(227, 232, 238, 1),
+        color: const Color.fromARGB(255, 45, 127, 226),
         child: Center(
             child: Text(
           txtcell,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         )),
       ),
     );

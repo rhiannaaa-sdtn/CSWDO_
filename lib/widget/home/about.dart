@@ -96,14 +96,14 @@ class Row1 extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Expanded(
+        const Expanded(
           flex: 5,
-          child: Container(
+          child: SizedBox(
             width: 100.0,
             // height: MediaQuery.of(context).size.height * .9,
             // height: double.infinity,
             // color: const Color.fromARGB(255, 255, 255, 255),
-            child: const Row(
+            child: Row(
               children: [Abt()],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -14,45 +15,105 @@ class _TableSampleState extends State<TableSample> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('Request').snapshots(),
       builder: (context, snapshot) {
-        List<Row> clientWidgets = [
-          Row(
-            children: [
-              Text('fullname'),
-              SizedBox(
-                width: 50,
+        List<TableRow> clientWidgets = [
+          const TableRow(
+            children: <Widget>[
+              TcellHeader(
+                txtcell: 'S No',
+                heightcell: 50,
               ),
-              Text('address'),
-              SizedBox(
-                width: 50,
+              TcellHeader(
+                txtcell: 'Family Order No',
+                heightcell: 50,
               ),
-              Text('barangay'),
+              TcellHeader(
+                txtcell: 'Acting Representative',
+                heightcell: 50,
+              ),
+              TcellHeader(
+                txtcell: 'Mobile Number',
+                heightcell: 50,
+              ),
+              TcellHeader(
+                txtcell: 'Needs Type',
+                heightcell: 50,
+              ),
+              TcellHeader(
+                txtcell: 'Date Registered',
+                heightcell: 50,
+              ),
+              TcellHeader(
+                txtcell: 'Action',
+                heightcell: 50,
+              ),
             ],
           )
         ];
 
         if (snapshot.hasData) {
-          final clients = snapshot.data?.docs.reversed.toList();
+          final clients = snapshot.data?.docs.toList();
           for (var client in clients!) {
-            final clientWidget = Row(
-              children: [
-                Text(client['fullname']),
-                SizedBox(
-                  width: 50,
+            final clientWidget = TableRow(
+              children: <Widget>[
+                const TcellData(
+                  txtcell: '1',
+                  heightcell: 50,
                 ),
-                Text(client['address']),
-                SizedBox(
-                  width: 50,
+                const TcellData(
+                  txtcell: '23241',
+                  heightcell: 50,
                 ),
-                Text(client['barangay']),
+                TcellData(
+                  txtcell: client['fullname'],
+                  heightcell: 50,
+                ),
+                TcellData(
+                  txtcell: client['familynum'],
+                  heightcell: 50,
+                ),
+                TcellData(
+                  txtcell: client['mobileNum'],
+                  heightcell: 50,
+                ),
+                TcellData(
+                  txtcell: client['timeStamp'].toDate().toString(),
+                  heightcell: 50,
+                ),
+                const TcellData(
+                  txtcell: 'food assitance',
+                  heightcell: 50,
+                ),
               ],
             );
             clientWidgets.add(clientWidget);
           }
         }
 
-        return ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
+        // return ListView(
+        //   scrollDirection: Axis.vertical,
+        //   shrinkWrap: true,
+        //   children: clientWidgets,
+        // );
+        return Table(
+          border: TableBorder.all(),
+          columnWidths: const <int, TableColumnWidth>{
+            //   0: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+            //   1: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+            //   2: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+            //   3: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+            //   4: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+            //   5: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+            //   6: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
+
+            0: FlexColumnWidth(1),
+            1: FlexColumnWidth(1),
+            2: FlexColumnWidth(1),
+            3: FlexColumnWidth(1),
+            4: FlexColumnWidth(1),
+            5: FlexColumnWidth(1),
+            6: FlexColumnWidth(1),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: clientWidgets,
         );
       },

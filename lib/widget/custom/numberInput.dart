@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class NumberInputWidget extends StatefulWidget {
+  const NumberInputWidget({super.key});
+
   @override
   _NumberInputWidgetState createState() => _NumberInputWidgetState();
 }
 
 class _NumberInputWidgetState extends State<NumberInputWidget> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   int _value = 0;
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _NumberInputWidgetState extends State<NumberInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 100,
       height: 100,
       child: Row(
@@ -53,7 +55,7 @@ class _NumberInputWidgetState extends State<NumberInputWidget> {
               controller: _controller,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
               onChanged: (text) {
@@ -67,11 +69,11 @@ class _NumberInputWidgetState extends State<NumberInputWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_upward),
+                icon: const Icon(Icons.arrow_upward),
                 onPressed: _increment,
               ),
               IconButton(
-                icon: Icon(Icons.arrow_downward),
+                icon: const Icon(Icons.arrow_downward),
                 onPressed: _decrement,
               ),
             ],

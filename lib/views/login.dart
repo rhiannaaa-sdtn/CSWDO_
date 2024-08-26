@@ -1,4 +1,5 @@
 import 'package:cwsdo/views/admin/side_bar.dart';
+import 'package:cwsdo/widget/admin/reliefRequest.dart';
 import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'home_screen.dart'; // Create a home screen after login
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -23,7 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       // Navigate to home screen after successful login
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Sidebar()),
+        MaterialPageRoute(
+            builder: (context) => const Sidebar(
+                  content: Reliefrequest(),
+                )),
       );
     } catch (e) {
       // Handle error

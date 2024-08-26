@@ -1,4 +1,19 @@
+import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:flutter/material.dart';
+
+class AddBeneficiaryMain extends StatefulWidget {
+  const AddBeneficiaryMain({super.key});
+
+  @override
+  State<AddBeneficiaryMain> createState() => _AddBeneficiaryMainState();
+}
+
+class _AddBeneficiaryMainState extends State<AddBeneficiaryMain> {
+  @override
+  Widget build(BuildContext context) {
+    return const Sidebar(content: Addbeneficiary());
+  }
+}
 
 class Addbeneficiary extends StatelessWidget {
   const Addbeneficiary({super.key});
@@ -250,12 +265,12 @@ void _submitButton(BuildContext context, btnlink) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Alert Dialog Example'),
+          title: const Text('Alert Dialog Example'),
           content: Text(btnlink),
           actions: <Widget>[
             TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text('OK')),
+                child: const Text('OK')),
           ],
         );
       });

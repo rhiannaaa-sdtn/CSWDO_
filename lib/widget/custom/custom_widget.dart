@@ -61,19 +61,19 @@ class Sbutton extends StatelessWidget {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Alert Dialog Example'),
+                title: const Text('Alert Dialog Example'),
                 content: Text(btnlink),
                 actions: <Widget>[
                   TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: Text('OK')),
+                      child: const Text('OK')),
                 ],
               );
             });
       },
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -94,7 +94,7 @@ class Sbutton extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           const Divider(
