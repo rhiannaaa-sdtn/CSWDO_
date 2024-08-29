@@ -23,7 +23,7 @@ class TotalTally extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 50,
+        // top: 50,
         left: 50,
       ),
       child: Column(
@@ -40,75 +40,132 @@ class TotalTally extends StatelessWidget {
             height: 50,
             // child: Text('asda'),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * .60,
-            width: MediaQuery.of(context).size.width * .78,
-            color: Colors.white,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Table(
-                border: TableBorder.all(),
-                columnWidths: <int, TableColumnWidth>{
-                  0: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-                  1: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-                  2: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-                  3: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-                  4: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-                },
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: <TableRow>[
-                  const TableRow(
-                    children: <Widget>[
-                      TcellHeader(
-                        txtcell: 'BARANGAY NO.',
-                        heightcell: 50,
-                      ),
-                      TcellHeader(
-                        txtcell: 'NAME OF BARANGAY',
-                        heightcell: 50,
-                      ),
-                      TcellHeader(
-                        txtcell: 'TOTAL BENEFICIARY',
-                        heightcell: 50,
-                      ),
-                      TcellHeader(
-                        txtcell: 'FOOD ASSISTANCE',
-                        heightcell: 50,
-                      ),
-                      TcellHeader(
-                        txtcell: 'MEDICAL ASSISTANCE',
-                        heightcell: 50,
+          Column(
+            children: [
+              Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width * .78,
+                color: Colors.white,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Table(
+                    border: TableBorder.all(),
+                    columnWidths: <int, TableColumnWidth>{
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(1),
+                      2: FlexColumnWidth(1),
+                      3: FlexColumnWidth(1),
+                      4: FlexColumnWidth(1),
+                      5: FlexColumnWidth(1),
+                    },
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: <TableRow>[
+                      const TableRow(
+                        children: <Widget>[
+                          TcellHeader(
+                            txtcell: 'BARANGAY NO.',
+                            heightcell: 50,
+                          ),
+                          TcellHeader(
+                            txtcell: 'NAME OF BARANGAY',
+                            heightcell: 50,
+                          ),
+                          TcellHeader(
+                            txtcell: 'TOTAL BENEFICIARY',
+                            heightcell: 50,
+                          ),
+                          TcellHeader(
+                            txtcell: 'FOOD ASSISTANCE',
+                            heightcell: 50,
+                          ),
+                          TcellHeader(
+                            txtcell: 'MEDICAL ASSISTANCE',
+                            heightcell: 50,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  for (int i = 0; i < bgrgyList.length; i++)
-                    TableRow(
-                      children: <Widget>[
-                        TcellData(
-                          txtcell: bgrgyList[i][0],
-                          heightcell: 50,
-                        ),
-                        TcellData(
-                          txtcell: bgrgyList[i][1],
-                          heightcell: 50,
-                        ),
-                        const TcellData(
-                          txtcell: '2',
-                          heightcell: 50,
-                        ),
-                        const TcellData(
-                          txtcell: '1',
-                          heightcell: 50,
-                        ),
-                        const TcellData(
-                          txtcell: '1',
-                          heightcell: 50,
-                        ),
-                      ],
-                    ),
-                ],
+                ),
               ),
-            ),
+              Container(
+                height: MediaQuery.of(context).size.height * .60,
+                width: MediaQuery.of(context).size.width * .78,
+                color: Colors.white,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Table(
+                    border: TableBorder.all(),
+                    columnWidths: <int, TableColumnWidth>{
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(1),
+                      2: FlexColumnWidth(1),
+                      3: FlexColumnWidth(1),
+                      4: FlexColumnWidth(1),
+                      5: FlexColumnWidth(1),
+                    },
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: <TableRow>[
+                      const TableRow(
+                        children: <Widget>[
+                          TcellHeader(
+                            txtcell: 'BARANGAY NO.',
+                            heightcell: 0,
+                          ),
+                          TcellHeader(
+                            txtcell: 'NAME OF BARANGAY',
+                            heightcell: 0,
+                          ),
+                          TcellHeader(
+                            txtcell: 'TOTAL BENEFICIARY',
+                            heightcell: 0,
+                          ),
+                          TcellHeader(
+                            txtcell: 'FOOD ASSISTANCE',
+                            heightcell: 0,
+                          ),
+                          TcellHeader(
+                            txtcell: 'MEDICAL ASSISTANCE',
+                            heightcell: 0,
+                          ),
+                        ],
+                      ),
+                      for (int i = 0; i < bgrgyList.length; i++)
+                        TableRow(
+                          children: <Widget>[
+                            TcellData(
+                              txtcell: bgrgyList[i][0],
+                              heightcell: 50,
+                              pad: 15,
+                              fsize: 15,
+                            ),
+                            TcellData(
+                                txtcell: bgrgyList[i][1],
+                                heightcell: 50,
+                                pad: 15,
+                                fsize: 15),
+                            const TcellData(
+                                txtcell: '2',
+                                heightcell: 50,
+                                pad: 15,
+                                fsize: 15),
+                            const TcellData(
+                                txtcell: '1',
+                                heightcell: 50,
+                                pad: 15,
+                                fsize: 15),
+                            const TcellData(
+                                txtcell: '1',
+                                heightcell: 50,
+                                pad: 15,
+                                fsize: 15),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -148,13 +205,15 @@ class TcellHeader extends StatelessWidget {
 
 class TcellData extends StatelessWidget {
   final String txtcell;
-  final double heightcell;
+  final double heightcell, pad, fsize;
   // final Color colorcell;
   // final Widget childcell;
   const TcellData({
     super.key,
     required this.txtcell,
     required this.heightcell,
+    required this.pad,
+    required this.fsize,
     // required this.childcell,
     // required this.colorcell
   });
@@ -167,8 +226,11 @@ class TcellData extends StatelessWidget {
         height: heightcell,
         color: const Color.fromRGBO(255, 255, 255, 1),
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Text(txtcell),
+          padding: EdgeInsets.all(pad),
+          child: Text(
+            txtcell,
+            style: TextStyle(fontSize: fsize),
+          ),
         ),
       ),
     );

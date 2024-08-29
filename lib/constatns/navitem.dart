@@ -19,161 +19,161 @@ List<dynamic> bgrgyList = [
   ['3', 'BARANGAY BAGONG BAYAN (1-C)'],
   ['4', 'BARANGAY II-A'],
   ['5', 'Bagong Pook IV-A'],
-  ['6', 'Bagong Pook IV-A'],
-  ['7', 'Bagong Pook IV-A'],
-  ['8', 'Bagong Pook IV-A'],
-  ['9', 'Bagong Pook IV-A'],
-  ['10', 'Bagong Pook IV-A'],
-  ['11', 'Bagong Pook IV-A'],
-  ['12', 'Bagong Pook IV-A'],
-  ['13', 'Bagong Pook IV-A'],
-  ['14', 'Bagong Pook IV-A'],
-  ['15', 'Bagong Pook IV-A'],
-  ['16', 'Bagong Pook IV-A'],
-  ['17', 'Bagong Pook IV-A'],
-  ['18', 'Bagong Pook IV-A'],
-  ['19', 'Bagong Pook IV-A'],
-  ['20', 'Bagong Pook IV-A'],
-  ['21', 'Bagong Pook IV-A'],
-  ['22', 'Bagong Pook IV-A'],
-  ['23', 'Bagong Pook IV-A'],
-  ['24', 'Bagong Pook IV-A'],
-  ['25', 'Bagong Pook IV-A'],
-  ['26', 'Bagong Pook IV-A'],
-  ['27', 'Bagong Pook IV-A'],
-  ['28', 'Bagong Pook IV-A'],
-  ['29', 'Bagong Pook IV-A'],
-  ['30', 'Bagong Pook IV-A'],
-  ['31', 'Bagong Pook IV-A'],
-  ['32', 'Bagong Pook IV-A'],
-  ['33', 'Bagong Pook IV-A'],
-  ['34', 'Bagong Pook IV-A'],
-  ['35', 'Bagong Pook IV-A'],
-  ['36', 'Bagong Pook IV-A'],
-  ['37', 'Bagong Pook IV-A'],
-  ['38', 'Bagong Pook IV-A'],
-  ['39', 'Bagong Pook IV-A'],
-  ['40', 'Bagong Pook IV-A'],
-  ['41', 'Bagong Pook IV-A'],
-  ['42', 'Bagong Pook IV-A'],
-  ['43', 'Bagong Pook IV-A'],
-  ['44', 'Bagong Pook IV-A'],
-  ['45', 'Bagong Pook IV-A'],
-  ['46', 'Bagong Pook IV-A'],
-  ['47', 'Bagong Pook IV-A'],
-  ['48', 'Bagong Pook IV-A'],
-  ['49', 'Bagong Pook IV-A'],
-  ['50', 'Bagong Pook IV-A'],
-  ['51', 'Bagong Pook IV-A'],
-  ['52', 'Bagong Pook IV-A'],
-  ['53', 'Bagong Pook IV-A'],
-  ['54', 'Bagong Pook IV-A'],
-  ['55', 'Bagong Pook IV-A'],
-  ['56', 'Bagong Pook IV-A'],
-  ['57', 'Bagong Pook IV-A'],
-  ['58', 'Bagong Pook IV-A'],
-  ['59', 'Bagong Pook IV-A'],
-  ['60', 'Bagong Pook IV-A'],
-  ['61', 'Bagong Pook IV-A'],
-  ['62', 'Bagong Pook IV-A'],
-  ['63', 'Bagong Pook IV-A'],
-  ['64', 'Bagong Pook IV-A'],
-  ['65', 'Bagong Pook IV-A'],
-  ['66', 'Bagong Pook IV-A'],
-  ['67', 'Bagong Pook IV-A'],
-  ['68', 'Bagong Pook IV-A'],
-  ['69', 'Bagong Pook IV-A'],
-  ['70', 'Bagong Pook IV-A'],
-  ['71', 'Bagong Pook IV-A'],
-  ['72', 'Bagong Pook IV-A'],
-  ['73', 'Bagong Pook IV-A'],
-  ['74', 'Bagong Pook IV-A'],
-  ['75', 'Bagong Pook IV-A'],
-  ['76', 'Bagong Pook IV-A'],
-  ['77', 'Bagong Pook IV-A'],
-  ['78', 'Bagong Pook IV-A'],
-  ['79', 'Bagong Pook IV-A'],
-  ['80', 'Bagong Pook IV-A'],
+  ['6', 'BARANGAY II-B'],
+  ['7', 'BARANGAY II-C'],
+  ['8', 'BARANGAY II-D'],
+  ['9', 'BARANGAY II-E'],
+  ['10', 'BARANGAY II-F'],
+  ['11', 'BARANGAY III-A'],
+  ['12', 'BARANGAY III-B'],
+  ['13', 'BARANGAY III-C'],
+  ['14', 'BARANGAY III-D'],
+  ['15', 'BARANGAY III-E'],
+  ['16', 'BARANGAY III-F'],
+  ['17', 'BARANGAY IV-A'],
+  ['18', 'BARANGAY IV-B'],
+  ['19', 'BARANGAY IV-C'],
+  ['20', 'BARANGAY V-A'],
+  ['21', 'BARANGAY V-B'],
+  ['22', 'BARANGAY V-C'],
+  ['23', 'BARANGAY V-D'],
+  ['24', 'BARANGAY VI-A'],
+  ['25', 'BARANGAY VI-B'],
+  ['26', 'BARANGAY BAGONG POOK (VI-C)'],
+  ['27', 'BARANGAY VI-D'],
+  ['28', 'BARANGAY VI-E'],
+  ['29', 'BARANGAY VII-A'],
+  ['30', 'BARANGAY VII-B'],
+  ['31', 'BARANGAY VII-C'],
+  ['32', 'BARANGAY VII-D'],
+  ['33', 'BARANGAY VII-E'],
+  ['34', 'BARANGAY CONCEPCION'],
+  ['35', 'BARANGAY DOLORES'],
+  ['36', 'BARANGAY SAN BUENAVENTURA'],
+  ['37', 'BARANGAY DIEGO'],
+  ['38', 'BARANGAY LORENZO'],
+  ['39', 'BARANGAY SAN PEDRO'],
+  ['40', 'BARANGAY STA. CATALINA'],
+  ['41', 'BARANGAY STA. ISABEL'],
+  ['42', 'BARANGAY STO. ANGEL'],
+  ['43', 'BARANGAY SAN CRISTOBAL'],
+  ['44', 'BARANGAY STA. ELENA'],
+  ['45', 'BARANGAY STO. NIÑO'],
+  ['46', 'BARANGAY BAUTISTA'],
+  ['47', 'BARANGAY SAN BARTOLOME'],
+  ['48', 'BARANGAY SAN ROQUE'],
+  ['49', 'BARANGAY SANTIAGO 1'],
+  ['50', 'BARANGAY SANTIAGO 2'],
+  ['51', 'BARANGAY STA. MONICA'],
+  ['52', 'BARANGAY STA. VERONICA'],
+  ['53', 'BARANGAY DEL REMEDIO'],
+  ['54', 'BARANGAY SAN CRISPIN'],
+  ['55', 'BARANGAY SAN JUAN'],
+  ['56', 'BARANGAY SAN LUCAS 1'],
+  ['57', 'BARANGAY SAN LUCAS 2'],
+  ['58', 'BARANGAY SAN MARCOS'],
+  ['59', 'BARANGAY SAN MATEO'],
+  ['60', 'BARANGAY SAN NICOLAS'],
+  ['61', 'BARANGAY SAN RAFAEL'],
+  ['62', 'BARANGAY STA. FILOMENA'],
+  ['63', 'BARANGAY STA. MARIA MAGDALENA'],
+  ['64', 'BARANGAY SAN GABRIEL'],
+  ['65', 'BARANGAY STA. MARIA'],
+  ['66', 'BARANGAY SAN MIGUEL'],
+  ['67', 'BARANGAY STO. ROSARIO'],
+  ['68', 'BARANGAY ATISAN'],
+  ['69', 'BARANGAY SAN ANTONIO 1'],
+  ['70', 'BARANGAY SAN ANTONIO 2'],
+  ['71', 'BARANGAY SAN FRANCISCO'],
+  ['72', 'BARANGAY SAN GREGORIO'],
+  ['73', 'BARANGAY SAN IGNACIO'],
+  ['74', 'BARANGAY SAN ISIDRO'],
+  ['75', 'BARANGAY SAN JOAQUIN'],
+  ['76', 'BARANGAY SAN JOSE'],
+  ['77', 'BARANGAY SAN VICENTE'],
+  ['78', 'BARANGAY STA.ANA'],
+  ['79', 'BARANGAY STA.CRUZ'],
+  ['80', 'BARANGAY STO. CRISTO'],
 ];
 
 //
 //
-// BARANGAY II-B
-// BARANGAY II-C
+//
+//
 // BARANGAY II-D
 // BARANGAY II-E
 // BARANGAY II-F
 // BARANGAY III-A
 // BARANGAY III-B
-// BARANGAY III-C
-// BARANGAY III-D
-// BARANGAY III-E
-// BARANGAY III-F
-// BARANGAY IV-A
-// BARANGAY IV-B
-// BARANGAY IV-C
-// BARANGAY V-A
-// BARANGAY V-B
-// BARANGAY V-C
-// BARANGAY V-D
-// BARANGAY VI-A
-// BARANGAY VI-B
-// BARANGAY BAGONG POOK (VI-C)
-// BARANGAY VI-D
-// BARANGAY VI-E
-// BARANGAY VII-A
-// BARANGAY VII-B
-// BARANGAY VII-C
-// BARANGAY VII-D
-// BARANGAY VII-E
-// BARANGAY CONCEPCION
-// BARANGAY DOLORES
-// BARANGAY SAN BUENAVENTURA
-// BARANGAY DIEGO
-// BARANGAY LORENZO
-// BARANGAY SAN PEDRO
-// BARANGAY STA. CATALINA
-// BARANGAY STA. ISABEL
-// BARANGAY STO. ANGEL
-// BARANGAY SAN CRISTOBAL
-// BARANGAY STA. ELENA
-// BARANGAY STO. NIÑO
-// BARANGAY BAUTISTA
-// BARANGAY SAN BARTOLOME
-// BARANGAY SAN ROQUE
-// BARANGAY SANTIAGO 1
-// BARANGAY SANTIAGO 2
-// BARANGAY STA. MONICA
-// BARANGAY STA. VERONICA
-// BARANGAY DEL REMEDIO
-// BARANGAY SAN CRISPIN
-// BARANGAY SAN JUAN
-// BARANGAY SAN LUCAS 1
-// BARANGAY SAN LUCAS 2
-// BARANGAY SAN MARCOS
-// BARANGAY SAN MATEO
-// BARANGAY SAN NICOLAS
-// BARANGAY SAN RAFAEL
-// BARANGAY STA. FILOMENA
-// BARANGAY STA. MARIA MAGDALENA
-// BARANGAY SAN GABRIEL
-// BARANGAY STA. MARIA
-// BARANGAY SAN MIGUEL
-// BARANGAY STO. ROSARIO
-// BARANGAY SOLEDAD
-// BARANGAY ATISAN
-// BARANGAY SAN ANTONIO 1
-// BARANGAY SAN ANTONIO 2
-// BARANGAY SAN FRANCISCO
-// BARANGAY SAN GREGORIO
-// BARANGAY SAN IGNACIO
-// BARANGAY SAN ISIDRO
-// BARANGAY SAN JOAQUIN
-// BARANGAY SAN JOSE
-// BARANGAY SAN VICENTE
-// BARANGAY STA.ANA
-// BARANGAY STA.CRUZ
-// BARANGAY STO. CRISTO
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 List<TableEntry> entries = [
   TableEntry(name: 'John Doe', age: 28, email: 'john.doe@example.com'),

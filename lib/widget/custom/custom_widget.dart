@@ -57,19 +57,21 @@ class Sbutton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Alert Dialog Example'),
-                content: Text(btnlink),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('OK')),
-                ],
-              );
-            });
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return AlertDialog(
+        //         title: const Text('Alert Dialog Example'),
+        //         content: Text(btnlink),
+        //         actions: <Widget>[
+        //           TextButton(
+        //               onPressed: () => Navigator.of(context).pop(),
+        //               child: const Text('OK')),
+        //         ],
+        //       );
+        //     });
+        Navigator.pushNamed(context, btnlink);
+        Navigator.pushReplacementNamed(context, btnlink);
       },
       child: Column(
         children: [

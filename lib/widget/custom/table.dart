@@ -1,3 +1,4 @@
+import 'package:cwsdo/widget/admin/nextStep.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,33 +57,49 @@ class _TableSampleState extends State<TableSample> {
             final clientWidget = TableRow(
               children: <Widget>[
                 const TcellData(
-                  txtcell: '1',
-                  heightcell: 50,
-                ),
-                const TcellData(
-                  txtcell: '23241',
-                  heightcell: 50,
-                ),
+                    txtcell: '1', heightcell: 50, pad: 15, fsize: 15),
                 TcellData(
-                  txtcell: client['fullname'],
-                  heightcell: 50,
-                ),
+                    txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
                 TcellData(
-                  txtcell: client['familynum'],
-                  heightcell: 50,
-                ),
+                    txtcell: client['fullname'],
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
                 TcellData(
-                  txtcell: client['mobileNum'],
-                  heightcell: 50,
-                ),
+                    txtcell: client['familynum'],
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
                 TcellData(
-                  txtcell: client['timeStamp'].toDate().toString(),
-                  heightcell: 50,
-                ),
-                const TcellData(
-                  txtcell: 'food assitance',
-                  heightcell: 50,
-                ),
+                    txtcell: client['mobileNum'],
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
+                TcellData(
+                    txtcell: client['timeStamp'].toDate().toString(),
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
+                ElevatedButton(
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          // side: const BorderSide(
+                          //     color: Colors.red)
+                        )),
+                        backgroundColor: const WidgetStatePropertyAll(
+                            Color.fromRGBO(33, 79, 215, 1))),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NextStepMain(requestID: client.id)),
+                      );
+                    },
+                    child: Text(
+                      'View',
+                      style: TextStyle(color: Colors.white),
+                    ))
               ],
             );
             clientWidgets.add(clientWidget);

@@ -721,7 +721,8 @@ class _CredentialsInputState extends State<CredentialsInput> {
                               const Text('Indigency *'),
                               pickedfile2 != null
                                   ? Text(pickedfile2!.name)
-                                  : const Text('Clear Picure of your Indigency'),
+                                  : const Text(
+                                      'Clear Picure of your Indigency'),
                               ElevatedButton(
                                 style: ButtonStyle(
                                     shape: WidgetStatePropertyAll(
@@ -760,7 +761,8 @@ class _CredentialsInputState extends State<CredentialsInput> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Authorization Letter (if applicable) *'),
+                              const Text(
+                                  'Authorization Letter (if applicable) *'),
                               pickedfile3 != null
                                   ? Text(pickedfile3!.name)
                                   : const Text('(.jpg .png .pdf)'),
