@@ -125,6 +125,8 @@ class _FormRegisterState extends State<FormRegister> {
   final TextEditingController _familynum = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _barangay = TextEditingController();
+  final TextEditingController _needs = TextEditingController();
+  final TextEditingController _date = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -203,7 +205,7 @@ class _FormRegisterState extends State<FormRegister> {
                   // color: const Color.fromARGB(255, 30, 58, 73),
                   child: Column(
                     children: [
-                      const NeedsInput(),
+                      NeedsInput(needs: _needs, date: _date),
                       CredentialsInput(
                           fullname: _fullname,
                           mobileNum: _mobilenum,
@@ -211,7 +213,9 @@ class _FormRegisterState extends State<FormRegister> {
                           govtid: _govtid,
                           familynum: _familynum,
                           address: _address,
-                          barangay: _barangay)
+                          barangay: _barangay,
+                          needs: _needs,
+                          date: _date)
                     ],
                   ),
                 ),
@@ -254,6 +258,26 @@ class PersonalInput extends StatefulWidget {
 class _PersonalInputState extends State<PersonalInput> {
   @override
   Widget build(BuildContext context) {
+    // TextEditingController dateController = TextEditingController();
+    Future<void> selectedDate() async {
+      DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100));
+
+      if (picked != null) {
+        debugPrint(picked.toString().split(" ")[0]);
+        // setState(() {
+        //   dateController.text = '_picked.toString().split(" ")[0]';
+        // });
+
+        widget.dob.text = picked.toString().split(" ")[0];
+
+        // dateController.text = 'asdsadsadsadkshagfjsahgfhkjsdagflksagkfjhgsalkf';
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 50, right: 20, top: 50, bottom: 30),
       child: Container(
@@ -292,10 +316,28 @@ class _PersonalInputState extends State<PersonalInput> {
                 txtinput: 'Enter Mobile Number',
                 inputText: widget.mobilenum,
               ),
-              InptBox(
-                txtdesc: 'Date of Birth',
-                txtinput: 'Enter Date of Birth',
-                inputText: widget.dob,
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Date of Birth',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: widget.dob,
+                  decoration: const InputDecoration(
+                      labelText: 'Date of Birth',
+                      filled: true,
+                      prefixIcon: Icon(Icons.calendar_today),
+                      enabledBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue))),
+                  readOnly: true,
+                  onTap: () {
+                    selectedDate();
+                  },
+                ),
               ),
               InptBox(
                 txtdesc: 'Any Govt. Issued ID',
@@ -326,7 +368,8 @@ class _PersonalInputState extends State<PersonalInput> {
 }
 
 class NeedsInput extends StatefulWidget {
-  const NeedsInput({super.key});
+  final TextEditingController needs, date;
+  const NeedsInput({super.key, required this.needs, required this.date});
 
   @override
   State<NeedsInput> createState() => _NeedsInputState();
@@ -335,7 +378,7 @@ class NeedsInput extends StatefulWidget {
 class _NeedsInputState extends State<NeedsInput> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController dateController = TextEditingController();
+    // TextEditingController dateController = TextEditingController();
     Future<void> selectedDate() async {
       DateTime? picked = await showDatePicker(
           context: context,
@@ -349,7 +392,7 @@ class _NeedsInputState extends State<NeedsInput> {
         //   dateController.text = '_picked.toString().split(" ")[0]';
         // });
 
-        dateController.text = picked.toString().split(" ")[0];
+        widget.date.text = picked.toString().split(" ")[0];
 
         // dateController.text = 'asdsadsadsadkshagfjsahgfhkjsdagflksagkfjhgsalkf';
       }
@@ -394,9 +437,11 @@ class _NeedsInputState extends State<NeedsInput> {
                       child: Text('Needs Type',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: DropButton(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropButton(
+                        needs: widget.needs,
+                      ),
                     ),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -406,7 +451,7 @@ class _NeedsInputState extends State<NeedsInput> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        controller: dateController,
+                        controller: widget.date,
                         decoration: const InputDecoration(
                             labelText: 'Date',
                             filled: true,
@@ -439,7 +484,9 @@ class CredentialsInput extends StatefulWidget {
       govtid,
       familynum,
       address,
-      barangay;
+      barangay,
+      needs,
+      date;
 
   const CredentialsInput(
       {super.key,
@@ -449,7 +496,9 @@ class CredentialsInput extends StatefulWidget {
       required this.govtid,
       required this.familynum,
       required this.address,
-      required this.barangay});
+      required this.barangay,
+      required this.needs,
+      required this.date});
   @override
   State<CredentialsInput> createState() => _CredentialsInputState();
 }
@@ -628,11 +677,16 @@ class _CredentialsInputState extends State<CredentialsInput> {
   Future<void> _clearFile() async {
     widget.fullname.text = '';
     widget.mobileNum.text = '';
-    widget.dob.text = '';
+    widget.dob.text = 'Date of Birth';
     widget.govtid.text = '';
     widget.familynum.text = '';
     widget.address.text = '';
     widget.barangay.text = '';
+    widget.needs.text = '';
+    widget.date.text = 'Date';
+    pickedfile1 = null;
+    pickedfile2 = null;
+    pickedfile3 = null;
   }
 
   @override
@@ -904,7 +958,8 @@ class _CredentialsInputState extends State<CredentialsInput> {
 // }
 
 class DropButton extends StatefulWidget {
-  const DropButton({super.key});
+  final TextEditingController needs;
+  const DropButton({super.key, required this.needs});
 
   @override
   State<DropButton> createState() => _DropButtonState();
@@ -916,6 +971,7 @@ class _DropButtonState extends State<DropButton> {
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<String>(
+      controller: widget.needs,
       initialSelection: list.first,
       onSelected: (String? value) {
         // This is called when the user selects an item.
