@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/admin/side.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/src/material/dropdown_menu.dart';
 
 class Sidebar extends StatefulWidget {
   final Widget content;
@@ -12,6 +15,34 @@ class Sidebar extends StatefulWidget {
 class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
+    String _selectedValue = 'Account';
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    void _onDropdownChanged(String? newValue) async {
+      setState(() {
+        _selectedValue = newValue!;
+      });
+
+      // Handle the selection
+      switch (newValue) {
+        case 'Account':
+          // Perform action for Account
+          print('Account selected');
+          break;
+        case 'Settings':
+          // Perform action for Settings
+          print('Settings selected');
+          break;
+        case 'Logout':
+
+          // Perform action for Logout
+          await _auth.signOut();
+          Navigator.pushNamed(context, '/');
+          print('Logout seleasdcted');
+          break;
+      }
+    }
+
     return Scaffold(
       body: Container(
         child: Row(
@@ -43,7 +74,7 @@ class _SidebarState extends State<Sidebar> {
                       flex: 1,
                       child: Container(
                         color: const Color.fromARGB(255, 22, 97, 152),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.only(right: 50),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -65,12 +96,28 @@ class _SidebarState extends State<Sidebar> {
                               SizedBox(
                                 width: 15,
                               ),
-                              Text(
-                                'Admin',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: DropdownButton<String>(
+                                  value: _selectedValue,
+                                  onChanged: _onDropdownChanged,
+                                  items: <String>[
+                                    'Account',
+                                    'Settings',
+                                    'Logout'
+                                  ].map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  underline:
+                                      Container(), // Removes the underline
+                                  icon: Icon(Icons
+                                      .more_vert), // You can use any icon you prefer
+                                ),
                               ),
                               SizedBox(
                                 width: 15,

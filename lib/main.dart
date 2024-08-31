@@ -41,19 +41,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'CWSDO',
       theme: ThemeData.light(),
-
+      // settings: settings,
       onGenerateRoute: _onGenerateRoute,
 
       // routes: {
-      //   '/': (context) => auth ? HomePage() : ReliefrequestMain(),
-      //   '/foodassistance': (context) =>
-      //       auth ? const Foodassistance() : ReliefrequestMain(),
-      //   '/medicalassistance': (context) =>
-      //       auth ? const MedicalAssistance() : ReliefrequestMain(),
-      //   '/requestrelief': (context) =>
-      //       auth ? const RequestRelief() : ReliefrequestMain(),
+      //   '/': (context) => HomePage(),
+      //   '/foodassistance': (context) => const Foodassistance(),
+      //   '/medicalassistance': (context) => const MedicalAssistance(),
+      //   '/requestrelief': (context) => const RequestRelief(),
       //   // '/sidebar': (context) => const Sidebar(),
-      //   '/login': (context) => auth ? const LoginScreen() : ReliefrequestMain(),
+      //   '/login': (context) => const LoginScreen(),
 
       //   // ---------ADMIN---------
 
@@ -70,29 +67,52 @@ class MyApp extends StatelessWidget {
     // Check authentication status
     final isAuthenticated = FirebaseAuth.instance.currentUser != null;
 
+    print(isAuthenticated);
+    print(settings.name);
+
     switch (settings.name) {
       // case '/':
       //   return MaterialPageRoute(builder: (context) => SplashPage());
+      // -----------------------USER ROUTE----------------------------------
       case '/':
-        return _authGuard(isAuthenticated, const HomePage());
+        return _authGuard(isAuthenticated, const HomePage(), settings);
+      case '/foodassistance':
+        return _authGuard(isAuthenticated, const Foodassistance(), settings);
+      case '/medicalassistance':
+        return _authGuard(isAuthenticated, const MedicalAssistance(), settings);
+      case '/requestrelief':
+        return _authGuard(isAuthenticated, const RequestRelief(), settings);
       case '/login':
-        return _authGuard(isAuthenticated, const LoginScreen());
+        return _authGuard(isAuthenticated, const LoginScreen(), settings);
+      // -------------------------ADMIN ROUTE--------------------
       case '/reliefrequest':
-        return _authGuardAdmin(isAuthenticated, const ReliefrequestMain());
+        // print(settings.toString())
+        return _authGuardAdmin(
+            isAuthenticated, const ReliefrequestMain(), settings);
+      case '/addbeneficiary':
+        return _authGuardAdmin(
+            isAuthenticated, const AddBeneficiaryMain(), settings);
+      case '/totaltally':
+        return _authGuardAdmin(
+            isAuthenticated, const TotalTallyMain(), settings);
+
       default:
         return MaterialPageRoute(builder: (context) => NotFoundPage());
     }
   }
 
-  Route<dynamic> _authGuardAdmin(bool isAuthenticated, Widget page) {
+  Route<dynamic> _authGuardAdmin(bool isAuthenticated, Widget page, settings) {
     return isAuthenticated
-        ? MaterialPageRoute(builder: (context) => const LoginScreen())
-        : MaterialPageRoute(builder: (context) => page);
+        ? MaterialPageRoute(settings: settings, builder: (context) => page)
+        : MaterialPageRoute(
+            settings: const RouteSettings(name: "/login"),
+            builder: (context) => const LoginScreen());
   }
 
-  Route<dynamic> _authGuard(bool isAuthenticated, Widget page) {
+  Route<dynamic> _authGuard(bool isAuthenticated, Widget page, settings) {
     return isAuthenticated
-        ? MaterialPageRoute(builder: (context) => page)
-        : MaterialPageRoute(builder: (context) => const ReliefrequestMain());
+        ? MaterialPageRoute(
+            settings: settings, builder: (context) => const ReliefrequestMain())
+        : MaterialPageRoute(settings: settings, builder: (context) => page);
   }
 }

@@ -36,12 +36,13 @@ class NavBar extends StatelessWidget {
                   // );
                   if (navTitles[i] == 'Admin') //
                   {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (context) => const Sidebar(
-                                content: Reliefrequest(),
-                              )),
-                    );
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(
+                    //       builder: (context) => const Sidebar(
+                    //             content: Reliefrequest(),
+                    //           )),
+                    // );
+                    Navigator.pushNamed(context, '/login');
                   } else {
                     Navigator.pushNamed(context, navLinks[i]);
                   }
