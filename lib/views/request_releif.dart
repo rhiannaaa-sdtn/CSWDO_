@@ -668,7 +668,7 @@ class _CredentialsInputState extends State<CredentialsInput> {
     widget.familynum.text = '';
     widget.address.text = '';
     widget.barangay.text = '';
-    widget.needs.text = '';
+    widget.needs.text = 'Food Assistance';
     widget.date.text = 'Date';
     pickedfile1 = null;
     pickedfile2 = null;
