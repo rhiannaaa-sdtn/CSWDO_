@@ -41,6 +41,8 @@ class FireStoreService {
       String familynum,
       String address,
       String barangay,
+      String needs,
+      String date,
       String? validID,
       String? indigency,
       String? authLetter) {
@@ -52,10 +54,14 @@ class FireStoreService {
       'familynum': familynum,
       'address': address,
       'barangay': barangay,
+      'needs': needs,
+      'date': date,
       'validID': validID,
       'indigency': indigency,
       'authLetter': authLetter,
-      'timeStamp': Timestamp.now()
+      'timeStamp': Timestamp.now(),
+      'notification': 'unread',
+      'status': 'ongoing',
     });
   }
 
@@ -74,6 +80,36 @@ class FireStoreService {
       'status': status,
       'timeStamp': Timestamp.now(),
       'REMARK BY': 'ADMINISTRATOR',
+    });
+  }
+
+  final CollectionReference addBeneficiaryfire =
+      FirebaseFirestore.instance.collection('Beneficiary');
+//create: add request
+  Future<void> addBeneficiary(
+    String fullname,
+    String mobileNum,
+    String dateOfBirth,
+    String govtID,
+    String familynum,
+    String address,
+    String barangay,
+    String needs,
+    String date,
+  ) {
+    return addBeneficiaryfire.add({
+      'fullname': fullname,
+      'mobileNum': mobileNum,
+      'dateOfBirth': dateOfBirth,
+      'govtID': govtID,
+      'familynum': familynum,
+      'address': address,
+      'barangay': barangay,
+      'needs': needs,
+      'date': date,
+      'timeStamp': Timestamp.now(),
+      'notification': 'unread',
+      'status': 'ongoing',
     });
   }
 }

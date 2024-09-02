@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:cwsdo/constatns/navitem.dart';
 import 'package:cwsdo/services/firestore.dart';
 import 'package:cwsdo/widget/custom/custom_widget.dart';
 import 'package:cwsdo/widget/navigation_bar/footer.dart';
@@ -355,10 +356,34 @@ class _PersonalInputState extends State<PersonalInput> {
                 txtinput: 'Enter address',
                 inputText: widget.address,
               ),
-              InptBox(
-                txtdesc: 'Barangay',
-                txtinput: 'Enter Barangay',
-                inputText: widget.barangay,
+              // InptBox(
+              //   txtdesc: 'Barangay',
+              //   txtinput: 'Enter Barangay',
+              //   inputText: widget.barangay,
+              // ),
+              Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 10, left: 10, right: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Barangay',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: BarangayDrop(barangay: widget.barangay),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ],
           ),
@@ -615,6 +640,8 @@ class _CredentialsInputState extends State<CredentialsInput> {
         widget.familynum.text,
         widget.address.text,
         widget.barangay.text,
+        widget.needs.text,
+        widget.date.text,
         'files/${pickedfile1!.name}',
         'files/${pickedfile2!.name}',
         pickedfile3 != null ? 'files/${pickedfile3!.name}' : '',
@@ -966,6 +993,36 @@ class _DropButtonState extends State<DropButton> {
         });
       },
       dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+        return DropdownMenuEntry<String>(value: value, label: value);
+      }).toList(),
+    );
+  }
+}
+
+class BarangayDrop extends StatefulWidget {
+  final TextEditingController barangay;
+  const BarangayDrop({super.key, required this.barangay});
+
+  @override
+  State<BarangayDrop> createState() => _BarangayDropState();
+}
+
+class _BarangayDropState extends State<BarangayDrop> {
+  String dropdownValue = bgrgyList.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu<String>(
+      controller: widget.barangay,
+      initialSelection: bgrgyList.first,
+      onSelected: (String? value) {
+        // This is called when the user selects an item.
+        setState(() {
+          dropdownValue = value!;
+        });
+      },
+      dropdownMenuEntries:
+          bgrgyList.map<DropdownMenuEntry<String>>((String value) {
         return DropdownMenuEntry<String>(value: value, label: value);
       }).toList(),
     );

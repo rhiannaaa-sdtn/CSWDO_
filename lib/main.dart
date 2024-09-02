@@ -3,6 +3,7 @@ import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/views/request_releif.dart';
 import 'package:cwsdo/views/login.dart';
 import 'package:cwsdo/widget/admin/addBeneficiary.dart';
+import 'package:cwsdo/widget/admin/dashboard.dart';
 import 'package:cwsdo/widget/admin/reliefRequest.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:cwsdo/widget/notFound.dart';
@@ -95,6 +96,9 @@ class MyApp extends StatelessWidget {
       case '/totaltally':
         return _authGuardAdmin(
             isAuthenticated, const TotalTallyMain(), settings);
+      case '/dashboard':
+        return _authGuardAdmin(
+            isAuthenticated, const DashboardMain(), settings);
 
       default:
         return MaterialPageRoute(builder: (context) => NotFoundPage());

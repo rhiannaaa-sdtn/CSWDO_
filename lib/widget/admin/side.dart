@@ -45,32 +45,32 @@ class Sidebuttons extends StatelessWidget {
                 ),
                 const Sbutton(
                   btndesc: 'Dashboard',
-                  btnlogo: 'images/SpcLogo.png',
+                  btnlogo: 'images/Dashboard.png',
                   btnlink: '/dashboard',
                 ),
                 const Sbutton(
                   btndesc: 'Total Tally',
-                  btnlogo: 'images/SpcLogo.png',
+                  btnlogo: 'images/TotalTally.png',
                   btnlink: '/totaltally',
                 ),
                 const Sbutton(
                   btndesc: 'Add Benificiary',
-                  btnlogo: 'images/SpcLogo.png',
+                  btnlogo: 'images/AddBeneficiary.png',
                   btnlink: '/addbeneficiary',
                 ),
                 const Sbutton(
                   btndesc: 'Relief Request',
-                  btnlogo: 'images/SpcLogo.png',
+                  btnlogo: 'images/ReliefRequest.png',
                   btnlink: '/reliefrequest',
                 ),
                 const Sbutton(
                   btndesc: 'Search Beneficiary',
-                  btnlogo: 'images/SpcLogo.png',
+                  btnlogo: 'images/SearchBeneficiary.png',
                   btnlink: '/searchbeneficiary',
                 ),
                 const Sbutton(
                   btndesc: 'Heat Map',
-                  btnlogo: 'images/SpcLogo.png',
+                  btnlogo: 'images/HeatMap.png',
                   btnlink: '/heatmap',
                 ),
               ],

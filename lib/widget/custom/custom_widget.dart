@@ -83,7 +83,7 @@ class Sbutton extends StatelessWidget {
                 MainAxisAlignment.start, //Center Column contents vertically,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(btnlogo, width: 40, height: 40, fit: BoxFit.cover),
+              Image.asset(btnlogo, width: 40, height: 40, fit: BoxFit.fill),
               const SizedBox(
                 width: 10,
               ),

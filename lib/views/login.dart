@@ -28,7 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       final user = _auth.currentUser;
-      print(user);
+
+      Navigator.pushNamed(context, '/reliefrequest');
+
+      // print(user);
       // Navigate to home screen after successful login
       // Navigator.of(context).pushReplacement(
       //   MaterialPageRoute(

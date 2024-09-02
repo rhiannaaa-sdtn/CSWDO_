@@ -28,7 +28,7 @@ class _TableSampleState extends State<TableSample> {
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Acting Representative',
+                txtcell: 'Acting Representative of Family',
                 heightcell: 50,
               ),
               TcellHeader(
