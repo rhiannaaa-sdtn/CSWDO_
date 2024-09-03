@@ -40,15 +40,37 @@ class Reliefrequest extends StatelessWidget {
               'Relief Request',
               style: TextStyle(fontSize: 30),
             ),
-            Container(
-              child: const Row(children: [
-                Text(
-                  'Show',
+            Column(
+              children: [
+                Container(
+                  color: Color.fromARGB(255, 45, 127, 226),
+                  height: 30,
+                  width: double.infinity,
+                  // child: Tex t('data'),
                 ),
-                NumberInputWidget()
-              ]),
+                Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.all(18),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: const Row(children: [
+                            Text(
+                              'Show',
+                            ),
+                            NumberInputWidget()
+                          ]),
+                        ),
+                        const TableSample(),
+                      ],
+                    ),
+                  ),
+                  // child: Tex t('data'),
+                )
+              ],
             ),
-            const TableSample(),
           ]),
     );
   }

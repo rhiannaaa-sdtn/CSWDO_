@@ -55,7 +55,7 @@ class Dashboard extends StatelessWidget {
           padding: EdgeInsets.all(50),
           child: Column(
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -73,19 +73,19 @@ class Dashboard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DashboardBox(
-                    title: 'Total Registered Beneficiary',
-                    count: '${docs2.length}',
-                  ),
+                      title: 'Total Registered Beneficiary',
+                      count: '${docs2.length}',
+                      link: '/beneficiarylist'),
                   DashboardBox(
-                    title: 'Food Assistance',
-                    count:
-                        '${docs1.where((doc) => doc['needs'] == 'Food Assistance').length}',
-                  ),
+                      title: 'Food Assistance',
+                      count:
+                          '${docs1.where((doc) => doc['needs'] == 'Food Assistance').length}',
+                      link: '/foodassistancelist'),
                   DashboardBox(
-                    title: 'Medical Assistance',
-                    count:
-                        '${docs1.where((doc) => doc['needs'] == 'Medical Assistance').length}',
-                  ),
+                      title: 'Medical Assistance',
+                      count:
+                          '${docs1.where((doc) => doc['needs'] == 'Medical Assistance').length}',
+                      link: '/medicalassistancelist'),
                 ],
               ),
               Row(
@@ -93,19 +93,19 @@ class Dashboard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DashboardBox(
-                    title: 'Total Completed Assistance',
-                    count:
-                        '${docs1.where((doc) => doc['status'] == 'Completed').length}',
-                  ),
+                      title: 'Total Completed Assistance',
+                      count:
+                          '${docs1.where((doc) => doc['status'] == 'Completed').length}',
+                      link: '/completedassitance'),
                   DashboardBox(
-                    title: 'Ongoing Assistance',
-                    count:
-                        '${docs1.where((doc) => doc['status'] == 'Ongoing').length}',
-                  ),
+                      title: 'Ongoing Assistance',
+                      count:
+                          '${docs1.where((doc) => doc['status'] == 'Ongoing').length}',
+                      link: '/ongoingassistance'),
                   DashboardBox(
-                    title: 'Relief Request',
-                    count: '${docs1.length}',
-                  ),
+                      title: 'Relief Request',
+                      count: '${docs1.length}',
+                      link: '/reliefrequest'),
                 ],
               ),
             ],
@@ -116,10 +116,19 @@ class Dashboard extends StatelessWidget {
   }
 }
 
-class DashboardBox extends StatelessWidget {
-  final String title, count;
-  const DashboardBox({super.key, required this.title, required this.count});
+class DashboardBox extends StatefulWidget {
+  final String title, count, link;
+  const DashboardBox(
+      {super.key,
+      required this.title,
+      required this.count,
+      required this.link});
 
+  @override
+  State<DashboardBox> createState() => _DashboardBoxState();
+}
+
+class _DashboardBoxState extends State<DashboardBox> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -127,21 +136,23 @@ class DashboardBox extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Detail'),
-                  content: Text(count),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
-              },
-            );
+            // showDialog(
+            //   context: context,
+            //   builder: (context) {
+            //     return AlertDialog(
+            //       title: const Text('Detail'),
+            //       content: Text(count),
+            //       actions: <Widget>[
+            //         TextButton(
+            //           onPressed: () => Navigator.of(context).pop(),
+            //           child: const Text('OK'),
+            //         ),
+            //       ],
+            //     );
+            //   },
+            // );
+
+            Navigator.pushNamed(context, widget.link);
           },
           child: Container(
             height: 100,
@@ -159,12 +170,12 @@ class DashboardBox extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        widget.title,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        count,
+                        widget.count,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],

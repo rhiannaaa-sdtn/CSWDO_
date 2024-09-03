@@ -1,20 +1,94 @@
+import 'package:cwsdo/views/admin/side_bar.dart';
+import 'package:cwsdo/widget/custom/numberInput.dart';
+import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/admin/nextStep.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TableSample extends StatefulWidget {
-  const TableSample({super.key});
+// import 'package:cwsdo/widget/admin/addBeneficiary.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:cwsdo/widget/admin/totaltally.dart';
+// import 'package:cwsdo/widget/admin/TotalBeneficiaryList.dart';
+
+class TotalBeneficiaryMain extends StatefulWidget {
+  const TotalBeneficiaryMain({super.key});
 
   @override
-  State<TableSample> createState() => _TableSampleState();
+  State<TotalBeneficiaryMain> createState() => _TotalBeneficiaryMainState();
 }
 
-class _TableSampleState extends State<TableSample> {
+class _TotalBeneficiaryMainState extends State<TotalBeneficiaryMain> {
+  @override
+  Widget build(BuildContext context) {
+    return const Sidebar(content: TotalBeneficiaryList());
+  }
+}
+
+class TotalBeneficiaryList extends StatelessWidget {
+  const TotalBeneficiaryList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Total Beneficiary List',
+              style: TextStyle(fontSize: 30),
+            ),
+            Column(
+              children: [
+                Container(
+                  color: Color.fromARGB(255, 45, 127, 226),
+                  height: 30,
+                  width: double.infinity,
+                  // child: Tex t('data'),
+                ),
+                Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.all(18),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: const Row(children: [
+                            Text(
+                              'Show',
+                            ),
+                            NumberInputWidget()
+                          ]),
+                        ),
+                        const TableDataList(),
+                      ],
+                    ),
+                  ),
+                  // child: Tex t('data'),
+                )
+              ],
+            ),
+          ]),
+    );
+  }
+}
+
+class TableDataList extends StatefulWidget {
+  const TableDataList({super.key});
+
+  @override
+  State<TableDataList> createState() => _TableDataListState();
+}
+
+class _TableDataListState extends State<TableDataList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Request').snapshots(),
+      stream: FirebaseFirestore.instance.collection('Beneficiary').snapshots(),
       builder: (context, snapshot) {
         List<TableRow> clientWidgets = [
           const TableRow(
@@ -57,11 +131,13 @@ class _TableSampleState extends State<TableSample> {
 
         if (snapshot.hasData) {
           final clients = snapshot.data?.docs.toList();
+          var index = 0;
           for (var client in clients!) {
+            index = index + 1;
+            var txt = index.toString();
             final clientWidget = TableRow(
               children: <Widget>[
-                const TcellData(
-                    txtcell: '1', heightcell: 50, pad: 15, fsize: 15),
+                TcellData(txtcell: txt, heightcell: 50, pad: 15, fsize: 15),
                 TcellData(
                     txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
                 TcellData(

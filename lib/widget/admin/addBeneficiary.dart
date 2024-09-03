@@ -158,7 +158,7 @@ class _PersonalInputlocalState extends State<PersonalInputlocal> {
                 )),
             SizedBox(
                 width: MediaQuery.of(context).size.width * .8,
-                height: MediaQuery.of(context).size.height * .65,
+                height: MediaQuery.of(context).size.height * .67,
                 child: SingleChildScrollView(
                   child: Container(
                     color: Colors.white,
@@ -178,11 +178,11 @@ class _PersonalInputlocalState extends State<PersonalInputlocal> {
                             txtinput: 'Enter Mobile Number',
                             inputText: widget.mobilenum,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text('Date of Birth',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
+                          // const Padding(
+                          //   padding: EdgeInsets.all(8.0),
+                          //   child: Text('Date of Birth',
+                          //       style: TextStyle(fontWeight: FontWeight.bold)),
+                          // ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
@@ -232,13 +232,13 @@ class _PersonalInputlocalState extends State<PersonalInputlocal> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(0),
                                       child: Text('Barangay',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(0),
                                       child: BarangayDrop(
                                           barangay: widget.barangay),
                                     ),
@@ -510,7 +510,8 @@ class _InptBXState extends State<InptBX> {
               Padding(
                 padding: const EdgeInsets.all(1.0),
                 child: Text(widget.txtdesc,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15)),
               ),
               Padding(
                 padding: const EdgeInsets.all(1.0),

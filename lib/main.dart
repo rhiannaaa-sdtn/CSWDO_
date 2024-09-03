@@ -4,6 +4,11 @@ import 'package:cwsdo/views/request_releif.dart';
 import 'package:cwsdo/views/login.dart';
 import 'package:cwsdo/widget/admin/addBeneficiary.dart';
 import 'package:cwsdo/widget/admin/dashboard.dart';
+import 'package:cwsdo/widget/admin/dashboard/ongoing.dart';
+import 'package:cwsdo/widget/admin/dashboard/totalBeneficiarylist.dart';
+import 'package:cwsdo/widget/admin/dashboard/totalCompleted.dart';
+import 'package:cwsdo/widget/admin/dashboard/totalFoodAssistancelist.dart';
+import 'package:cwsdo/widget/admin/dashboard/totalMedicalAssistance.dart';
 import 'package:cwsdo/widget/admin/reliefRequest.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:cwsdo/widget/notFound.dart';
@@ -86,10 +91,25 @@ class MyApp extends StatelessWidget {
       case '/login':
         return _authGuard(isAuthenticated, const LoginScreen(), settings);
       // -------------------------ADMIN ROUTE--------------------
+
       case '/reliefrequest':
-        // print(settings.toString())
         return _authGuardAdmin(
             isAuthenticated, const ReliefrequestMain(), settings);
+      case '/ongoingassistance':
+        return _authGuardAdmin(
+            isAuthenticated, const TotalOngoingMain(), settings);
+      case '/foodassistancelist':
+        return _authGuardAdmin(
+            isAuthenticated, const TotalFoodAssistanceMain(), settings);
+      case '/completedassitance':
+        return _authGuardAdmin(
+            isAuthenticated, const TotalCompletedMain(), settings);
+      case '/medicalassistancelist':
+        return _authGuardAdmin(
+            isAuthenticated, const TotalMedicalAssistanceMain(), settings);
+      case '/beneficiarylist':
+        return _authGuardAdmin(
+            isAuthenticated, const TotalBeneficiaryMain(), settings);
       case '/addbeneficiary':
         return _authGuardAdmin(
             isAuthenticated, const AddBeneficiaryMain(), settings);

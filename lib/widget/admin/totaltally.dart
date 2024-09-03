@@ -134,13 +134,13 @@ class TotalTally extends StatelessWidget {
                         TableRow(
                           children: <Widget>[
                             TcellData(
-                              txtcell: bgrgyList[i][0],
+                              txtcell: i.toString(),
                               heightcell: 50,
                               pad: 15,
                               fsize: 15,
                             ),
                             TcellData(
-                                txtcell: bgrgyList[i][1],
+                                txtcell: bgrgyList[i],
                                 heightcell: 50,
                                 pad: 15,
                                 fsize: 15),
