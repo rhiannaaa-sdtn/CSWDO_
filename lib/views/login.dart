@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       final user = _auth.currentUser;
 
-      Navigator.pushNamed(context, '/reliefrequest');
+      Navigator.pushNamed(context, '/dashboard');
 
       // print(user);
       // Navigate to home screen after successful login

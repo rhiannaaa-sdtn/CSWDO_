@@ -12,7 +12,7 @@ import 'package:file_picker/file_picker.dart';
 
 // import 'package:file_picker/';
 
-const List<String> list = <String>['Food Assitance', 'Medical Assistance'];
+const List<String> list = <String>['Food Assistance', 'Medical Assistance'];
 
 class RequestRelief extends StatefulWidget {
   const RequestRelief({super.key});

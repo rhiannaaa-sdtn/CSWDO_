@@ -116,8 +116,8 @@ class MyApp extends StatelessWidget {
   Route<dynamic> _authGuard(bool isAuthenticated, Widget page, settings) {
     return isAuthenticated
         ? MaterialPageRoute(
-            settings: const RouteSettings(name: "/reliefrequest"),
-            builder: (context) => const ReliefrequestMain())
+            settings: const RouteSettings(name: "/dashboard"),
+            builder: (context) => const DashboardMain())
         : MaterialPageRoute(settings: settings, builder: (context) => page);
   }
 }

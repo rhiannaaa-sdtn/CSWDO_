@@ -61,7 +61,7 @@ class FireStoreService {
       'authLetter': authLetter,
       'timeStamp': Timestamp.now(),
       'notification': 'unread',
-      'status': 'ongoing',
+      'status': 'Ongoing',
     });
   }
 
@@ -109,7 +109,7 @@ class FireStoreService {
       'date': date,
       'timeStamp': Timestamp.now(),
       'notification': 'unread',
-      'status': 'ongoing',
+      'status': 'Ongoing',
     });
   }
 }
