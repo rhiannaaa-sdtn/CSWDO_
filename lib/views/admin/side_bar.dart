@@ -15,7 +15,7 @@ class Sidebar extends StatefulWidget {
 class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
-    String _selectedValue = 'Account';
+    String _selectedValue = 'Administrator';
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
     void _onDropdownChanged(String? newValue) async {
@@ -75,54 +75,59 @@ class _SidebarState extends State<Sidebar> {
                       child: Container(
                         color: const Color.fromARGB(255, 22, 97, 152),
                         child: Padding(
-                          padding: EdgeInsets.only(right: 50),
+                          padding: const EdgeInsets.only(right: 50),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.notifications,
                                 color: Colors.white,
                                 size: 30,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 15,
                               ),
-                              VerticalDivider(
+                              const VerticalDivider(
                                 color: Colors.white,
                                 thickness: 2,
                                 endIndent: 10,
                                 indent: 10,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 15,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
                                 child: DropdownButton<String>(
+                                  dropdownColor:
+                                      const Color.fromARGB(255, 43, 43, 43),
                                   value: _selectedValue,
                                   onChanged: _onDropdownChanged,
                                   items: <String>[
-                                    'Account',
-                                    'Settings',
+                                    'Administrator',
+                                    // 'Settings',
                                     'Logout'
                                   ].map<DropdownMenuItem<String>>(
                                       (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: Text(value),
+                                      child: Text(
+                                        value,
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 30),
+                                      ),
                                     );
                                   }).toList(),
                                   underline:
                                       Container(), // Removes the underline
-                                  icon: Icon(Icons
-                                      .more_vert), // You can use any icon you prefer
+                                  // You can use any icon you prefer
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 15,
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.account_circle,
                                 color: Colors.white,
                                 size: 50,
