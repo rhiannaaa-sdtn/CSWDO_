@@ -30,7 +30,7 @@ class Sidebuttons extends StatelessWidget {
                       'CNAMS',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 30,
+                          fontSize: 20,
                           color: Colors.white),
                     ),
                   ],

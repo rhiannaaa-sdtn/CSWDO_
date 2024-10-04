@@ -1013,7 +1013,10 @@ class _BarangayDropState extends State<BarangayDrop> {
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<String>(
+      // width: 100,
+      textStyle: const TextStyle(color: Colors.black,fontSize: 12),
       controller: widget.barangay,
+        // menuHeight: 40, 
       initialSelection: bgrgyList.first,
       onSelected: (String? value) {
         // This is called when the user selects an item.
@@ -1023,7 +1026,7 @@ class _BarangayDropState extends State<BarangayDrop> {
       },
       dropdownMenuEntries:
           bgrgyList.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
+        return DropdownMenuEntry<String>(value: value, label: value,);
       }).toList(),
     );
   }

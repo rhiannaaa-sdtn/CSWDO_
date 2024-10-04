@@ -24,7 +24,7 @@ class Footer extends StatelessWidget {
             '© SAN PABLO CITY GOVERNMENT',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 30,
+              fontSize: 20,
             ),
           )
         ],

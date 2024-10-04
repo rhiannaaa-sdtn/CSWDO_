@@ -35,8 +35,8 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CustomWidg(txt: 'Community Needs Assesment', fsize: 80),
-                    CustomWidg(txt: 'Management System', fsize: 80),
+                    CustomWidg(txt: 'Community Needs Assesment', fsize: 50),
+                    CustomWidg(txt: 'Management System', fsize: 50),
                     SizedBox(height: 20),
                     CustomWidg(txt: 'City of San Pablo', fsize: 30),
                     CustomWidg(

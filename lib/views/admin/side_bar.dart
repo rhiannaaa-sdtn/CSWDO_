@@ -100,6 +100,7 @@ class _SidebarState extends State<Sidebar> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
                                 child: DropdownButton<String>(
+                                  
                                   dropdownColor:
                                       const Color.fromARGB(255, 43, 43, 43),
                                   value: _selectedValue,
@@ -115,7 +116,7 @@ class _SidebarState extends State<Sidebar> {
                                       child: Text(
                                         value,
                                         style: const TextStyle(
-                                            color: Colors.white, fontSize: 30),
+                                            color: Colors.white, fontSize: 20),
                                       ),
                                     );
                                   }).toList(),

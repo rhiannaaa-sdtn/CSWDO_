@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.black),
                             ],
                             color: Colors.white,
-                            fontSize: 30,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                           'City of San Pablo'),
@@ -125,12 +125,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.black),
                             ],
                             color: Colors.white,
-                            fontSize: 30,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                           'City Social Welfare andd Development Office'),
                     ]),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
                 const Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.black),
                             ],
                             color: Colors.white,
-                            fontSize: 30,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                           'Community Needs Assesment'),
@@ -180,12 +180,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.black),
                             ],
                             color: Colors.white,
-                            fontSize: 30,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                           'Management System (CNAMS)'),
                     ]),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(

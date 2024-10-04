@@ -61,34 +61,34 @@ class _TableSampleState extends State<TableSample> {
             final clientWidget = TableRow(
               children: <Widget>[
                 const TcellData(
-                    txtcell: '1', heightcell: 50, pad: 15, fsize: 15),
+                    txtcell: '1', heightcell: 50, pad: 10, fsize: 12),
                 TcellData(
-                    txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
+                    txtcell: client.id, heightcell: 50, pad: 10, fsize: 12),
                 TcellData(
                     txtcell: client['fullname'],
                     heightcell: 50,
-                    pad: 15,
-                    fsize: 15),
+                    pad: 10,
+                    fsize: 12),
                 TcellData(
                     txtcell: client['familynum'],
                     heightcell: 50,
-                    pad: 15,
-                    fsize: 15),
+                    pad: 10,
+                    fsize: 12),
                 TcellData(
                     txtcell: client['mobileNum'],
                     heightcell: 50,
-                    pad: 15,
-                    fsize: 15),
+                    pad: 10,
+                    fsize: 12),
                 TcellData(
                     txtcell: client['needs'],
                     heightcell: 50,
-                    pad: 15,
-                    fsize: 15),
+                    pad: 10,
+                    fsize: 12),
                 TcellData(
                     txtcell: client['timeStamp'].toDate().toString(),
                     heightcell: 50,
-                    pad: 15,
-                    fsize: 15),
+                    pad: 10,
+                    fsize: 12),
                 ElevatedButton(
                     style: ButtonStyle(
                         shape: WidgetStatePropertyAll(RoundedRectangleBorder(

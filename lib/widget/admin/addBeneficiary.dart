@@ -139,7 +139,7 @@ class _PersonalInputlocalState extends State<PersonalInputlocal> {
           height: 50,
           child: Text(
             'Add Beneficiary',
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(fontSize: 20),
           ),
         ),
         Column(
@@ -149,7 +149,7 @@ class _PersonalInputlocalState extends State<PersonalInputlocal> {
                 child: Container(
                   color: const Color.fromARGB(255, 22, 97, 152),
                   child: const Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(05.0),
                     child: Text(
                       'Personal Information',
                       style: TextStyle(color: Colors.white, fontSize: 20),
@@ -183,23 +183,26 @@ class _PersonalInputlocalState extends State<PersonalInputlocal> {
                           //   child: Text('Date of Birth',
                           //       style: TextStyle(fontWeight: FontWeight.bold)),
                           // ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              controller: widget.dob,
-                              decoration: const InputDecoration(
-                                  labelText: 'Date of Birth',
-                                  filled: true,
-                                  prefixIcon: Icon(Icons.calendar_today),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide.none),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.blue))),
-                              readOnly: true,
-                              onTap: () {
-                                selectedDate();
-                              },
+                          Container(
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: widget.dob,
+                                decoration: const InputDecoration(
+                                    labelText: 'Date of Birth',
+                                    filled: true,
+                                    prefixIcon: Icon(Icons.calendar_today),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.blue))),
+                                readOnly: true,
+                                onTap: () {
+                                  selectedDate();
+                                },
+                              ),
                             ),
                           ),
                           InptBX(
@@ -226,21 +229,23 @@ class _PersonalInputlocalState extends State<PersonalInputlocal> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    top: 10, left: 10, right: 10),
+                                    top: 0, left: 10, right: 10),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
+                                  const  Padding(
                                       padding: const EdgeInsets.all(0),
                                       child: Text('Barangay',
-                                          style: const TextStyle(
+                                          style: const TextStyle(fontSize: 12,
                                               fontWeight: FontWeight.bold)),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(0),
-                                      child: BarangayDrop(
-                                          barangay: widget.barangay),
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0),
+                                        child: BarangayDrop(
+                                            barangay: widget.barangay),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -511,18 +516,21 @@ class _InptBXState extends State<InptBX> {
                 padding: const EdgeInsets.all(1.0),
                 child: Text(widget.txtdesc,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15)),
+                        fontWeight: FontWeight.bold, fontSize: 12)),
               ),
-              Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: TextField(
-                    controller: widget.inputText,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+              Container(height: 35  ,
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: TextField(
+                      controller: widget.inputText,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        hintText: widget.txtinput,
+                      ), style:const TextStyle(fontSize: 12)
                       ),
-                      hintText: widget.txtinput,
-                    )),
+                ),
               ),
             ],
           ),

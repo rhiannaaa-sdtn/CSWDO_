@@ -61,7 +61,7 @@ class TotalTally extends StatelessWidget {
               children: [
                 const Text(
                   'Total Tally',
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * .78,
@@ -231,7 +231,7 @@ class TcellHeader extends StatelessWidget {
         child: Center(
             child: Text(
           txtcell,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
         )),
       ),
     );

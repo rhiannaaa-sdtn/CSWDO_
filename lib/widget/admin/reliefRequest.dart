@@ -38,7 +38,7 @@ class Reliefrequest extends StatelessWidget {
           children: [
             const Text(
               'Relief Request',
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(fontSize: 20),
             ),
             Column(
               children: [
@@ -52,7 +52,7 @@ class Reliefrequest extends StatelessWidget {
                   color: Colors.white,
                   width: double.infinity,
                   child: Padding(
-                    padding: EdgeInsets.all(18),
+                    padding: const EdgeInsets.only(bottom: 18,left: 18,right: 18),
                     child: Column(
                       children: [
                         Container(

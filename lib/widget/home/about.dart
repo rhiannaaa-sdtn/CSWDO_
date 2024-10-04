@@ -47,14 +47,14 @@ class _AbtState extends State<Abt> {
               Text(
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 40,
+                  fontSize: 30,
                 ),
                 'ABOUT US',
               ),
               SizedBox(height: 20),
               Text(
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.justify,
@@ -76,7 +76,7 @@ class _AbtState extends State<Abt> {
               SizedBox(height: 20),
               Text(
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.justify,
@@ -151,7 +151,7 @@ class Row1 extends StatelessWidget {
                                     width: 100, height: 100, fit: BoxFit.cover),
                                 const Text(
                                     style: TextStyle(
-                                      fontSize: 30,
+                                      fontSize: 20,
                                       color: Color.fromRGBO(255, 255, 255, 1),
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -192,7 +192,7 @@ class Row1 extends StatelessWidget {
                                 const Text(
                                     style: TextStyle(
                                       color: Color.fromRGBO(255, 255, 255, 1),
-                                      fontSize: 30,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     'Food Assistance')
@@ -295,7 +295,7 @@ class Contact extends StatelessWidget {
                   children: [
                     Text(
                         style: TextStyle(
-                          fontSize: 50,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),
                         'CONTACT US'),
@@ -306,31 +306,31 @@ class Contact extends StatelessWidget {
                     ),
                     Text(
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                         'inquiry@cswdo.gov.ph'),
                     Text(
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                         'cnams.co@cswdo.gov.ph'),
                     Text(
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                         '8962-2813/8951-7433'),
                     Text(
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                         'Monday - Friday (except holidays)'),
                     Text(
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                         '8:00 am - 5:00 pm')
