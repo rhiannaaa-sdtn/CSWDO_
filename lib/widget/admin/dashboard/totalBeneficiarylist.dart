@@ -2,6 +2,7 @@ import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:cwsdo/widget/custom/numberInput.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/admin/nextStep.dart';
+import 'package:cwsdo/widget/admin/nextStepbene.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -175,10 +176,12 @@ class _TableDataListState extends State<TableDataList> {
                         backgroundColor: const WidgetStatePropertyAll(
                             Color.fromRGBO(33, 79, 215, 1))),
                     onPressed: () {
+                     
+                    //  _showDialog(context, client.id);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                             builder: (context) =>
-                                NextStepMain(requestID: client.id)),
+                                NextStepMainbene(requestID: client.id)),
                       );
                     },
                     child: Text(
@@ -222,3 +225,23 @@ class _TableDataListState extends State<TableDataList> {
     );
   }
 }
+
+void _showDialog(BuildContext context,client) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(client),
+          content: Text('This is a simple dialog box.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }

@@ -12,31 +12,35 @@ class Sidebuttons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(left: 20,right: 20,bottom: 15,top: 15),
           child: SizedBox(
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .start, //Center Column contents vertically,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset("images/SpcLogo.png",
-                        width: 60, height: 60, fit: BoxFit.cover),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      'CNAMS',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .start, //Center Column contents vertically,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset("images/SpcLogo.png",
+                            width: 50, height: 50, fit: BoxFit.cover),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'CNAMS',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.white),
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 2,
                 ),
                 const Divider(
                   color: Colors.white,

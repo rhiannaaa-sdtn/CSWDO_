@@ -70,8 +70,8 @@ class _SidebarState extends State<Sidebar> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     //  header
-                    Expanded(
-                      flex: 1,
+                    SizedBox(
+                      height: 80,
                       child: Container(
                         color: const Color.fromARGB(255, 22, 97, 152),
                         child: Padding(
@@ -140,7 +140,7 @@ class _SidebarState extends State<Sidebar> {
                     ),
                     // content
                     Expanded(
-                      flex: 6,
+                      flex: 8,
                       child: Container(
                           // child: const TotalTally(),
                           // child: const Addbeneficiary(),

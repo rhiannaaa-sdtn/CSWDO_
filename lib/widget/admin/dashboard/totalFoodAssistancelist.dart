@@ -143,9 +143,11 @@ class _TableDataListState extends State<TableDataList> {
               children: <Widget>[
                 TcellData(txtcell: txt, heightcell: 50, pad: 15, fsize: 15),
                 TcellData(
-                    txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
+                    txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),  
+                    TcellData(
+                    txtcell: client['fullname'], heightcell: 50, pad: 15, fsize: 15),
                 TcellData(
-                    txtcell: client['fullname'],
+                    txtcell: client['familynum'],
                     heightcell: 50,
                     pad: 15,
                     fsize: 15),

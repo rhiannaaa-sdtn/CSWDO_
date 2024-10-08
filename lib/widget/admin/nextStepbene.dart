@@ -11,15 +11,15 @@ import 'package:cwsdo/services/firestore.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
-class NextStepMain extends StatefulWidget {
+class NextStepMainbene extends StatefulWidget {
   final String requestID;
-  const NextStepMain({super.key, required this.requestID});
+  const NextStepMainbene({super.key, required this.requestID});
 
   @override
-  State<NextStepMain> createState() => _NextStepMainState();
+  State<NextStepMainbene> createState() => _NextStepMainState();
 }
 
-class _NextStepMainState extends State<NextStepMain> {
+class _NextStepMainState extends State<NextStepMainbene> {
   @override
   Widget build(BuildContext context) {
     return Sidebar(
@@ -40,7 +40,7 @@ class NextStep extends StatelessWidget {
     final FireStoreService fireStoreService = FireStoreService();
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('Request')
+          .collection('Beneficiary')
           .doc(requestID)
           .snapshots(),
       builder: (context, snapshot) {
