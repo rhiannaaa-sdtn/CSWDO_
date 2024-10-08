@@ -138,19 +138,21 @@ class NextStep extends StatelessWidget {
             ],
           );
           clientWidgets.add(clientWidget);
+
+          
           personalinfo('FULLNAME', clients['fullname']);
           personalinfo('MOBILE NUMBER.', clients['mobileNum']);
-          personalinfo('DATE OF BIRTH', clients['mobileNum']);
-          personalinfo('GOVT. ISSUED ID', clients['mobileNum']);
-          personalinfo('GOVT. ISSUED ID NO.', clients['mobileNum']);
-          personalinfo('No. OF FAMILIY NUMBER', clients['mobileNum']);
-          personalinfo('FULL ADDRESS', clients['mobileNum']);
-          personalinfo('BARANGAY', clients['mobileNum']);
-          needsinfo('ORDER NUMBER', clients['mobileNum']);
-          needsinfo('NEED TYPE', clients['mobileNum']);
-          needsinfo('DATE REGISTERED', clients['mobileNum']);
-          needsinfo('NEEDS STATUS', clients['mobileNum']);
-          needsinfo('REPORT', clients['mobileNum']);
+          personalinfo('DATE OF BIRTH', clients['dateOfBirth']);
+          personalinfo('GOVT. ISSUED ID', clients['govtID']);
+          personalinfo('GOVT. ISSUED ID NO.', clients['idNo']);
+          personalinfo('No. OF FAMILIY NUMBER', clients['familynum']);
+          personalinfo('FULL ADDRESS', clients['address']);
+          personalinfo('BARANGAY', clients['barangay']);
+          needsinfo('ORDER NUMBER', clients.id);
+          needsinfo('NEED TYPE', clients['needs']);
+          needsinfo('DATE REGISTERED', clients['date']);
+          needsinfo('NEEDS STATUS', clients['status']);
+          needsinfo('REPORT', clients['Reportstatus']);
         }
 
         Future<void> _saveRemarks(
@@ -164,58 +166,58 @@ class NextStep extends StatelessWidget {
 
         Future<void> _actionButton() async {
           showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  title: Container(
-                    height: 80,
-                    color: const Color.fromARGB(255, 45, 127, 226),
-                    child: Center(child: Text('Take Action')),
+  context: context,
+  builder: (context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      title: Container(
+        height: 80,
+        color: const Color.fromARGB(255, 45, 127, 226),
+        child: Center(child: Text('Take Action')),
+      ),
+      titlePadding: const EdgeInsets.all(0),
+      content: Container(
+        height: MediaQuery.of(context).size.height * .6,
+        width: MediaQuery.of(context).size.width * .6,
+        child: Column(
+          children: [
+            DropdownButtonExample(
+              status: status,
+            ),
+            SizedBox(
+              child: TextField(
+                controller: remarks,
+                maxLength: 500,
+                maxLines: 10,
+                decoration: InputDecoration(
+                  labelText: "Remarks",
+                  hintText: "Remarks (Maximum of 500 characters)",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  titlePadding: const EdgeInsets.all(0),
-                  content: Container(
-                      height: MediaQuery.of(context).size.height * .6,
-                      width: MediaQuery.of(context).size.width * .6,
-                      child: Column(
-                        children: [
-                          DropdownButtonExample(
-                            status: status,
-                          ),
-                          SizedBox(
-                            // width: 100,
-                            child: TextField(
-                              controller: remarks,
-                              maxLength: 500,
-                              maxLines: 10,
-                              decoration: InputDecoration(
-                                // contentPadding: EdgeInsets.symmetric(
-                                //   vertical: 150.0,
-                                //   horizontal: 10.0,
-                                // ),
-                                labelText: "Remarks",
-                                hintText: "Remarks (Maximum of 500 characters)",
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                // focusedBorder: InputBorder.none,
-                                // enabledBorder: InputBorder.none,
-                                // errorBorder: InputBorder.none,
-                                // disabledBorder: InputBorder.none,
-                                // hintTextDirection: TextDirection.ltr,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
-                  actions: <Widget>[
-                    TextButton(
-                        onPressed: () => _saveRemarks(status, remarks.text),
-                        child: const Text('OK')),
-                  ],
-                );
-              });
+                  fillColor: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            _saveRemarks(status, remarks.text);
+            remarks.text = '';
+            Navigator.pop(context); // Close the dialog
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  },
+);
+
         }
 
         // return ListView(
@@ -223,7 +225,68 @@ class NextStep extends StatelessWidget {
         //   shrinkWrap: true,
         //   children: clie+ntWidgets,
         // );
-        return Padding(
+
+                return StreamBuilder<QuerySnapshot>(
+           stream: FirebaseFirestore.instance
+  .collection('Remarks')
+  .where('cleintID', isEqualTo: requestID)
+  // .orderBy("cleintID")
+  // .orderBy("timeStamp", descending: true)
+  .snapshots(),
+            builder: (context, snapshot) {
+              List<TableRow> remarkTable = [
+                const TableRow(
+                  children: <Widget>[
+                    TcellHeader(
+                      txtcell: 'REMARK',
+                      heightcell: 30,
+                    ),
+                    TcellHeader(
+                      txtcell: 'STATUS',
+                      heightcell: 30,
+                    ),
+                    TcellHeader(
+                      txtcell: 'REMARK DATE',
+                      heightcell: 30,
+                    ),
+                    TcellHeader(
+                      txtcell: 'REMARK BY',
+                      heightcell: 30,
+                    ),
+                  ],
+                ),
+              ];
+
+              if (snapshot.hasData) {
+                final clientss = snapshot.data?.docs.toList();
+                clientss?.sort((a, b) => b['timeStamp'].compareTo(a['timeStamp']));
+                for (var client in clientss!) {
+                  final clientWidget = TableRow(
+                    children: <Widget>[
+                       TcellData(
+                          txtcell: client['remarks'], heightcell: 50, pad: 10, fsize: 15),
+                      TcellData(
+                          txtcell: client['status'],
+                          heightcell: 50,
+                          pad: 10,
+                          fsize: 15),
+                      TcellData(
+                          txtcell: client['timeStamp'].toDate().toString(),
+                          heightcell: 50,
+                          pad: 10,
+                          fsize: 15),
+                      TcellData(
+                          txtcell: client['REMARK BY'],
+                          heightcell: 50,
+                          pad: 10,
+                          fsize: 15),
+                    ],
+                  );
+                  remarkTable.add(clientWidget);
+                }
+              }
+
+              return Padding(
           padding: const EdgeInsets.only(
             // top: 50,
             left: 50,
@@ -438,7 +501,7 @@ class NextStep extends StatelessWidget {
                                 },
                                 defaultVerticalAlignment:
                                     TableCellVerticalAlignment.middle,
-                                children: clientWidgets,
+                                children: remarkTable,
                               ),
                             ),
                           ),
@@ -455,6 +518,8 @@ class NextStep extends StatelessWidget {
             ],
           ),
         );
+            });
+       
       },
     );
   }
@@ -476,8 +541,13 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
     'Completed',
   ];
   @override
-  Widget build(BuildContext context) {
+void initState() {
+  super.initState();
     widget.status.text = 'Ongoing';
+}
+
+  Widget build(BuildContext context) {
+    
     return DropdownButton(
       isExpanded: true,
       // Initial Value
@@ -505,3 +575,6 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
     );
   }
 }
+
+
+
