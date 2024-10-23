@@ -3,12 +3,8 @@ import 'package:cwsdo/widget/custom/numberInput.dart';
 import 'package:cwsdo/widget/custom/table.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/admin/nextStep.dart';
-
 import 'package:cwsdo/widget/admin/totaltally.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
 
 class ReliefrequestMain extends StatefulWidget {
   const ReliefrequestMain({super.key});
@@ -58,6 +54,24 @@ class TableSample extends StatefulWidget {
 class _TableSampleState extends State<TableSample> {
   int _rowsPerPage = 5; // Rows per page
   int _currentPage = 0;  // Current page index
+  String _searchTerm = ""; // Search term
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchTerm = _searchController.text.toLowerCase();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +83,15 @@ class _TableSampleState extends State<TableSample> {
         }
 
         final clients = snapshot.data?.docs ?? [];
-        final totalRows = clients.length;
+        final filteredClients = clients.where((client) {
+          return client['fullname'].toLowerCase().contains(_searchTerm) ||
+                //  client['mobileNum'].toLowerCase().contains(_searchTerm) ||
+                 client['needs'].toLowerCase().contains(_searchTerm) ||
+                 client.id.toLowerCase().contains(_searchTerm); // Family Order No
+        }).toList();
 
-        // Calculate start and end indices for pagination
+        final totalRows = filteredClients.length;
+
         int startIndex = _currentPage * _rowsPerPage;
         int endIndex = (startIndex + _rowsPerPage > totalRows)
             ? totalRows
@@ -79,6 +99,16 @@ class _TableSampleState extends State<TableSample> {
 
         return Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: TextField(
+                controller: _searchController,
+                decoration:const InputDecoration(
+                  labelText: 'Search',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
             Table(
               border: TableBorder.all(),
               children: [
@@ -97,13 +127,13 @@ class _TableSampleState extends State<TableSample> {
                 for (int i = startIndex; i < endIndex; i++)
                   TableRow(
                     children: <Widget>[
-                      TcellData(txtcell: '${i + 1}', heightcell: 50, pad: 10, fsize: 12),
-                      TcellData(txtcell: clients[i].id, heightcell: 50, pad: 10, fsize: 12),
-                      TcellData(txtcell: clients[i]['fullname'], heightcell: 50, pad: 10, fsize: 12),
-                      TcellData(txtcell: clients[i]['familynum'], heightcell: 50, pad: 10, fsize: 12),
-                      TcellData(txtcell: clients[i]['mobileNum'], heightcell: 50, pad: 10, fsize: 12),
-                      TcellData(txtcell: clients[i]['needs'], heightcell: 50, pad: 10, fsize: 12),
-                      TcellData(txtcell: clients[i]['timeStamp'].toDate().toString(), heightcell: 50, pad: 10, fsize: 12),
+                      TcellData(txtcell: '${startIndex + i + 1}', heightcell: 50, pad: 10, fsize: 12),
+                      TcellData(txtcell: filteredClients[i].id, heightcell: 50, pad: 10, fsize: 12),
+                      TcellData(txtcell: filteredClients[i]['fullname'], heightcell: 50, pad: 10, fsize: 12),
+                      TcellData(txtcell: filteredClients[i]['familynum'], heightcell: 50, pad: 10, fsize: 12),
+                      TcellData(txtcell: filteredClients[i]['mobileNum'], heightcell: 50, pad: 10, fsize: 12),
+                      TcellData(txtcell: filteredClients[i]['needs'], heightcell: 50, pad: 10, fsize: 12),
+                      TcellData(txtcell: filteredClients[i]['timeStamp'].toDate().toString(), heightcell: 50, pad: 10, fsize: 12),
                       ElevatedButton(
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -113,7 +143,7 @@ class _TableSampleState extends State<TableSample> {
                         ),
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) => NextStepMain(requestID: clients[i].id)),
+                            MaterialPageRoute(builder: (context) => NextStepMain(requestID: filteredClients[i].id)),
                           );
                         },
                         child: const Text('View', style: TextStyle(color: Colors.white)),
