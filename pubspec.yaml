@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  carousel_slider: ^5.0.0
   rxdart: ^0.27.4
   async: ^2.10.0
   loading_animation_widget: 
