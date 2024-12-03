@@ -2,6 +2,7 @@ import 'package:cwsdo/widget/custom/custom_widget.dart';
 import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/navigation_bar/navigation_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MedicalAssistance extends StatelessWidget {
   const MedicalAssistance({super.key});
@@ -63,7 +64,7 @@ class FoodHEad extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset("images/SpcLogo.png",
+          SvgPicture.asset("images/SpcLogo.svg",
               width: 100, height: 100, fit: BoxFit.cover),
           const SizedBox(
             width: 20,

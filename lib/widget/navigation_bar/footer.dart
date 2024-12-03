@@ -1,5 +1,6 @@
 // import 'package:cwsdo/constatns/navitem.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:cwsdo/widget/custom/custom_widget.dart';
 
 class Footer extends StatelessWidget {
@@ -15,7 +16,7 @@ class Footer extends StatelessWidget {
             MainAxisAlignment.center, //Center Column contents vertically,
         crossAxisAlignment: CrossAxisAlignment.center, //Center Co
         children: [
-          Image.asset("images/SpcLogo.png",
+          SvgPicture.asset("images/SpcLogo.svg",
               width: 100, height: 100, fit: BoxFit.cover),
           const SizedBox(
             width: 20,

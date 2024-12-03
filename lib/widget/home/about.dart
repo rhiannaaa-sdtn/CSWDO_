@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // Constant style for reusable text styles
 const TextStyle boldTitleStyle = TextStyle(
@@ -176,7 +177,7 @@ class Contact extends StatelessWidget {
             padding: const EdgeInsets.all(30.0),
             child: Row(
               children: [
-                Image.asset("images/SpcLogo.png", width: 200, height: 200, fit: BoxFit.cover),
+                SvgPicture.asset("images/SpcLogo.svg", width: 200, height: 200, fit: BoxFit.cover),
                 const SizedBox(width: 20),
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -82,7 +82,7 @@ class Sidebuttons extends StatelessWidget {
                 const Sbutton(
                   btndesc: 'User Setting',
                   btnlogo: 'images/Union.png',
-                  btnlink: '/UserSetting',
+                  btnlink: '/usersetting',
                 ),
               ],
             ),

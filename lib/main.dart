@@ -12,6 +12,7 @@ import 'package:cwsdo/widget/admin/dashboard/totalMedicalAssistance.dart';
 import 'package:cwsdo/widget/admin/reliefRequest.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:cwsdo/widget/notFound.dart';
+import "package:cwsdo/views/admin/usersetting.dart";
 // import 'package:cwsdo/widget/splashPage.dart';
 // import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +120,9 @@ class MyApp extends StatelessWidget {
       case '/dashboard':
         return _authGuardAdmin(
             isAuthenticated, const DashboardMain(), settings);
+      case '/usersetting':
+        return _authGuardAdmin(
+            isAuthenticated, const UserSetting(), settings);
 
       default:
         return MaterialPageRoute(builder: (context) => NotFoundPage());

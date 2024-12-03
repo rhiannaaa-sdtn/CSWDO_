@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/navigation_bar/navigation_bar.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // import 'package:file_picker/';
 
@@ -80,7 +81,7 @@ class FoodHEad extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset("images/SpcLogo.png",
+          SvgPicture.asset("images/SpcLogo.svg",
               width: 100, height: 100, fit: BoxFit.cover),
           const SizedBox(
             width: 20,
