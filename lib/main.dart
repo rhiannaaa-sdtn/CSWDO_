@@ -12,7 +12,7 @@ import 'package:cwsdo/widget/admin/dashboard/totalMedicalAssistance.dart';
 import 'package:cwsdo/widget/admin/reliefRequest.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:cwsdo/widget/notFound.dart';
-import 'package:cwsdo/widget/splashPage.dart';
+// import 'package:cwsdo/widget/splashPage.dart';
 // import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_test/pages/home_page.dart';
@@ -73,8 +73,8 @@ class MyApp extends StatelessWidget {
     // Check authentication status
     final isAuthenticated = FirebaseAuth.instance.currentUser != null;
 
-    print(isAuthenticated);
-    print(settings.name);
+    // print(isAuthenticated);
+    // print(settings.name);
 
     switch (settings.name) {
       // case '/':

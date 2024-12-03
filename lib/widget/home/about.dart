@@ -1,6 +1,15 @@
-// import 'package:cwsdo/widget/navigation_bar/footer.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
+
+// Constant style for reusable text styles
+const TextStyle boldTitleStyle = TextStyle(
+  fontSize: 30,
+  fontWeight: FontWeight.bold,
+);
+
+const TextStyle bodyTextStyle = TextStyle(
+  fontSize: 15,
+  fontWeight: FontWeight.bold,
+);
 
 class About extends StatelessWidget {
   const About({super.key});
@@ -10,84 +19,54 @@ class About extends StatelessWidget {
     return const Column(
       children: [
         Row1(),
-        // SizedBox(
-        //   height: 20,
-        // ),
         Row2(),
-        SizedBox(
-          height: 50,
-        ),
-
+        SizedBox(height: 50),
         Contact(),
-        SizedBox(
-          height: 150,
-        )
+        SizedBox(height: 150),
       ],
     );
   }
 }
 
-// Abt
-class Abt extends StatefulWidget {
+// About Us section
+class Abt extends StatelessWidget {
   const Abt({super.key});
 
-  @override
-  State<Abt> createState() => _AbtState();
-}
-
-class _AbtState extends State<Abt> {
   @override
   Widget build(BuildContext context) {
     return const Expanded(
       child: Padding(
-          padding: EdgeInsets.all(30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                ),
-                'ABOUT US',
-              ),
-              SizedBox(height: 20),
-              Text(
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.justify,
-                'The City Social Welfare and Development Office (CWSDO) is the local social welfare arm of '
-                'the City Government of San Pablo   mandated to provide basic social welfare programs to its '
-                'disadvantege citizenry. CWSDO was devolved and decentralized to the City Government of San Pablo '
-                'October 1, 1992 in pursuant to RA 7160 and City Ordinance No. 2374 Series of 1994 which approved '
-                'the organizaitional structure and staffing pattern of the City of San Pablo in orger for LGUs to '
-                'excercise greater autonomy in providing basic welfare programs and service.',
-              ),
-              SizedBox(height: 20),
-              Text(
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-                'Program Objectives',
-              ),
-              SizedBox(height: 20),
-              Text(
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.justify,
-                  'The objectives of City Social Welfare and Development Office (CWSDO) is to '
-                  'help and provide food and medical assistance for disadvantage citizens of San Pablo.'),
-            ],
-          )),
+        padding: EdgeInsets.all(30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('ABOUT US', style: boldTitleStyle),
+            SizedBox(height: 20),
+            Text(
+              'The City Social Welfare and Development Office (CWSDO) is the local social welfare arm of '
+              'the City Government of San Pablo mandated to provide basic social welfare programs to its '
+              'disadvantage citizenry. CWSDO was devolved and decentralized to the City Government of San Pablo '
+              'on October 1, 1992, in pursuant to RA 7160 and City Ordinance No. 2374 Series of 1994.',
+              style: bodyTextStyle,
+              textAlign: TextAlign.justify,
+            ),
+            SizedBox(height: 20),
+            Text('Program Objectives', style: boldTitleStyle),
+            SizedBox(height: 20),
+            Text(
+              'The objectives of the City Social Welfare and Development Office (CWSDO) are to help and provide '
+              'food and medical assistance for disadvantaged citizens of San Pablo.',
+              style: bodyTextStyle,
+              textAlign: TextAlign.justify,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
+// First row section with Assistance offers and Request Tracker button
 class Row1 extends StatelessWidget {
   const Row1({super.key});
 
@@ -95,155 +74,94 @@ class Row1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         const Expanded(
           flex: 5,
-          child: SizedBox(
-            width: 100.0,
-            // height: MediaQuery.of(context).size.height * .9,
-            // height: double.infinity,
-            // color: const Color.fromARGB(255, 255, 255, 255),
-            child: Row(
-              children: [Abt()],
-            ),
-          ),
+          child: Abt(),
         ),
         Expanded(
           flex: 4,
-          child: SizedBox(
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, //Center Column contents vertically,
-              crossAxisAlignment: CrossAxisAlignment
-                  .center, //Center Column contents horizontally,
+          child: Padding(
+            padding: const EdgeInsets.all(50.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    child: Column(
-                      children: [
-                        const Text(
-                          'CWSDO ASSISTANCE',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        SizedBox(
-                          height: 100,
-                          width: MediaQuery.of(context).size.width * .3,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                shape: WidgetStatePropertyAll(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  // side: const BorderSide(
-                                  //     color: Colors.red)
-                                )),
-                                backgroundColor: const WidgetStatePropertyAll(
-                                    Color.fromRGBO(78, 115, 222, 1))),
-                            child: Row(
-                              children: [
-                                Image.asset("images/Caduceus.png",
-                                    width: 100, height: 100, fit: BoxFit.cover),
-                                const Text(
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Color.fromRGBO(255, 255, 255, 1),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    'Medical Assistance')
-                              ],
-                            ),
-                            onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => const Footer()),
-                              // );
-                              Navigator.pushNamed(
-                                  context, '/medicalassistance');
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        SizedBox(
-                          height: 100,
-                          width: MediaQuery.of(context).size.width * .3,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                shape: WidgetStatePropertyAll(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  // side: const BorderSide(
-                                  //     color: Colors.red)
-                                )),
-                                backgroundColor: const WidgetStatePropertyAll(
-                                    Color.fromRGBO(78, 115, 222, 1))),
-                            child: Row(
-                              children: [
-                                Image.asset("images/Food.png",
-                                    width: 100, height: 100, fit: BoxFit.cover),
-                                const Text(
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 255, 255, 1),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    'Food Assistance')
-                              ],
-                            ),
-                            onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => const Footer()),
-                              // );
-                              Navigator.pushNamed(context, '/foodassistance');
-                            },
-                          ),
-                        ),
-                      ],
-                    )),
+                const Text(
+                  'CWSDO ASSISTANCE OFFERS',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 30),
+                _buildAssistanceOption('Medical Assistance'),
+                _buildAssistanceOption('Food Assistance'),
+                _buildAssistanceOption('Other Assistance...'),
+                const SizedBox(height: 30),
+                _buildRequestTrackerButton(context),
               ],
             ),
           ),
         ),
       ],
-      // )
-      //         height: 500,
-      //         width: double.maxFinite,
-      //         color: Colors.blueGrey,
+    );
+  }
+
+  // Helper function to avoid repetition in assistance options
+  Widget _buildAssistanceOption(String title) {
+    return Text(
+      title,
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    );
+  }
+
+  // Request Tracker button
+  Widget _buildRequestTrackerButton(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      width: MediaQuery.of(context).size.width * .3,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          ),
+          backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(78, 115, 222, 1)),
+        ),
+        child: const Center(
+          child: Text(
+            'Request Tracker',
+            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => const RequestTrackerDialog(),
+          );
+        },
+      ),
     );
   }
 }
 
+// Second row section with image
 class Row2 extends StatelessWidget {
   const Row2({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment:
-          MainAxisAlignment.center, //Center Column contents vertically,
-      crossAxisAlignment:
-          CrossAxisAlignment.center, //Center Column contents horizontally,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset("images/CSWDOgroupPic.jpg",
-            width: MediaQuery.of(context).size.width * .9,
-            height: MediaQuery.of(context).size.height * .5,
-            fit: BoxFit.cover)
+        Image.asset(
+          "images/CSWDOgroupPic.jpg",
+          width: MediaQuery.of(context).size.width * .9,
+          height: MediaQuery.of(context).size.height * .5,
+          fit: BoxFit.cover,
+        ),
       ],
     );
   }
 }
 
-// height: MediaQuery.of(context).size.height * .1,
+// Contact section with address, phone, and email
 class Contact extends StatelessWidget {
   const Contact({super.key});
 
@@ -251,96 +169,107 @@ class Contact extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         Expanded(
           flex: 4,
           child: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Row(children: [
-                Image.asset("images/SpcLogo.png",
-                    width: 200, height: 200, fit: BoxFit.cover),
-                const SizedBox(
-                  width: 20,
-                ),
+            padding: const EdgeInsets.all(30.0),
+            child: Row(
+              children: [
+                Image.asset("images/SpcLogo.png", width: 200, height: 200, fit: BoxFit.cover),
+                const SizedBox(width: 20),
                 const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          'Community Needs'),
-                      Text(
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          'Assesment Management'),
-                      Text(
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          'System (CNAMS)')
-                    ])
-              ])),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Community Needs', style: boldTitleStyle),
+                    Text('Assessment Management', style: boldTitleStyle),
+                    Text('System (CNAMS)', style: boldTitleStyle),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
         const Expanded(
           flex: 4,
           child: Padding(
-              padding: EdgeInsets.all(30.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        'CONTACT US'),
-                    Divider(
-                      color: Colors.black,
-                      thickness: 10,
-                      endIndent: 300,
-                    ),
-                    Text(
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        'inquiry@cswdo.gov.ph'),
-                    Text(
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        'cnams.co@cswdo.gov.ph'),
-                    Text(
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        '8962-2813/8951-7433'),
-                    Text(
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        'Monday - Friday (except holidays)'),
-                    Text(
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        '8:00 am - 5:00 pm')
-                  ])),
+            padding: EdgeInsets.all(30.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('CONTACT US', style: boldTitleStyle),
+                Divider(color: Colors.black, thickness: 10, endIndent: 300),
+                Text('inquiry@cswdo.gov.ph', style: bodyTextStyle),
+                Text('cnams.co@cswdo.gov.ph', style: bodyTextStyle),
+                Text('8962-2813/8951-7433', style: bodyTextStyle),
+                Text('Monday - Friday (except holidays)', style: bodyTextStyle),
+                Text('8:00 am - 5:00 pm', style: bodyTextStyle),
+              ],
+            ),
+          ),
         ),
       ],
-      // )
-      //         height: 500,
-      //         width: double.maxFinite,
-      //         color: Colors.blueGrey,
+    );
+  }
+}
+
+// Request Tracker Dialog
+class RequestTrackerDialog extends StatefulWidget {
+  const RequestTrackerDialog({super.key});
+
+  @override  
+  _RequestTrackerDialogState createState() => _RequestTrackerDialogState();
+}
+
+class _RequestTrackerDialogState extends State<RequestTrackerDialog> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return AlertDialog(
+      title: const Text(
+        'Request Tracker',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+      content: ConstrainedBox(
+        constraints: BoxConstraints(minWidth: screenWidth * 0.8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Please enter your reference number below:',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Request Information',
+                hintText: 'Enter your request...',
+              ),
+            ),
+          ],
+        ),
+      ),
+      // actions: [
+      //   TextButton(
+      //     onPressed: () => Navigator.of(context).pop(),
+      //     child: const Text('Cancel'),
+      //   ),
+      //   TextButton(
+      //     onPressed: () {
+      //       String requestText = _controller.text;
+      //       if (requestText.isNotEmpty) {
+      //         print('User request: $requestText');
+      //       }
+      //       Navigator.of(context).pop();
+      //     },
+      //     child: const Text('Submit'),
+      //   ),
+      // ],
     );
   }
 }

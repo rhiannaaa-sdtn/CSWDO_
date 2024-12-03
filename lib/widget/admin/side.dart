@@ -1,5 +1,6 @@
 import 'package:cwsdo/widget/custom/custom_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Sidebuttons extends StatelessWidget {
   const Sidebuttons({super.key});
@@ -23,7 +24,7 @@ class Sidebuttons extends StatelessWidget {
                           .start, //Center Column contents vertically,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset("images/SpcLogo.png",
+                        SvgPicture.asset("images/SpcLogo.svg",
                             width: 50, height: 50, fit: BoxFit.cover),
                         const SizedBox(
                           width: 10,
@@ -62,20 +63,26 @@ class Sidebuttons extends StatelessWidget {
                   btnlogo: 'images/AddBeneficiary.png',
                   btnlink: '/addbeneficiary',
                 ),
-                const Sbutton(
-                  btndesc: 'Relief Request',
-                  btnlogo: 'images/ReliefRequest.png',
-                  btnlink: '/reliefrequest',
+                   const Sbutton(
+                  btndesc: 'List of BNS',
+                  btnlogo: 'images/TotalTally.png',
+                  btnlink: '/addbeneficiary',
                 ),
-                const Sbutton(
-                  btndesc: 'Search Beneficiary',
-                  btnlogo: 'images/SearchBeneficiary.png',
-                  btnlink: '/searchbeneficiary',
-                ),
+                // const Sbutton(
+                //   btndesc: 'Relief Request',
+                //   btnlogo: 'images/ReliefRequest.png',
+                //   btnlink: '/reliefrequest',
+                // ),
+        
                 const Sbutton(
                   btndesc: 'Heat Map',
                   btnlogo: 'images/HeatMap.png',
                   btnlink: '/heatmap',
+                ),        
+                const Sbutton(
+                  btndesc: 'User Setting',
+                  btnlogo: 'images/Union.png',
+                  btnlink: '/UserSetting',
                 ),
               ],
             ),
