@@ -76,38 +76,20 @@ class Dashboard extends StatelessWidget {
                       title: 'Total Registered Beneficiary',
                       count: '${docs2.length}',
                       link: '/beneficiarylist'),
-                  DashboardBox(
-                      title: 'Food Assistance',
-                      count:
-                          '${docs1.where((doc) => doc['needs'] == 'Food Assistance').length}',
-                      link: '/foodassistancelist'),
-                  DashboardBox(
-                      title: 'Medical Assistance',
-                      count:
-                          '${docs1.where((doc) => doc['needs'] == 'Medical Assistance').length}',
-                      link: '/medicalassistancelist'),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DashboardBox(
-                      title: 'Total Completed Assistance',
-                      count:
-                          '${docs1.where((doc) => doc['status'] == 'Completed').length}',
-                      link: '/completedassitance'),
-                  DashboardBox(
+                DashboardBox(
                       title: 'Ongoing Assistance',
                       count:
                           '${docs1.where((doc) => doc['status'] == 'Ongoing').length}',
                       link: '/ongoingassistance'),
-                  DashboardBox(
-                      title: 'Relief Request',
-                      count: '${docs1.length}',
-                      link: '/reliefrequest'),
+                 DashboardBox(
+                      title: 'Total Completed Assistance',
+                      count:
+                          '${docs1.where((doc) => doc['status'] == 'Completed').length}',
+                      link: '/completedassitance'),
+          
                 ],
               ),
+          
             ],
           ),
         );

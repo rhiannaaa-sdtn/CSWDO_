@@ -33,7 +33,6 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
 
   // Function to filter the users based on the search query
   void _filterUsers(String query) {
-    // Check if the query is empty, and show all users if it is
     List<DocumentSnapshot> filtered = _allUsers.where((user) {
       String fullName = user['fullName'].toLowerCase();
       String email = user['email'].toLowerCase();
@@ -179,34 +178,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
 
                 if (errorMessages.isNotEmpty) {
                   // Show error dialog with all issues
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Error'),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              for (var errorMessage in errorMessages)
-                                Text(
-                                  errorMessage,
-                                  style: const TextStyle(color: Colors.red),
-                                ),
-                            ],
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(); // Close the error dialog
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  _showErrorDialog(context, errorMessages);
                 } else {
                   try {
                     // Step 1: Create a new user with Firebase Authentication
@@ -223,20 +195,69 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                       'createdAt': FieldValue.serverTimestamp(),
                     });
 
-                    // Success! Close the dialog
+                    // Success! Close the dialog and show success message
                     Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('User successfully added!')),
-                    );
+                    _showSuccessDialog(context, 'User successfully added!');
                   } on FirebaseAuthException catch (e) {
                     // Handle Firebase errors here
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: ${e.message}')),
-                    );
+                    _showErrorDialog(context, [e.message ?? 'Error occurred']);
                   }
                 }
               },
               child: const Text('Add User'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Function to show a success dialog
+  void _showSuccessDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Function to show an error dialog
+  void _showErrorDialog(BuildContext context, List<String> errorMessages) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var errorMessage in errorMessages)
+                  Text(
+                    errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the error dialog
+              },
+              child: const Text('OK'),
             ),
           ],
         );
@@ -299,11 +320,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                         _showAddUserDialog(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, // Blue background
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding inside the button
-                        shape: RoundedRectangleBorder( // Box-like appearance
-                          borderRadius: BorderRadius.circular(8), // Rounded corners
-                        ),
+                        backgroundColor: Colors.blue, // Set the button color
                       ),
                       child: const Text(
                         'Add New User',
@@ -346,13 +363,9 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                             // Delete user from Firestore
                             try {
                               await FirebaseFirestore.instance.collection('users').doc(user.id).delete();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('User deleted successfully')),
-                              );
+                              _showSuccessDialog(context, 'User deleted successfully');
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Error deleting user: $e')),
-                              );
+                              _showErrorDialog(context, ['Error deleting user: $e']);
                             }
                           },
                         ),
