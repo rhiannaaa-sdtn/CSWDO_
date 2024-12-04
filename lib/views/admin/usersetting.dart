@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:cwsdo/constatns/navitem.dart'; // Import navitem.dart for officeList
-import 'package:cwsdo/services/firestore.dart'; // Assuming this is where you handle Firebase interactions
 import 'package:firebase_auth/firebase_auth.dart'; // For Firebase Authentication
 import 'package:cloud_firestore/cloud_firestore.dart'; // For Firestore
+import 'package:firebase_core/firebase_core.dart'; // To initialize Firebase if needed
 
 class UserSetting extends StatefulWidget {
   const UserSetting({super.key});
@@ -19,8 +19,31 @@ class _UserSettingState extends State<UserSetting> {
   }
 }
 
-class AddBeneficiary extends StatelessWidget {
+class AddBeneficiary extends StatefulWidget {
   const AddBeneficiary({super.key});
+
+  @override
+  _AddBeneficiaryState createState() => _AddBeneficiaryState();
+}
+
+class _AddBeneficiaryState extends State<AddBeneficiary> {
+  TextEditingController _searchController = TextEditingController();
+  List<DocumentSnapshot> _filteredUsers = [];
+  List<DocumentSnapshot> _allUsers = [];
+
+  // Function to filter the users based on the search query
+  void _filterUsers(String query) {
+    // Check if the query is empty, and show all users if it is
+    List<DocumentSnapshot> filtered = _allUsers.where((user) {
+      String fullName = user['fullName'].toLowerCase();
+      String email = user['email'].toLowerCase();
+      return fullName.contains(query.toLowerCase()) || email.contains(query.toLowerCase());
+    }).toList();
+
+    setState(() {
+      _filteredUsers = filtered;
+    });
+  }
 
   // Function to show the dialog for adding a new user
   void _showAddUserDialog(BuildContext context) {
@@ -30,10 +53,8 @@ class AddBeneficiary extends StatelessWidget {
     final TextEditingController confirmPasswordController = TextEditingController();
 
     String? selectedOffice;
-    String? selectedRole;
 
     List<String> offices = officeList; // Assuming officeList is a List<String> in navitem.dart
-    List<String> roles = ['Admin'];
 
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -79,25 +100,9 @@ class AddBeneficiary extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
 
-                  // Role and Email
+                  // Email
                   Row(
                     children: [
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          value: selectedRole,
-                          hint: const Text('Select Role'),
-                          onChanged: (String? newValue) {
-                            selectedRole = newValue;
-                          },
-                          items: roles.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
                       Expanded(
                         child: TextField(
                           controller: emailController,
@@ -168,9 +173,6 @@ class AddBeneficiary extends StatelessWidget {
                 if (selectedOffice == null || selectedOffice!.isEmpty) {
                   errorMessages.add('Office is required');
                 }
-                if (selectedRole == null || selectedRole!.isEmpty) {
-                  errorMessages.add('Role is required');
-                }
                 if (passwordController.text != confirmPasswordController.text) {
                   errorMessages.add('Passwords do not match');
                 }
@@ -213,12 +215,11 @@ class AddBeneficiary extends StatelessWidget {
                       password: passwordController.text,
                     );
 
-                    // Step 2: Store additional user details in Firestore
+                    // Step 2: Store additional user details in Firestore (no 'role' field)
                     await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
                       'fullName': fullNameController.text,
                       'email': emailController.text,
                       'office': selectedOffice,
-                      'role': selectedRole,
                       'createdAt': FieldValue.serverTimestamp(),
                     });
 
@@ -245,7 +246,6 @@ class AddBeneficiary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
@@ -253,62 +253,109 @@ class AddBeneficiary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // First Row with text on left and button on right, encapsulated in a white background
+          // White Container with text and button, and the search bar inside it
           Container(
             color: Colors.white, // White background for the entire section
             padding: const EdgeInsets.all(20.0), // Padding inside the white container
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribute space between widgets
-              crossAxisAlignment: CrossAxisAlignment.center, // Vertically align items in the center
+            child: Column(
               children: [
-                const Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 50.0),
-                    child: Text('Manage users', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Show the add new user dialog
-                    _showAddUserDialog(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Blue background
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding inside the button
-                    shape: RoundedRectangleBorder( // Box-like appearance
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
+                // Row for "Manage Users" text and "Add New User" button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribute space between widgets
+                  crossAxisAlignment: CrossAxisAlignment.center, // Vertically align items in the center
+                  children: [
+                    const Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 50.0),
+                        child: Text('Manage users', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    'Add New User',
-                    style: TextStyle(color: Colors.white), // White text color
+                    ElevatedButton(
+                      onPressed: () {
+                        // Show the add new user dialog
+                        _showAddUserDialog(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue, // Blue background
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding inside the button
+                        shape: RoundedRectangleBorder( // Box-like appearance
+                          borderRadius: BorderRadius.circular(8), // Rounded corners
+                        ),
+                      ),
+                      child: const Text(
+                        'Add New User',
+                        style: TextStyle(color: Colors.white), // White text color
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20), // Space between the row and the search bar
+
+                // Search Bar (inside the white container)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: const InputDecoration(
+                      labelText: 'Search by Name or Email',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (query) {
+                      _filterUsers(query); // Call the filter function
+                    },
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20), // Space between the rows
-          // Second Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50.0, right: 50),
-                  child: SizedBox(
-                    width: screenWidth * 0.7, // 70% of the screen width
-                    child: Container(
-                      color: Colors.blue, // Just to visualize the width
-                      height: 100.0, // Example height
-                      child: Center(child: Text('Another Form')),
-                    ),
-                  ),
+          const SizedBox(height: 20), // Space between the white container and user list
+
+          // User List
+          StreamBuilder<QuerySnapshot>( 
+            stream: FirebaseFirestore.instance.collection('users').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              var users = snapshot.data!.docs;
+              _allUsers = users;  // Storing the all users for filtering
+              _filteredUsers = users; // Initially show all users
+
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: _filteredUsers.length,
+                  itemBuilder: (context, index) {
+                    var user = _filteredUsers[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                      child: ListTile(
+                        title: Text(user['fullName']),
+                        subtitle: Text('${user['email']}\nOffice: ${user['office']}'),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () async {
+                            // Delete user from Firestore
+                            try {
+                              await FirebaseFirestore.instance.collection('users').doc(user.id).delete();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('User deleted successfully')),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Error deleting user: $e')),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),
