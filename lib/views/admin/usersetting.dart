@@ -259,11 +259,12 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
             padding: const EdgeInsets.all(20.0), // Padding inside the white container
             child: Column(
               children: [
-                // Row for "Manage Users" text and "Add New User" button
+                // Row for "Manage Users" text, search bar and "Add New User" button
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribute space between widgets
+                  mainAxisAlignment: MainAxisAlignment.center, // Center the children horizontally
                   crossAxisAlignment: CrossAxisAlignment.center, // Vertically align items in the center
                   children: [
+                    // Manage Users Text
                     const Expanded(
                       flex: 1,
                       child: Padding(
@@ -271,6 +272,27 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                         child: Text('Manage users', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       ),
                     ),
+                    
+                    // Search Bar (in the middle)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        width: screenWidth * 0.3, // Set a width for the search bar
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: const InputDecoration(
+                            labelText: 'Search by Name or Email',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (query) {
+                            _filterUsers(query); // Call the filter function
+                          },
+                        ),
+                      ),
+                    ),
+
+                    // Add New User Button
                     ElevatedButton(
                       onPressed: () {
                         // Show the add new user dialog
@@ -290,23 +312,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20), // Space between the row and the search bar
-
-                // Search Bar (inside the white container)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      labelText: 'Search by Name or Email',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (query) {
-                      _filterUsers(query); // Call the filter function
-                    },
-                  ),
-                ),
+                const SizedBox(height: 20), // Space between the row and the user list
               ],
             ),
           ),
