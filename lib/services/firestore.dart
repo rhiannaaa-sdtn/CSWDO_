@@ -38,6 +38,7 @@ class FireStoreService {
       String mobileNum,
       String dateOfBirth,
       String govtID,
+      String idNo,
       String familynum,
       String address,
       String barangay,

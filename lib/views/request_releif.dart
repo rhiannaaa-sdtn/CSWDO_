@@ -639,6 +639,7 @@ class _CredentialsInputState extends State<CredentialsInput> {
         widget.dob.text,
         widget.govtid.text,
         widget.familynum.text,
+        widget.familynum.text,
         widget.address.text,
         widget.barangay.text,
         widget.needs.text,
@@ -1029,6 +1030,62 @@ class _BarangayDropState extends State<BarangayDrop> {
           bgrgyList.map<DropdownMenuEntry<String>>((String value) {
         return DropdownMenuEntry<String>(value: value, label: value,);
       }).toList(),
+    );
+  }
+}
+
+
+class InptBX extends StatefulWidget {
+  final String txtdesc, txtinput;
+  final TextEditingController inputText;
+  // final String txtinput;
+
+  const InptBX({
+    super.key,
+    required this.txtdesc,
+    required this.txtinput,
+    required this.inputText,
+  });
+
+  @override
+  State<InptBX> createState() => _InptBXState();
+}
+
+class _InptBXState extends State<InptBX> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 1, left: 1, right: 1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: Text(widget.txtdesc,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 12)),
+              ),
+              Container(height: 35  ,
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: TextField(
+                      controller: widget.inputText,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        hintText: widget.txtinput,
+                      ), style:const TextStyle(fontSize: 12)
+                      ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
