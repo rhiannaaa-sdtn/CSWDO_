@@ -40,7 +40,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
 
   PlatformFile? pickedfile1;
   PlatformFile? pickedfile2;
-  PlatformFile? pickedfile3;
+  bool isLoading = false; // Loading state
 
   Future<void> selectedDate(TextEditingController controller) async {
     DateTime? picked = await showDatePicker(
@@ -59,21 +59,38 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
 
   void _onSubmit() async {
     if (_fullname.text.isEmpty || _mobilenum.text.isEmpty) {
-      print("Please fill all required fields");
+      _showErrorDialog("Please fill all required fields");
       return;
     }
+
+    // Check if the files are uploaded (Valid ID and Indigency)
+    if (pickedfile1 == null || pickedfile2 == null) {
+      _showErrorDialog("Please upload both Valid ID and Indigency documents");
+      return;
+    }
+
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
 
     try {
       // Upload files to Firebase Storage
       String? validIdUrl = await _uploadFile(pickedfile1, 'valid_id');
       String? indigencyUrl = await _uploadFile(pickedfile2, 'indigency');
-      String? authLetterUrl = await _uploadFile(pickedfile3, 'authorization_letter');
 
       // Add beneficiary data to Firestore
-      await _addBeneficiaryToFirestore(validIdUrl, indigencyUrl, authLetterUrl);
-      print('Beneficiary added successfully!');
+      await _addBeneficiaryToFirestore(validIdUrl, indigencyUrl);
+
+      // Clear the fields after saving
+      _clearFields();
+
+      _showSuccessDialog("Beneficiary added successfully!");
     } catch (e) {
-      print('Error adding beneficiary: $e');
+      _showErrorDialog("Error adding beneficiary: $e");
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loading indicator after processing
+      });
     }
   }
 
@@ -87,13 +104,12 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
       final downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      print('Error uploading $fileType: $e');
+      _showErrorDialog('Error uploading $fileType: $e');
       return null;
     }
   }
 
-  Future<void> _addBeneficiaryToFirestore(
-      String? validIdUrl, String? indigencyUrl, String? authLetterUrl) async {
+  Future<void> _addBeneficiaryToFirestore(String? validIdUrl, String? indigencyUrl) async {
     try {
       // Firestore document structure for the beneficiary
       await FirebaseFirestore.instance.collection('beneficiaries').add({
@@ -108,11 +124,10 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
         'dateRegistered': _dateRegistered.text,
         'validId': validIdUrl,
         'indigency': indigencyUrl,
-        'authorizationLetter': authLetterUrl,
       });
       print("Beneficiary added to Firestore!");
     } catch (e) {
-      print("Error adding beneficiary to Firestore: $e");
+      _showErrorDialog("Error adding beneficiary to Firestore: $e");
     }
   }
 
@@ -123,8 +138,63 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     setState(() {
       if (type == 'type1') pickedfile1 = result.files.first;
       if (type == 'type2') pickedfile2 = result.files.first;
-      if (type == 'type3') pickedfile3 = result.files.first;
     });
+  }
+
+  void _clearFields() {
+    _fullname.clear();
+    _mobilenum.clear();
+    _dob.clear();
+    _civilStatus.clear();
+    _govtidno.clear();
+    _address.clear();
+    _barangay.clear();
+    _needs.clear();
+    _dateRegistered.clear();
+    pickedfile1 = null;
+    pickedfile2 = null;
+  }
+
+  // Method to show error dialog
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Method to show success dialog
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Success"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -218,7 +288,6 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
               _datePickerField('Date Registered', _dateRegistered),
               _fileUploadRow('Valid ID *', pickedfile1, 'type1'),
               _fileUploadRow('Indigency *', pickedfile2, 'type2'),
-              _fileUploadRow('Authorization Letter (if applicable) *', pickedfile3, 'type3'),
               _submitButton(),
             ],
           ),
@@ -296,19 +365,23 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        ElevatedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            )),
-            backgroundColor: MaterialStateProperty.all(const Color(0x4E73DE)),
-          ),
-          onPressed: _onSubmit,
-          child: const Text(
-            'Submit',
-            style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ),
+        isLoading
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    )),
+                                    backgroundColor:
+                                        const WidgetStatePropertyAll(
+                                            Color.fromRGBO(78, 115, 222, 1))),
+                onPressed: _onSubmit,
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
       ],
     );
   }
