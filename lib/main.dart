@@ -3,6 +3,7 @@ import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/views/request_releif.dart';
 import 'package:cwsdo/views/login.dart';
 import 'package:cwsdo/widget/admin/addBeneficiary.dart';
+import 'package:cwsdo/widget/admin/assisranceRequest.dart';
 import 'package:cwsdo/widget/admin/dashboard.dart';
 import 'package:cwsdo/widget/admin/dashboard/ongoing.dart';
 import 'package:cwsdo/widget/admin/dashboard/requestlist.dart';
@@ -118,6 +119,9 @@ class MyApp extends StatelessWidget {
       case '/addbeneficiary':
         return _authGuardAdmin(
             isAuthenticated, const AddBeneficiaryMain(), settings);
+      case '/assistancerequest':
+        return _authGuardAdmin(
+            isAuthenticated, const AssistanceRequest(), settings);
       case '/totaltally':
         return _authGuardAdmin(
             isAuthenticated, const TotalTallyMain(), settings);

@@ -76,7 +76,8 @@ class Sidebuttons extends StatelessWidget {
                     btnlogo: 'images/Union.png',
                     btnlink: '/usersetting',
                   ),
-                ] else ...[
+                ]
+                 else ...[
                     const Sbutton(
                     btndesc: 'List of Resident',
                     btnlogo: 'images/Dashboard.png',
@@ -85,7 +86,7 @@ class Sidebuttons extends StatelessWidget {
                  const Sbutton(
                     btndesc: 'Request Assistance',
                     btnlogo: 'images/AddBeneficiary.png',
-                    btnlink: '/addbeneficiary',
+                    btnlink: '/assistancerequest',
                   ),const Sbutton(
                     btndesc: 'List of Request',
                     btnlogo: 'images/TotalTally.png',
