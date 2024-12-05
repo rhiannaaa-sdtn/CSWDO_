@@ -5,6 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cwsdo/constatns/navitem.dart'; // Import navitem.dart for bgrgyList
+import 'dart:math';
 
 class AddBeneficiaryMain extends StatefulWidget {
   const AddBeneficiaryMain({super.key});
@@ -31,12 +33,15 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
   final TextEditingController _fullname = TextEditingController();
   final TextEditingController _mobilenum = TextEditingController();
   final TextEditingController _dob = TextEditingController();
-  final TextEditingController _civilStatus = TextEditingController();
   final TextEditingController _govtidno = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _barangay = TextEditingController();
   final TextEditingController _needs = TextEditingController();
   final TextEditingController _dateRegistered = TextEditingController();
+
+  String? _selectedCivilStatus;
+  String? _selectedBarangay; // Add selectedBarangay to store the dropdown value
+  String? _selectedNeedsType; // New variable for Needs Type
 
   PlatformFile? pickedfile1;
   PlatformFile? pickedfile2;
@@ -58,7 +63,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
   }
 
   void _onSubmit() async {
-    if (_fullname.text.isEmpty || _mobilenum.text.isEmpty) {
+    if (_fullname.text.isEmpty || _mobilenum.text.isEmpty || _selectedCivilStatus == null || _selectedBarangay == null) {
       _showErrorDialog("Please fill all required fields");
       return;
     }
@@ -78,13 +83,14 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
       String? validIdUrl = await _uploadFile(pickedfile1, 'valid_id');
       String? indigencyUrl = await _uploadFile(pickedfile2, 'indigency');
 
-      // Add beneficiary data to Firestore
-      await _addBeneficiaryToFirestore(validIdUrl, indigencyUrl);
+      // Add beneficiary data to Firestore and get documentId
+      String documentId = await _addBeneficiaryToFirestore(validIdUrl, indigencyUrl);
 
       // Clear the fields after saving
       _clearFields();
 
-      _showSuccessDialog("Beneficiary added successfully!");
+      // Show success dialog with documentId
+      _showSuccessDialog("Beneficiary added successfully!\nDocument ID: $documentId");
     } catch (e) {
       _showErrorDialog("Error adding beneficiary: $e");
     } finally {
@@ -109,25 +115,33 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     }
   }
 
-  Future<void> _addBeneficiaryToFirestore(String? validIdUrl, String? indigencyUrl) async {
+  Future<String> _addBeneficiaryToFirestore(String? validIdUrl, String? indigencyUrl) async {
     try {
       // Firestore document structure for the beneficiary
-      await FirebaseFirestore.instance.collection('beneficiaries').add({
+      String dateToday = DateTime.now().toIso8601String().substring(0, 10).replaceAll('-', ''); // Get date in yyyyMMdd format
+      int randomFourDigitNumber = Random().nextInt(9000) + 1000; // Generate a random 4-digit number
+
+      String documentId = '$dateToday$randomFourDigitNumber'; // Combine both to form the document ID
+
+      await FirebaseFirestore.instance.collection('beneficiaries').doc(documentId).set({
         'fullname': _fullname.text,
         'mobilenum': _mobilenum.text,
         'dob': _dob.text,
-        'civilStatus': _civilStatus.text,
+        'civilStatus': _selectedCivilStatus,
         'govtidno': _govtidno.text,
         'address': _address.text,
-        'barangay': _barangay.text,
-        'needs': _needs.text,
+        'barangay': _selectedBarangay, // Use selectedBarangay
+        'needs': _selectedNeedsType, // Use selectedNeedsType
         'dateRegistered': _dateRegistered.text,
         'validId': validIdUrl,
         'indigency': indigencyUrl,
+        'status': 'Ongoing',
       });
-      print("Beneficiary added to Firestore!");
+
+      return documentId;
     } catch (e) {
       _showErrorDialog("Error adding beneficiary to Firestore: $e");
+      rethrow; // Rethrow to handle the error at the calling site
     }
   }
 
@@ -145,12 +159,14 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     _fullname.clear();
     _mobilenum.clear();
     _dob.clear();
-    _civilStatus.clear();
     _govtidno.clear();
     _address.clear();
     _barangay.clear();
     _needs.clear();
     _dateRegistered.clear();
+    _selectedCivilStatus = null;
+    _selectedBarangay = null; // Clear the selectedBarangay value
+    _selectedNeedsType = null; // Clear the selectedNeedsType
     pickedfile1 = null;
     pickedfile2 = null;
   }
@@ -262,10 +278,11 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
               _inputBox('Full name', 'Enter Full Name', _fullname),
               _inputBox('Mobile Number', 'Enter Mobile Number', _mobilenum),
               _datePickerField('Date of Birth', _dob),
-              _inputBox('Civil Status', 'Enter Civil Status', _civilStatus),
+              _dropdownField(),
               _inputBox('Gender', 'Enter Gender', _govtidno),
               _inputBox('Address', 'Enter Address', _address),
-              _inputBox('Barangay', 'Enter Barangay', _barangay),
+              _barangayDropdown(),
+              // _datePickerField('Date Registered', _dateRegistered),
             ],
           ),
         ),
@@ -275,62 +292,39 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
 
   Widget _needsInformationForm() {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.height * 0.64,
-      child: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _inputBox('Needs Type', 'Enter Need Type', _needs),
+      width: MediaQuery.of(context).size.width * .8,
+      child: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _needsTypeDropdown(),
               _datePickerField('Date Registered', _dateRegistered),
+            const SizedBox(height: 30),
               _fileUploadRow('Valid ID *', pickedfile1, 'type1'),
               _fileUploadRow('Indigency *', pickedfile2, 'type2'),
-              _submitButton(),
-            ],
-          ),
+            const SizedBox(height: 20),
+            _submitButton(),
+          ],
         ),
       ),
     );
   }
 
-  Widget _inputBox(String label, String hint, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          hintText: hint,
-          filled: true,
-          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _datePickerField(String label, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          filled: true,
-          prefixIcon: const Icon(Icons.calendar_today),
-          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-        ),
-        readOnly: true,
-        onTap: () => selectedDate(controller),
-      ),
+  Widget _needsTypeDropdown() {
+    return DropdownButtonFormField<String>(
+      value: _selectedNeedsType,
+      onChanged: (newValue) {
+        setState(() {
+          _selectedNeedsType = newValue;
+        });
+      },
+      items: const [
+        DropdownMenuItem(value: 'Medical Assistance', child: Text('Medical Assistance')),
+        DropdownMenuItem(value: 'Food Assistance', child: Text('Food Assistance')),
+      ],
+      decoration: const InputDecoration(labelText: 'Needs Type'),
     );
   }
 
@@ -369,13 +363,13 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 style: ButtonStyle(
-                                    shape: WidgetStatePropertyAll(
-                                        RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    )),
-                                    backgroundColor:
-                                        const WidgetStatePropertyAll(
-                                            Color.fromRGBO(78, 115, 222, 1))),
+                  shape: MaterialStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  backgroundColor:
+                      const MaterialStatePropertyAll(Color.fromRGBO(78, 115, 222, 1))),
                 onPressed: _onSubmit,
                 child: const Text(
                   'Submit',
@@ -383,6 +377,67 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                 ),
               ),
       ],
+    );
+  }
+
+  Widget _inputBox(String label, String hint, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(labelText: label, hintText: hint),
+      ),
+    );
+  }
+
+  Widget _datePickerField(String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: InkWell(
+        onTap: () => selectedDate(controller),
+        child: IgnorePointer(
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(labelText: label, hintText: 'Pick a date'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _dropdownField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: DropdownButtonFormField<String>(
+        value: _selectedCivilStatus,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedCivilStatus = newValue;
+          });
+        },
+        items: ['Single', 'Married', 'Widowed', 'Separated'].map((option) {
+          return DropdownMenuItem(value: option, child: Text(option));
+        }).toList(),
+        decoration: InputDecoration(labelText: 'Civil Status'),
+      ),
+    );
+  }
+
+  Widget _barangayDropdown() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: DropdownButtonFormField<String>(
+        value: _selectedBarangay,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedBarangay = newValue;
+          });
+        },
+        items: bgrgyList.map((barangay) {
+          return DropdownMenuItem(value: barangay, child: Text(barangay));
+        }).toList(),
+        decoration: const InputDecoration(labelText: 'Barangay'),
+      ),
     );
   }
 }
