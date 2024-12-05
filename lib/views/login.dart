@@ -2,10 +2,11 @@ import 'package:cwsdo/services/firestore.dart';
 import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:cwsdo/widget/admin/reliefRequest.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-// import 'home_screen.dart'; // Create a home screen after login
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:html' as html; // Import dart:html for web storage
+import 'dart:io'; // For platform-specific checks
+import 'package:flutter/foundation.dart'; // For web-specific checks
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,8 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
-  // final CheckAuth checkAuth = CheckAuth();
-
   void _login() async {
     try {
       final acc = await _auth.signInWithEmailAndPassword(
@@ -29,35 +28,70 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       final user = _auth.currentUser;
 
-      Navigator.pushNamed(context, '/dashboard');
+      if (user != null) {
+        // Retrieve user data (full name, office) from Firestore
+        final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
 
-      // print(user);
-      // Navigate to home screen after successful login
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(
-      //       builder: (context) => const Sidebar(
-      //             content: Reliefrequest(),
-      //           )),
-      // );
+        if (userDoc.exists) {
+          // Assuming the Firestore document has 'fullName' and 'office' fields
+          final fullName = userDoc['fullName'];
+          final office = userDoc['office'];
+            html.window.localStorage['fullName'] = fullName;
+            html.window.localStorage['office'] = office;
+          // Store these values in localStorage (for web)
+          // if (kIsWeb) {
+          //   // Use window.localStorage to store data for web platforms
+          //   html.window.localStorage['fullName'] = fullName;
+          //   html.window.localStorage['office'] = office;
+          // } else {
+          //   // For non-web platforms, use SharedPreferences
+          //   SharedPreferences prefs = await SharedPreferences.getInstance();
+          //   await prefs.setString('fullName', fullName);
+          //   await prefs.setString('office', office);
+          // }
+
+          // Print to debug (optional)
+          print('FullName: $fullName, Office: $office');
+
+          // Navigate to the dashboard screen
+          Navigator.pushNamed(context, '/dashboard');
+        } else {
+          _showErrorDialog('User data not found');
+        }
+      }
     } catch (e) {
       // Handle error
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login failed')),
-        // SnackBar(content: Text('Login failed: ${e.toString()}')),
-      );
+      _showErrorDialog('Login failed');
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // _auth.currentUser
-
     return Scaffold(
       body: Container(
         height: double.maxFinite,
         width: double.maxFinite,
         decoration: const BoxDecoration(
-          // color: Colors.blue,
           image: DecorationImage(
             image: AssetImage("images/bg1.png"),
             fit: BoxFit.cover,
@@ -83,19 +117,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             shadows: [
                               Shadow(
-                                  // bottomLeft
                                   offset: Offset(1, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  // bottomRight
                                   offset: Offset(1, -.5),
                                   color: Colors.black),
                               Shadow(
-                                  // topRight
                                   offset: Offset(1, .5),
                                   color: Colors.black),
                               Shadow(
-                                  // topLeft
                                   offset: Offset(1, .5),
                                   color: Colors.black),
                             ],
@@ -108,19 +138,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             shadows: [
                               Shadow(
-                                  // bottomLeft
                                   offset: Offset(1, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  // bottomRight
                                   offset: Offset(1, -.5),
                                   color: Colors.black),
                               Shadow(
-                                  // topRight
                                   offset: Offset(1, .5),
                                   color: Colors.black),
                               Shadow(
-                                  // topLeft
                                   offset: Offset(1, .5),
                                   color: Colors.black),
                             ],
@@ -128,8 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
-                          'City Social Welfare andd Development Office'),
+                          'City Social Welfare and Development Office'),
                     ]),
+
+                // Additional UI components here...
                 const SizedBox(height: 10),
                 const Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -138,19 +166,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             shadows: [
                               Shadow(
-                                  // bottomLeft
                                   offset: Offset(.2, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  // bottomRight
                                   offset: Offset(.2, -.5),
                                   color: Colors.black),
                               Shadow(
-                                  // topRight
                                   offset: Offset(.2, .5),
                                   color: Colors.black),
                               Shadow(
-                                  // topLeft
                                   offset: Offset(.2, .5),
                                   color: Colors.black),
                             ],
@@ -163,19 +187,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             shadows: [
                               Shadow(
-                                  // bottomLeft
                                   offset: Offset(.2, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  // bottomRight
                                   offset: Offset(.2, -.5),
                                   color: Colors.black),
                               Shadow(
-                                  // topRight
                                   offset: Offset(.2, .5),
                                   color: Colors.black),
                               Shadow(
-                                  // topLeft
                                   offset: Offset(.2, .5),
                                   color: Colors.black),
                             ],
@@ -185,6 +205,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           'Management System (CNAMS)'),
                     ]),
+
+                // Sign-in form
                 const SizedBox(height: 20),
                 Container(
                   decoration: const BoxDecoration(
@@ -194,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       colors: <Color>[
                         Color.fromARGB(255, 183, 182, 182),
                         Color.fromARGB(255, 255, 255, 255),
-                      ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                      ],
                       tileMode: TileMode.mirror,
                     ),
                     color: Colors.white,
@@ -223,11 +245,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 20),
                         ElevatedButton(
                           style: ButtonStyle(
-                              shape:
-                                  WidgetStatePropertyAll(RoundedRectangleBorder(
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               )),
-                              backgroundColor: const WidgetStatePropertyAll(
+                              backgroundColor: const MaterialStatePropertyAll(
                                   Color.fromRGBO(78, 115, 222, 1))),
                           onPressed: _login,
                           child: const Text(
@@ -251,12 +272,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       style: TextStyle(
                                           color: Colors.blue, fontSize: 15),
                                     ),
-                                  )))
+                                  ))),
                             ])
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -265,25 +286,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-          // Container(
-          //     height: MediaQuery.of(context).size.height * .9,
-          //     width: double.maxFinite,
-          //     decoration: const BoxDecoration(
-          //       image: DecorationImage(
-          //         image: AssetImage("images/bg1.png"),
-          //         fit: BoxFit.cover,
-          //       ),
-          //     ),
-          //     child: const Column(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         crossAxisAlignment: CrossAxisAlignment.center,
-          //         children: [
-          //           CustomWidg(txt: 'Community Needs Assesment', fsize: 80),
-          //           CustomWidg(txt: 'Management System', fsize: 80),
-          //           SizedBox(height: 20),
-          //           CustomWidg(txt: 'City of San Pablo', fsize: 30),
-          //           CustomWidg(
-          //               txt: 'City Social Welfare and Development Office',
-          //               fsize: 30),
-          //         ])),

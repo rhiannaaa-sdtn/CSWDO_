@@ -34,6 +34,10 @@ dependencies:
   flutter_svg: ^1.0.0
   loading_animation_widget: 
   dropdown_button2: ^2.3.8
+  shared_preferences: ^2.0.15
+  shared_preferences_web: ^2.0.0 # This package enables shared_preferences for web.
+  flutter_web_storage: ^1.0.0
+
   google_fonts: ^2.1.0 
   flutter:
     sdk: flutter
