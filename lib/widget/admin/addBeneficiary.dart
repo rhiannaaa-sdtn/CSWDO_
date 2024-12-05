@@ -42,6 +42,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
   String? _selectedCivilStatus;
   String? _selectedBarangay; // Add selectedBarangay to store the dropdown value
   String? _selectedNeedsType; // New variable for Needs Type
+  String? _selectedGender; // New variable for Gender dropdown
 
   PlatformFile? pickedfile1;
   PlatformFile? pickedfile2;
@@ -63,7 +64,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
   }
 
   void _onSubmit() async {
-    if (_fullname.text.isEmpty || _mobilenum.text.isEmpty || _selectedCivilStatus == null || _selectedBarangay == null) {
+    if (_fullname.text.isEmpty || _mobilenum.text.isEmpty || _selectedCivilStatus == null || _selectedBarangay == null || _selectedGender == null) {
       _showErrorDialog("Please fill all required fields");
       return;
     }
@@ -128,7 +129,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
         'mobilenum': _mobilenum.text,
         'dob': _dob.text,
         'civilStatus': _selectedCivilStatus,
-        'govtidno': _govtidno.text,
+        'gender': _selectedGender, // Use selectedGender
         'address': _address.text,
         'barangay': _selectedBarangay, // Use selectedBarangay
         'needs': _selectedNeedsType, // Use selectedNeedsType
@@ -167,6 +168,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     _selectedCivilStatus = null;
     _selectedBarangay = null; // Clear the selectedBarangay value
     _selectedNeedsType = null; // Clear the selectedNeedsType
+    _selectedGender = null; // Clear the selectedGender
     pickedfile1 = null;
     pickedfile2 = null;
   }
@@ -279,7 +281,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
               _inputBox('Mobile Number', 'Enter Mobile Number', _mobilenum),
               _datePickerField('Date of Birth', _dob),
               _dropdownField(),
-              _inputBox('Gender', 'Enter Gender', _govtidno),
+              _genderDropdown(), // Gender Dropdown
               _inputBox('Address', 'Enter Address', _address),
               _barangayDropdown(),
               // _datePickerField('Date Registered', _dateRegistered),
@@ -300,10 +302,10 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _needsTypeDropdown(),
-              _datePickerField('Date Registered', _dateRegistered),
+            _datePickerField('Date Registered', _dateRegistered),
             const SizedBox(height: 30),
-              _fileUploadRow('Valid ID *', pickedfile1, 'type1'),
-              _fileUploadRow('Indigency *', pickedfile2, 'type2'),
+            _fileUploadRow('Valid ID *', pickedfile1, 'type1'),
+            _fileUploadRow('Indigency *', pickedfile2, 'type2'),
             const SizedBox(height: 20),
             _submitButton(),
           ],
@@ -437,6 +439,24 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
           return DropdownMenuItem(value: barangay, child: Text(barangay));
         }).toList(),
         decoration: const InputDecoration(labelText: 'Barangay'),
+      ),
+    );
+  }
+
+  Widget _genderDropdown() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: DropdownButtonFormField<String>(
+        value: _selectedGender,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedGender = newValue;
+          });
+        },
+        items: ['Male', 'Female', 'Other'].map((gender) {
+          return DropdownMenuItem(value: gender, child: Text(gender));
+        }).toList(),
+        decoration: const InputDecoration(labelText: 'Gender'),
       ),
     );
   }

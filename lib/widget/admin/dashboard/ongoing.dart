@@ -84,7 +84,7 @@ class _TableDataListState extends State<TableDataList> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('Request')
+          .collection('beneficiaries')
           .where('status', isEqualTo: 'Ongoing')
           .snapshots(),
       builder: (context, snapshot) {
@@ -92,34 +92,37 @@ class _TableDataListState extends State<TableDataList> {
           const TableRow(
             children: <Widget>[
               TcellHeader(
-                txtcell: 'S No',
+                txtcell: 'Beneficiary No.',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Family Order No',
+                txtcell: 'Barangay',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Acting Representative of Family',
+                txtcell: 'Fullname',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'No. of Family Member',
+                txtcell: 'Gender',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Mobile Number',
+                txtcell: 'Civil Status',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Needs Type',
+                txtcell: 'Brithday (yyyy-mm-dd)',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Date Registered',
+                txtcell: 'Contact',
                 heightcell: 50,
               ),
               TcellHeader(
+                txtcell: 'Needs',
+                heightcell: 50,
+              ), TcellHeader(
                 txtcell: 'Action',
                 heightcell: 50,
               ),
@@ -135,31 +138,40 @@ class _TableDataListState extends State<TableDataList> {
             var txt = index.toString();
             final clientWidget = TableRow(
               children: <Widget>[
-                TcellData(txtcell: txt, heightcell: 50, pad: 15, fsize: 15),
+                TcellData(txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
                 TcellData(
-                    txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
+                    txtcell: client['barangay'],
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
                 TcellData(
                     txtcell: client['fullname'],
                     heightcell: 50,
                     pad: 15,
-                    fsize: 15),
-                TcellData(
-                    txtcell: client['mobileNum'],
-                    heightcell: 50,
-                    pad: 15,
                     fsize: 15),   
                     TcellData(
-                    txtcell: client['familynum'],
+                    txtcell: client['gender'],
                     heightcell: 50,
                     pad: 15,
                     fsize: 15),
                 TcellData(
+                    txtcell: client['civilStatus'],
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
+                TcellData(
+                    txtcell: client['dob'],
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
+                    TcellData(
+                    txtcell: client['mobilenum'],
+                    heightcell: 50,
+                    pad: 15,
+                    fsize: 15),
+ 
+                    TcellData(
                     txtcell: client['needs'],
-                    heightcell: 50,
-                    pad: 15,
-                    fsize: 15),
-                TcellData(
-                    txtcell: client['timeStamp'].toDate().toString(),
                     heightcell: 50,
                     pad: 15,
                     fsize: 15),
