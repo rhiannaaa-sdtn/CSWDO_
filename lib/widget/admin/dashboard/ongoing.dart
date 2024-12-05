@@ -85,7 +85,7 @@ class _TableDataListState extends State<TableDataList> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('beneficiaries')
-          .where('status', isEqualTo: 'Ongoing')
+  .where('status', isNotEqualTo: 'Completed')
           .snapshots(),
       builder: (context, snapshot) {
         List<TableRow> clientWidgets = [

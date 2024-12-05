@@ -35,12 +35,14 @@ class NextStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String status1 = "";
     final TextEditingController status = TextEditingController();
     final TextEditingController remarks = TextEditingController();
     final FireStoreService fireStoreService = FireStoreService();
+
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('Request')
+          .collection('beneficiaries')
           .doc(requestID)
           .snapshots(),
       builder: (context, snapshot) {
@@ -131,7 +133,7 @@ class NextStep extends StatelessWidget {
                   pad: 5,
                   fsize: 12),
               TcellData(
-                  txtcell: clients['familynum'],
+                  txtcell: clients['fullname'],
                   heightcell: 30,
                   pad: 5,
                   fsize: 12),
@@ -139,20 +141,17 @@ class NextStep extends StatelessWidget {
           );
           clientWidgets.add(clientWidget);
 
-          
+          status1 = clients['status'];          
           personalinfo('FULLNAME', clients['fullname']);
-          personalinfo('MOBILE NUMBER.', clients['mobileNum']);
-          personalinfo('DATE OF BIRTH', clients['dateOfBirth']);
-          personalinfo('GOVT. ISSUED ID', clients['govtID']);
-          personalinfo('GOVT. ISSUED ID NO.', clients['idNo']);
-          personalinfo('No. OF FAMILIY NUMBER', clients['familynum']);
+          personalinfo('MOBILE NUMBER.', clients['mobilenum']);
+          personalinfo('DATE OF BIRTH', clients['dob']);
+          personalinfo('Gender', clients['gender']);
           personalinfo('FULL ADDRESS', clients['address']);
           personalinfo('BARANGAY', clients['barangay']);
           needsinfo('ORDER NUMBER', clients.id);
           needsinfo('NEED TYPE', clients['needs']);
-          needsinfo('DATE REGISTERED', clients['date']);
+          needsinfo('DATE REGISTERED', clients['dateRegistered']);
           needsinfo('NEEDS STATUS', clients['status']);
-          needsinfo('REPORT', clients['Reportstatus']);
         }
 
         Future<void> _saveRemarks(
@@ -161,420 +160,360 @@ class NextStep extends StatelessWidget {
         ) async {
           print(status.text);
           print(remarks);
-          fireStoreService.addRemarks(requestID, remarks, status.text);
+         
+           if(status1 == "Ongoing"){
+          fireStoreService.addRemarks(requestID, remarks, 'Ready');
+            } else if(status1 == "Ready"){
+          fireStoreService.addRemarks(requestID, remarks, 'Completed');
+            }
+         
+        }
+
+        Future<void> _updateStatus() async {
+          final documentRef = FirebaseFirestore.instance.collection('beneficiaries').doc(requestID);
+
+          try {
+            if(status1 == "Ongoing"){
+              await documentRef.update({'status': 'Ready'});
+            } else if(status1 == "Ready"){
+              await documentRef.update({'status': 'Completed'});
+            }
+          } catch (e) {
+            print('Error updating status: $e');
+          }
         }
 
         Future<void> _actionButton() async {
           showDialog(
-  context: context,
-  builder: (context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      title: Container(
-        height: 80,
-        color: const Color.fromARGB(255, 45, 127, 226),
-        child: Center(child: Text('Take Action')),
-      ),
-      titlePadding: const EdgeInsets.all(0),
-      content: Container(
-        height: MediaQuery.of(context).size.height * .6,
-        width: MediaQuery.of(context).size.width * .6,
-        child: Column(
-          children: [
-            DropdownButtonExample(
-              status: status,
-            ),
-            SizedBox(
-              child: TextField(
-                controller: remarks,
-                maxLength: 500,
-                maxLines: 10,
-                decoration: InputDecoration(
-                  labelText: "Remarks",
-                  hintText: "Remarks (Maximum of 500 characters)",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  fillColor: Colors.white,
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            _saveRemarks(status, remarks.text);
-            remarks.text = '';
-            Navigator.pop(context); // Close the dialog
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    );
-  },
-);
-
+                title: Container(
+                  height: 80,
+                  color: const Color.fromARGB(255, 45, 127, 226),
+                  child: Center(child: Text('Take Action')),
+                ),
+                titlePadding: const EdgeInsets.all(0),
+                content: Container(
+                  height: MediaQuery.of(context).size.height * .6,
+                  width: MediaQuery.of(context).size.width * .6,
+                  child: Column(
+                    children: [
+                      DropdownButtonExample(
+                        status: status,
+                        status1: status1,
+                      ),
+                      SizedBox(
+                        child: TextField(
+                          controller: remarks,
+                          maxLength: 500,
+                          maxLines: 10,
+                          decoration: InputDecoration(
+                            labelText: "Remarks",
+                            hintText: "Remarks (Maximum of 500 characters)",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      _saveRemarks(status, remarks.text);
+                      remarks.text = '';
+                      _updateStatus();  // Update the status when "OK" is pressed
+                      Navigator.pop(context); // Close the dialog
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
         }
 
-        // return ListView(
-        //   scrollDirection: Axis.vertical,
-        //   shrinkWrap: true,
-        //   children: clie+ntWidgets,
-        // );
+        return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('Remarks')
+              .where('cleintID', isEqualTo: requestID)
+              .snapshots(),
+          builder: (context, snapshot) {
+            List<TableRow> remarkTable = [
+              const TableRow(
+                children: <Widget>[
+                  TcellHeader(
+                    txtcell: 'REMARK',
+                    heightcell: 30,
+                  ),
+                  TcellHeader(
+                    txtcell: 'STATUS',
+                    heightcell: 30,
+                  ),
+                  TcellHeader(
+                    txtcell: 'REMasdsARK DATE',
+                    heightcell: 30,
+                  ),
+                  TcellHeader(
+                    txtcell: 'REMARK BY',
+                    heightcell: 30,
+                  ),
+                ],
+              ),
+            ];
 
-                return StreamBuilder<QuerySnapshot>(
-           stream: FirebaseFirestore.instance
-  .collection('Remarks')
-  .where('cleintID', isEqualTo: requestID)
-  // .orderBy("cleintID")
-  // .orderBy("timeStamp", descending: true)
-  .snapshots(),
-            builder: (context, snapshot) {
-              List<TableRow> remarkTable = [
-                const TableRow(
+            if (snapshot.hasData) {
+              final clientss = snapshot.data?.docs.toList();
+              clientss?.sort((a, b) => b['timeStamp'].compareTo(a['timeStamp']));
+              for (var client in clientss!) {
+                final clientWidget = TableRow(
                   children: <Widget>[
-                    TcellHeader(
-                      txtcell: 'REMARK',
-                      heightcell: 30,
-                    ),
-                    TcellHeader(
-                      txtcell: 'STATUS',
-                      heightcell: 30,
-                    ),
-                    TcellHeader(
-                      txtcell: 'REMARK DATE',
-                      heightcell: 30,
-                    ),
-                    TcellHeader(
-                      txtcell: 'REMARK BY',
-                      heightcell: 30,
-                    ),
+                    TcellData(
+                        txtcell: client['remarks'], heightcell: 50, pad: 10, fsize: 15),
+                    TcellData(
+                        txtcell: client['status'],
+                        heightcell: 50,
+                        pad: 10,
+                        fsize: 15),
+                    TcellData(
+                        txtcell: client['timeStamp'].toDate().toString(),
+                        heightcell: 50,
+                        pad: 10,
+                        fsize: 15),
+                    TcellData(
+                        txtcell: client['REMARK BY'],
+                        heightcell: 50,
+                        pad: 10,
+                        fsize: 15),
                   ],
-                ),
-              ];
-
-              if (snapshot.hasData) {
-                final clientss = snapshot.data?.docs.toList();
-                clientss?.sort((a, b) => b['timeStamp'].compareTo(a['timeStamp']));
-                for (var client in clientss!) {
-                  final clientWidget = TableRow(
-                    children: <Widget>[
-                       TcellData(
-                          txtcell: client['remarks'], heightcell: 50, pad: 10, fsize: 15),
-                      TcellData(
-                          txtcell: client['status'],
-                          heightcell: 50,
-                          pad: 10,
-                          fsize: 15),
-                      TcellData(
-                          txtcell: client['timeStamp'].toDate().toString(),
-                          heightcell: 50,
-                          pad: 10,
-                          fsize: 15),
-                      TcellData(
-                          txtcell: client['REMARK BY'],
-                          heightcell: 50,
-                          pad: 10,
-                          fsize: 15),
-                    ],
-                  );
-                  remarkTable.add(clientWidget);
-                }
+                );
+                remarkTable.add(clientWidget);
               }
+            }
 
-              return Padding(
-          padding: const EdgeInsets.only(
-            // top: 50,
-            left: 50,
-          ),
-          child: Column(
-            
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-                  // part1
-             
-              const Expanded(
-                flex: 1,child: const Row(
+            return Padding(
+              padding: const EdgeInsets.only(left: 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'BENEFICIARY DETAIL:',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),),
-
-                  // part2
-             
-              Expanded(flex: 8,child:  Row(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * .4,
-                          height: 380,
-                          child: ListView(
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 800,
-                                color: const Color.fromARGB(255, 44, 68, 227),
-                                child: const Center(
-                                  child: Text(
-                                    'Personal Information',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                // height: double.infinity,
-                                // height: MediaQuery.of(context).size.height / 1.5,
-                                width: 800,
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Table(
-                                    border: TableBorder.all(),
-                                    columnWidths: const <int, TableColumnWidth>{
-                                      0: FlexColumnWidth(1),
-                                      1: FlexColumnWidth(1),
-                                      2: FlexColumnWidth(1),
-                                      3: FlexColumnWidth(1)
-                                    },
-                                    defaultVerticalAlignment:
-                                        TableCellVerticalAlignment.middle,
-                                    children: personalWidgets,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 8,
+                        child: Text(
+                          'Client Remarks',
+                          style: TextStyle(fontSize: 25),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                   Expanded(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * .4,
-                          height: 380,
-                          child: ListView(
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 800,
-                                color: const Color.fromARGB(255, 44, 68, 227),
-                                child: const Center(
-                                  child: Text(
-                                    'Needs Information',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                // height: double.infinity,
-                                // height: MediaQuery.of(context).size.height / 1.5,
-                                width: 800,
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Column(
-                                    children: [
-                                      Table(
-                                        border: TableBorder.all(),
-                                        columnWidths: const <int,
-                                            TableColumnWidth>{
-                                          0: FlexColumnWidth(1),
-                                          1: FlexColumnWidth(1),
-                                          2: FlexColumnWidth(1),
-                                          3: FlexColumnWidth(1)
-                                        },
-                                        defaultVerticalAlignment:
-                                            TableCellVerticalAlignment.middle,
-                                        children: needsWidgets,
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      SizedBox(
-                                        height: 50,
-                                        width: 150,
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                              shape: WidgetStatePropertyAll(
-                                                  RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              )),
-                                              backgroundColor:
-                                                  const WidgetStatePropertyAll(
-                                                      Color.fromRGBO(
-                                                          78, 222, 97, 1))),
-                                          child: const Row(
-                                            children: [
-                                              Text(
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Color.fromRGBO(
-                                                        255, 255, 255, 1),
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  'Take Action'),
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            _actionButton();
-                                            // _selectedFile('type1');
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),),
-              
-              // part3
-              Expanded(flex: 5,child:   Row(
-                children: [
-                  Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * .7,
-                      height: 200,
-                      child: ListView(
-                        children: [
-                          Container(
-                            height: 40,
-                            width: 800,
-                            color: const Color.fromARGB(255, 44, 68, 227),
-                            child: const Center(
-                              child: Text(
-                                'Tracking History',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            // height: double.infinity,
-                            // height: MediaQuery.of(context).size.height / 1.5,
-                            width: 800,
-                            color: Colors.white,
+                    flex: 8,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Center(
                             child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Table(
-                                border: TableBorder.all(),
-                                columnWidths: const <int, TableColumnWidth>{
-                                  0: FlexColumnWidth(1),
-                                  1: FlexColumnWidth(1),
-                                  2: FlexColumnWidth(1),
-                                  3: FlexColumnWidth(1)
-                                },
-                                defaultVerticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                children: remarkTable,
+                              padding: const EdgeInsets.only(right: 10),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * .4,
+                                height: 380,
+                                child: ListView(
+                                  children: [
+                                    Container(
+                                      height: 40,
+                                      width: 800,
+                                      color: const Color.fromARGB(255, 44, 68, 227),
+                                      child: const Center(
+                                        child: Text(
+                                          'Personal Information',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 800,
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Table(
+                                          border: TableBorder.all(),
+                                          columnWidths: const <int, TableColumnWidth>{
+                                            0: FlexColumnWidth(1),
+                                            1: FlexColumnWidth(1),
+                                            2: FlexColumnWidth(1),
+                                            3: FlexColumnWidth(1),
+                                          },
+                                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                          children: personalWidgets,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * .4,
+                                height: 380,
+                                child: ListView(
+                                  children: [
+                                    Container(
+                                      height: 40,
+                                      width: 800,
+                                      color: const Color.fromARGB(255, 44, 68, 227),
+                                      child: const Center(
+                                        child: Text(
+                                          'Needs Information',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 800,
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            Table(
+                                              border: TableBorder.all(),
+                                              columnWidths: const <int, TableColumnWidth>{
+                                                0: FlexColumnWidth(1),
+                                                1: FlexColumnWidth(1),
+                                                2: FlexColumnWidth(1),
+                                                3: FlexColumnWidth(1),
+                                              },
+                                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                              children: needsWidgets,
+                                            ),
+                                            SizedBox(height: 5),
+                                            // Conditionally show the button if status is not 'Completed'
+                                            if (status1 != 'Completed')
+                                              SizedBox(
+                                                height: 50,
+                                                width: 150,
+                                                child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                      shape: MaterialStateProperty.all(
+                                                          RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  )),
+                                                      backgroundColor:
+                                                          MaterialStateProperty.all(
+                                                              const Color.fromRGBO(78, 222, 97, 1))),
+                                                  child: const Row(
+                                                    children: [
+                                                      Text(
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: Color.fromRGBO(255, 255, 255, 1),
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                        'Take Action',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  onPressed: () {
+                                                    _actionButton();
+                                                  },
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ))
-          
-
-
-            
-            ],
-          ),
+                 Container(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Table(
+                              border: TableBorder.all(),
+                              columnWidths: const <int, TableColumnWidth>{
+                                0: FlexColumnWidth(1),
+                                1: FlexColumnWidth(1),
+                                2: FlexColumnWidth(1),
+                                3: FlexColumnWidth(1),
+                              },
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                              children: remarkTable,
+                            ),
+                          ),
+                        ),
+                      ],
+              ),
+            );
+          },
         );
-            });
-       
       },
     );
   }
 }
 
+
 class DropdownButtonExample extends StatefulWidget {
   TextEditingController status;
-  DropdownButtonExample({super.key, required this.status});
+  String status1;
+
+  DropdownButtonExample({super.key, required this.status, required this.status1});
 
   @override
   State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
 }
 
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  String dropdownValue = list.first;
-  String dropdownvalue = 'Ongoing';
-  var items = [
-    'Ongoing',
-    'Completed',
-  ];
+  String dropdownValue = ''; // To hold the selected value
+  List<String> items = ['Ongoing', 'Ready', 'Completed'];
+
   @override
-void initState() {
-  super.initState();
-    widget.status.text = 'Ongoing';
-}
+  void initState() {
+    super.initState();
+    // Initialize dropdownValue from widget.status1
+    dropdownValue = widget.status1.isNotEmpty ? widget.status1 : items.first;
+    widget.status.text = dropdownValue; // Update the controller text
+  }
 
+  @override
   Widget build(BuildContext context) {
-    
-    return DropdownButton(
-      isExpanded: true,
-      // Initial Value
-      value: dropdownvalue,
-
-      // Down Arrow Icon
-      icon: const Icon(Icons.keyboard_arrow_down),
-
-      // Array list of items
-      items: items.map((String items) {
-        return DropdownMenuItem(
-          value: items,
-          child: Text(items),
-        );
-      }).toList(),
-      // After selecting the desired option,it will
-      // change button value to selected value
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownvalue = newValue!;
-          widget.status.text = newValue;
-          print(widget.status.text);
-        });
-      },
+    return TextField(
+      controller: widget.status,
+      enabled: false, // Disable user interaction with the TextField
+      decoration: InputDecoration(
+        labelText: 'Status', // You can add a label to make it more like a TextField
+        border: OutlineInputBorder(),
+        suffixIcon: Icon(Icons.lock), // Optional: Add a lock icon to indicate it's disabled
+      ),
     );
   }
 }
-
-
-

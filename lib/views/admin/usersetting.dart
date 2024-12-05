@@ -295,23 +295,23 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                     ),
                     
                     // Search Bar (in the middle)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SizedBox(
-                        width: screenWidth * 0.3, // Set a width for the search bar
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: const InputDecoration(
-                            labelText: 'Search by Name or Email',
-                            prefixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (query) {
-                            _filterUsers(query); // Call the filter function
-                          },
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                    //   child: SizedBox(
+                    //     width: screenWidth * 0.3, // Set a width for the search bar
+                    //     child: TextField(
+                    //       controller: _searchController,
+                    //       decoration: const InputDecoration(
+                    //         labelText: 'Search by Name or Email',
+                    //         prefixIcon: Icon(Icons.search),
+                    //         border: OutlineInputBorder(),
+                    //       ),
+                    //       onChanged: (query) {
+                    //         _filterUsers(query); // Call the filter function
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
 
                     // Add New User Button
                     ElevatedButton(
