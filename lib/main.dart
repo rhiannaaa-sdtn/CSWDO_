@@ -7,6 +7,7 @@ import 'package:cwsdo/widget/admin/assisranceRequest.dart';
 import 'package:cwsdo/widget/admin/dashboard.dart';
 import 'package:cwsdo/widget/admin/dashboard/ongoing.dart';
 import 'package:cwsdo/widget/admin/dashboard/requestlist.dart';
+import 'package:cwsdo/widget/admin/dashboard/resident.dart';
 import 'package:cwsdo/widget/admin/dashboard/totalBeneficiarylist.dart';
 import 'package:cwsdo/widget/admin/dashboard/totalCompleted.dart';
 import 'package:cwsdo/widget/admin/dashboard/totalFoodAssistancelist.dart';
@@ -103,7 +104,10 @@ class MyApp extends StatelessWidget {
             isAuthenticated, const TotalOngoingMain(), settings);
       case '/listrequest':
         return _authGuardAdmin(
-            isAuthenticated, const RequestList(), settings);
+            isAuthenticated, const RequestList(), settings); 
+            case '/resident':
+        return _authGuardAdmin(
+            isAuthenticated, const Resident(), settings);
       case '/foodassistancelist':
         return _authGuardAdmin(
             isAuthenticated, const TotalFoodAssistanceMain(), settings);

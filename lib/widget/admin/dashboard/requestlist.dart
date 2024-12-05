@@ -32,7 +32,7 @@ class OngoingList extends StatefulWidget {
 class _OngoingListState extends State<OngoingList> {
   String searchQuery = "";
   int currentPage = 0;
-  int recordsPerPage = 10;
+  int recordsPerPage = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -83,34 +83,6 @@ class _OngoingListState extends State<OngoingList> {
                             currentPage = page;
                           });
                         },
-                      ),
-                      // Pagination Controls
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              onPressed: currentPage > 0
-                                  ? () {
-                                      setState(() {
-                                        currentPage--;
-                                      });
-                                    }
-                                  : null,
-                            ),
-                            Text('Page ${currentPage + 1}'),
-                            IconButton(
-                              icon: Icon(Icons.arrow_forward),
-                              onPressed: () {
-                                setState(() {
-                                  currentPage++;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -164,6 +136,9 @@ class TableDataList extends StatelessWidget {
           }).toList();
         }
 
+        // Calculate total pages
+        final totalPages = (filteredClients.length / recordsPerPage).ceil();
+
         // Ensure pagination works even with an empty list or small list size
         final startIndex = currentPage * recordsPerPage;
         final endIndex = startIndex + recordsPerPage;
@@ -205,15 +180,44 @@ class TableDataList extends StatelessWidget {
           clientWidgets.add(clientWidget);
         }
 
-        return Table(
-          border: TableBorder.all(),
-          columnWidths: const <int, TableColumnWidth>{
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(1),
-            2: FlexColumnWidth(1),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: clientWidgets,
+        return Column(
+          children: [
+            Table(
+              border: TableBorder.all(),
+              columnWidths: const <int, TableColumnWidth>{
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(1),
+                2: FlexColumnWidth(1),
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: clientWidgets,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: currentPage > 0
+                        ? () {
+                            onPageChange(currentPage - 1);
+                          }
+                        : null,
+                  ),
+                  Text('Page ${currentPage + 1}'),
+                  IconButton(
+                    icon: Icon(Icons.arrow_forward),
+                    onPressed: currentPage < totalPages - 1
+                        ? () {
+                            onPageChange(currentPage + 1);
+                          }
+                        : null,
+                  ),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );
