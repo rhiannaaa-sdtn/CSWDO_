@@ -3,6 +3,9 @@ import 'package:cwsdo/widget/admin/side.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/src/material/dropdown_menu.dart';
+import 'dart:html' as html; // Import dart:html for web storage
+import 'dart:io'; // For platform-specific checks
+import 'package:flutter/foundation.dart'; // For web-specific checks
 
 class Sidebar extends StatefulWidget {
   final Widget content;
@@ -15,9 +18,10 @@ class Sidebar extends StatefulWidget {
 class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
-    String _selectedValue = 'Administrator';
+    String _selectedValue = html.window.localStorage['office'].toString();
     final FirebaseAuth _auth = FirebaseAuth.instance;
-
+    //  html.window.localStorage['fullName'] = fullName;
+    //         html.window.localStorage['office'] = office;
     void _onDropdownChanged(String? newValue) async {
       setState(() {
         _selectedValue = newValue!;
@@ -106,7 +110,7 @@ class _SidebarState extends State<Sidebar> {
                                   value: _selectedValue,
                                   onChanged: _onDropdownChanged,
                                   items: <String>[
-                                    'Administrator',
+                                    html.window.localStorage['office'].toString(),
                                     // 'Settings',
                                     'Logout'
                                   ].map<DropdownMenuItem<String>>(
