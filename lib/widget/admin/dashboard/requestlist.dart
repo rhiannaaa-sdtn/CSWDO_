@@ -8,7 +8,6 @@ import 'dart:html' as html; // Import dart:html for web storage
 import 'dart:io'; // For platform-specific checks
 import 'package:flutter/foundation.dart'; // For web-specific checks
 
-
 class RequestList extends StatefulWidget {
   const RequestList({super.key});
 
@@ -23,76 +22,158 @@ class _RequestListState extends State<RequestList> {
   }
 }
 
-class OngoingList extends StatelessWidget {
+class OngoingList extends StatefulWidget {
   const OngoingList({super.key});
+
+  @override
+  _OngoingListState createState() => _OngoingListState();
+}
+
+class _OngoingListState extends State<OngoingList> {
+  String searchQuery = "";
+  int currentPage = 0;
+  int recordsPerPage = 10;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
+      padding: const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Total Food Assistance List',
-              style: TextStyle(fontSize: 30),
-            ),
-            Column(
-              children: [
-                Container(
-                  color: Color.fromARGB(255, 45, 127, 226),
-                  height: 30,
-                  width: double.infinity,
-                  // child: Tex t('data'),
-                ),
-                Container(
-                  color: Colors.white,
-                  width: double.infinity,
-                  child: Padding(
-                    padding: EdgeInsets.all(18),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: const Row(children: [
-                            Text(
-                              'Show',
-                            ),
-                            NumberInputWidget()
-                          ]),
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+              Container(
+                color: Color.fromARGB(255, 45, 127, 226),
+                height: 30,
+                width: double.infinity,
+              ),
+              Container(
+                color: Colors.white,
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.all(18),
+                  child: Column(
+                    children: [
+                      // Search Bar
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: TextField(
+                          onChanged: (query) {
+                            setState(() {
+                              searchQuery = query;
+                              currentPage = 0;  // Reset to first page when search query changes
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Search by Fullname",
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.search),
+                          ),
                         ),
-                        const TableDataList(),
-                      ],
-                    ),
+                      ),
+                      // Pass searchQuery, currentPage, and recordsPerPage to TableDataList
+                      TableDataList(
+                        searchQuery: searchQuery,
+                        currentPage: currentPage,
+                        recordsPerPage: recordsPerPage,
+                        onPageChange: (page) {
+                          setState(() {
+                            currentPage = page;
+                          });
+                        },
+                      ),
+                      // Pagination Controls
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: currentPage > 0
+                                  ? () {
+                                      setState(() {
+                                        currentPage--;
+                                      });
+                                    }
+                                  : null,
+                            ),
+                            Text('Page ${currentPage + 1}'),
+                            IconButton(
+                              icon: Icon(Icons.arrow_forward),
+                              onPressed: () {
+                                setState(() {
+                                  currentPage++;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  // child: Tex t('data'),
-                )
-              ],
-            ),
-          ]),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
 
-class TableDataList extends StatefulWidget {
-  const TableDataList({super.key});
+class TableDataList extends StatelessWidget {
+  final String searchQuery;
+  final int currentPage;
+  final int recordsPerPage;
+  final Function(int) onPageChange;
 
-  @override
-  State<TableDataList> createState() => _TableDataListState();
-}
+  const TableDataList({
+    super.key,
+    required this.searchQuery,
+    required this.currentPage,
+    required this.recordsPerPage,
+    required this.onPageChange,
+  });
 
-class _TableDataListState extends State<TableDataList> {
   @override
   Widget build(BuildContext context) {
-    print( html.window.localStorage['office'].toString());
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('beneficiaries')
-  // .where('status', isNotEqualTo: 'Completed')
-  .where('barangay', isEqualTo: html.window.localStorage['office'].toString())
+          .where('barangay', isEqualTo: html.window.localStorage['office'].toString())
           .snapshots(),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text("Error loading data"));
+        }
+
+        final clients = snapshot.data?.docs.toList() ?? [];
+        var filteredClients = clients;
+
+        // Apply search filter
+        if (searchQuery.isNotEmpty) {
+          filteredClients = clients.where((client) {
+            return client['fullname'].toString().toLowerCase().contains(searchQuery.toLowerCase());
+          }).toList();
+        }
+
+        // Ensure pagination works even with an empty list or small list size
+        final startIndex = currentPage * recordsPerPage;
+        final endIndex = startIndex + recordsPerPage;
+        final paginatedClients = filteredClients.isNotEmpty
+            ? filteredClients.sublist(
+                startIndex,
+                endIndex > filteredClients.length ? filteredClients.length : endIndex,
+              )
+            : [];  // If there are no clients, return an empty list
+
         List<TableRow> clientWidgets = [
           const TableRow(
             children: <Widget>[
@@ -100,12 +181,10 @@ class _TableDataListState extends State<TableDataList> {
                 txtcell: 'Beneficiary No.',
                 heightcell: 50,
               ),
-             
               TcellHeader(
                 txtcell: 'Fullname',
                 heightcell: 50,
               ),
-             
               TcellHeader(
                 txtcell: 'Needs',
                 heightcell: 50,
@@ -114,56 +193,24 @@ class _TableDataListState extends State<TableDataList> {
           )
         ];
 
-        if (snapshot.hasData) {
-          final clients = snapshot.data?.docs.toList();
-          var index = 0;
-          for (var client in clients!) {
-            index = index + 1;
-            var txt = index.toString();
-            final clientWidget = TableRow(
-              children: <Widget>[
-                TcellData(txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
-                                TcellData(
-                    txtcell: client['fullname'],
-                    heightcell: 50,
-                    pad: 15,
-                    fsize: 15),   
-                
-                    TcellData(
-                    txtcell: client['needs'],
-                    heightcell: 50,
-                    pad: 15,
-                    fsize: 15),
-               
-              ],
-            );
-            clientWidgets.add(clientWidget);
-          }
+        for (var client in paginatedClients) {
+          var index = clients.indexOf(client) + 1;
+          final clientWidget = TableRow(
+            children: <Widget>[
+              TcellData(txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['fullname'], heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['needs'], heightcell: 50, pad: 15, fsize: 15),
+            ],
+          );
+          clientWidgets.add(clientWidget);
         }
 
-        // return ListView(
-        //   scrollDirection: Axis.vertical,
-        //   shrinkWrap: true,
-        //   children: clientWidgets,
-        // );
         return Table(
           border: TableBorder.all(),
           columnWidths: const <int, TableColumnWidth>{
-            //   0: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-            //   1: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-            //   2: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-            //   3: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-            //   4: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-            //   5: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-            //   6: FixedColumnWidth(MediaQuery.of(context).size.width * .14),
-
             0: FlexColumnWidth(1),
             1: FlexColumnWidth(1),
             2: FlexColumnWidth(1),
-            3: FlexColumnWidth(1),
-            4: FlexColumnWidth(1),
-            5: FlexColumnWidth(1),
-            6: FlexColumnWidth(1),
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: clientWidgets,
