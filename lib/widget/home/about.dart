@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cwsdo/widget/admin/totaltally.dart';  // Assuming TcellData and TcellHeader are defined here
+
+// Global variable to store the request text
+String requestText = '';
 
 // Constant style for reusable text styles
 const TextStyle boldTitleStyle = TextStyle(
@@ -132,6 +137,7 @@ class Row1 extends StatelessWidget {
           ),
         ),
         onPressed: () {
+          print('Opening Request Tracker Dialog');  // Debugging line
           showDialog(
             context: context,
             builder: (context) => const RequestTrackerDialog(),
@@ -258,19 +264,142 @@ class _RequestTrackerDialogState extends State<RequestTrackerDialog> {
                 IconButton(
                   icon: const Icon(Icons.arrow_forward),
                   onPressed: () {
-                    String requestText = _controller.text;
-                    if (requestText.isNotEmpty) {
+                    // Only update the request text and trigger the search on button click
+                    if (_controller.text.isNotEmpty) {
+                      setState(() {
+                        // Set the global variable when the user clicks the arrow button
+                        requestText = _controller.text;
+                      });
+
                       print('User request: $requestText');
-                      // You can add any further logic here, like sending the request
                     }
-                    // Navigator.of(context).pop();
                   },
                 ),
               ],
             ),
+            RemarkTable(), // Pass the global requestText
           ],
         ),
       ),
+    );
+  }
+}
+
+class RemarkTable extends StatelessWidget {
+  const RemarkTable({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('Remarks')
+          .where('cleintID', isEqualTo: requestText)
+          .snapshots(),
+      builder: (context, snapshot) {
+        // Show a loading indicator while waiting for data
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        // Show error message if there's an error fetching the data
+        if (snapshot.hasError) {
+          return const Center(child: Text('Error loading data'));
+        }
+
+        // Show a message when no data is found
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No remarks found.'));
+        }
+
+        // Sort the documents by timestamp
+        final remarks = snapshot.data!.docs.toList()
+          ..sort((a, b) => b['timeStamp'].compareTo(a['timeStamp']));
+
+        // Create table rows with the remarks data
+        List<TableRow> remarkTable = [
+          const TableRow(
+            children: <Widget>[
+              TcellHeader(txtcell: 'REMARK', heightcell: 30),
+              TcellHeader(txtcell: 'STATUS', heightcell: 30),
+              TcellHeader(txtcell: 'REMARK DATE', heightcell: 30),
+            ],
+          ),
+        ];
+
+        // Add the data rows for each remark
+        for (var remark in remarks) {
+          remarkTable.add(
+            TableRow(
+              children: <Widget>[
+                TcellData(
+                  txtcell: remark['remarks'],
+                  heightcell: 50,
+                  pad: 10,
+                  fsize: 15,
+                ),
+                TcellData(
+                  txtcell: remark['status'],
+                  heightcell: 50,
+                  pad: 10,
+                  fsize: 15,
+                ),
+                TcellData(
+                  txtcell: remark['timeStamp'].toDate().toString(),
+                  heightcell: 50,
+                  pad: 10,
+                  fsize: 15,
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+           
+              SizedBox(
+                width: MediaQuery.of(context).size.width * .8,
+                height: 380,
+                child: ListView(
+                  children: [
+                    Container(
+                      height: 40,
+                      color: const Color.fromARGB(255, 44, 68, 227),
+                      child: const Center(
+                        child: Text(
+                          'Remarks Information',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(5),
+                      child: Table(
+                        border: TableBorder.all(),
+                        columnWidths: const <int, TableColumnWidth>{
+                          0: FlexColumnWidth(1),
+                          1: FlexColumnWidth(1),
+                          2: FlexColumnWidth(1),
+                        },
+                        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                        children: remarkTable,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
