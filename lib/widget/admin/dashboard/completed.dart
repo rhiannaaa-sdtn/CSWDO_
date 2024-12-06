@@ -5,14 +5,14 @@ import 'package:cwsdo/widget/admin/nextStep.dart';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TotalOngoingMain extends StatefulWidget {
-  const TotalOngoingMain({super.key});
+class Completed extends StatefulWidget {
+  const Completed({super.key});
 
   @override
-  State<TotalOngoingMain> createState() => _TotalOngoingMainState();
+  State<Completed> createState() => _CompletedState();
 }
 
-class _TotalOngoingMainState extends State<TotalOngoingMain> {
+class _CompletedState extends State<Completed> {
   @override
   Widget build(BuildContext context) {
     return const Sidebar(content: OngoingList());
@@ -126,7 +126,7 @@ class _TableDataListState extends State<TableDataList> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('beneficiaries')
-          .where('status', isNotEqualTo: 'Completed')
+          .where('status', isEqualTo: 'Completed')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {

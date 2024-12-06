@@ -58,7 +58,7 @@ class Sidebuttons extends StatelessWidget {
                  const Sbutton(
                     btndesc: 'List of BNS',
                     btnlogo: 'images/TotalTally.png',
-                    btnlink: '/addbeneficiary',
+                    btnlink: '/listbns',
                   ),
                   // Uncomment if needed
                   // Sbutton(

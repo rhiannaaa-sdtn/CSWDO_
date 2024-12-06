@@ -18,13 +18,28 @@ class _TotalTallyMainState extends State<TotalTallyMain> {
   }
 }
 
-class TotalTally extends StatelessWidget {
+class TotalTally extends StatefulWidget {
   const TotalTally({super.key});
 
   @override
+  State<TotalTally> createState() => _TotalTallyState();
+}
+
+class _TotalTallyState extends State<TotalTally> {
+  // Controller for the search bar
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final s1 = FirebaseFirestore.instance.collection('Request').snapshots();
-    final s2 = FirebaseFirestore.instance.collection('Beneficiary').snapshots();
+    final s1 = FirebaseFirestore.instance.collection('beneficiaries').snapshots();
+    final s2 = FirebaseFirestore.instance.collection('residents').snapshots();
 
     return StreamBuilder<List<QuerySnapshot>>(
         stream: Rx.combineLatest2(
@@ -41,33 +56,63 @@ class TotalTally extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          if (!snapshot.hasData ||
-              snapshot.data == null ||
-              snapshot.data!.isEmpty) {
+          if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
             return Center(child: Text('No data available'));
           }
 
           final docs1 = snapshot.data![0].docs;
           final docs2 = snapshot.data![1].docs;
 
+          // Filter barangay list based on search query
+          List<String> filteredBarangayList = bgrgyList
+              .where((barangay) => barangay.toLowerCase().contains(searchQuery.toLowerCase()))
+              .toList();
+
           return Padding(
-            padding: const EdgeInsets.only(
-              // top: 50,
-              left: 50,
-            ),
+            padding: const EdgeInsets.only(left: 50),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Total Tally',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                // Row for Title and Search Bar
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    
+                    const Text(
+                        'Total Tally',
+                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                    
+                    const SizedBox(width: 20), // Space between title and search bar
+                    // Search Bar
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 300, // You can adjust this width
+                        child: TextField(
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              searchQuery = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Search by Barangay',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            suffixIcon: Icon(Icons.search),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * .78,
                   color: const Color.fromARGB(255, 22, 97, 152),
                   height: 50,
-                  // child: Text('asda'),
                 ),
                 Column(
                   children: [
@@ -87,31 +132,15 @@ class TotalTally extends StatelessWidget {
                             4: FlexColumnWidth(1),
                             5: FlexColumnWidth(1),
                           },
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           children: <TableRow>[
                             const TableRow(
                               children: <Widget>[
-                                TcellHeader(
-                                  txtcell: 'BARANGAY NO.',
-                                  heightcell: 50,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'NAME OF BARANGAY',
-                                  heightcell: 50,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'TOTAL BENEFICIARY',
-                                  heightcell: 50,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'FOOD ASSISTANCE',
-                                  heightcell: 50,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'MEDICAL ASSISTANCE',
-                                  heightcell: 50,
-                                ),
+                                TcellHeader(txtcell: 'BARANGAY NO.', heightcell: 50),
+                                TcellHeader(txtcell: 'NAME OF BARANGAY', heightcell: 50),
+                                TcellHeader(txtcell: 'TOTAL BENEFICIARY', heightcell: 50),
+                                TcellHeader(txtcell: 'FOOD ASSISTANCE', heightcell: 50),
+                                TcellHeader(txtcell: 'MEDICAL ASSISTANCE', heightcell: 50),
                               ],
                             ),
                           ],
@@ -119,7 +148,7 @@ class TotalTally extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * .60,
+                      height: MediaQuery.of(context).size.height * .55,
                       width: MediaQuery.of(context).size.width * .78,
                       color: Colors.white,
                       child: SingleChildScrollView(
@@ -134,34 +163,18 @@ class TotalTally extends StatelessWidget {
                             4: FlexColumnWidth(1),
                             5: FlexColumnWidth(1),
                           },
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           children: <TableRow>[
                             const TableRow(
                               children: <Widget>[
-                                TcellHeader(
-                                  txtcell: 'BARANGAY NO.',
-                                  heightcell: 0,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'NAME OF BARANGAY',
-                                  heightcell: 0,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'TOTAL BENEFICIARY',
-                                  heightcell: 0,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'FOOD ASSISTANCE',
-                                  heightcell: 0,
-                                ),
-                                TcellHeader(
-                                  txtcell: 'MEDICAL ASSISTANCE',
-                                  heightcell: 0,
-                                ),
+                                TcellHeader(txtcell: 'BARANGAY NO.', heightcell: 0),
+                                TcellHeader(txtcell: 'NAME OF BARANGAY', heightcell: 0),
+                                TcellHeader(txtcell: 'TOTAL BENEFICIARY', heightcell: 0),
+                                TcellHeader(txtcell: 'FOOD ASSISTANCE', heightcell: 0),
+                                TcellHeader(txtcell: 'MEDICAL ASSISTANCE', heightcell: 0),
                               ],
                             ),
-                            for (int i = 0; i < bgrgyList.length; i++)
+                            for (int i = 0; i < filteredBarangayList.length; i++)
                               TableRow(
                                 children: <Widget>[
                                   TcellData(
@@ -171,25 +184,25 @@ class TotalTally extends StatelessWidget {
                                     fsize: 15,
                                   ),
                                   TcellData(
-                                      txtcell: bgrgyList[i],
+                                      txtcell: filteredBarangayList[i],
                                       heightcell: 50,
                                       pad: 15,
                                       fsize: 15),
                                   TcellData(
                                       txtcell:
-                                          '${docs2.where((doc) => doc['barangay'] == bgrgyList[i]).length}',
+                                          '${docs2.where((doc) => doc['barangay'] == filteredBarangayList[i]).length}',
                                       heightcell: 50,
                                       pad: 15,
                                       fsize: 15),
                                   TcellData(
                                       txtcell:
-                                          '${docs1.where((doc) => doc['needs'] == 'Food Assistance').where((doc) => doc['barangay'] == bgrgyList[i]).length}',
+                                          '${docs1.where((doc) => doc['needs'] == 'Food Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length}',
                                       heightcell: 50,
                                       pad: 15,
                                       fsize: 15),
                                   TcellData(
                                       txtcell:
-                                          '${docs1.where((doc) => doc['needs'] == 'Medical Assistance').where((doc) => doc['barangay'] == bgrgyList[i]).length}',
+                                          '${docs1.where((doc) => doc['needs'] == 'Medical Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length}',
                                       heightcell: 50,
                                       pad: 15,
                                       fsize: 15),
@@ -211,14 +224,11 @@ class TotalTally extends StatelessWidget {
 class TcellHeader extends StatelessWidget {
   final String txtcell;
   final double heightcell;
-  // final Color colorcell;
-  // final Widget childcell;
+
   const TcellHeader({
     super.key,
     required this.txtcell,
     required this.heightcell,
-    // required this.childcell,
-    // required this.colorcell
   });
 
   @override
@@ -231,7 +241,7 @@ class TcellHeader extends StatelessWidget {
         child: Center(
             child: Text(
           txtcell,
-          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
         )),
       ),
     );
@@ -241,16 +251,13 @@ class TcellHeader extends StatelessWidget {
 class TcellData extends StatelessWidget {
   final String txtcell;
   final double heightcell, pad, fsize;
-  // final Color colorcell;
-  // final Widget childcell;
+
   const TcellData({
     super.key,
     required this.txtcell,
     required this.heightcell,
     required this.pad,
     required this.fsize,
-    // required this.childcell,
-    // required this.colorcell
   });
 
   @override

@@ -22,8 +22,8 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s1 = FirebaseFirestore.instance.collection('Request').snapshots();
-    final s2 = FirebaseFirestore.instance.collection('Beneficiary').snapshots();
+    final s1 = FirebaseFirestore.instance.collection('beneficiaries').snapshots();
+    final s2 = FirebaseFirestore.instance.collection('residents').snapshots();
 
     return StreamBuilder<List<QuerySnapshot>>(
       stream: Rx.combineLatest2(
@@ -79,7 +79,7 @@ class Dashboard extends StatelessWidget {
                 DashboardBox(
                       title: 'Ongoing Assistance',
                       count:
-                          '${docs1.where((doc) => doc['status'] == 'Ongoing').length}',
+                          '${docs1.where((doc) => doc['status'] != 'Completed').length}',
                       link: '/ongoingassistance'),
                  DashboardBox(
                       title: 'Total Completed Assistance',

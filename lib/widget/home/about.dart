@@ -215,6 +215,7 @@ class Contact extends StatelessWidget {
 }
 
 // Request Tracker Dialog
+
 class RequestTrackerDialog extends StatefulWidget {
   const RequestTrackerDialog({super.key});
 
@@ -244,33 +245,34 @@ class _RequestTrackerDialogState extends State<RequestTrackerDialog> {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: _controller,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Request Information',
-                hintText: 'Enter your request...',
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Request Information',
+                      hintText: 'Enter your request...',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward),
+                  onPressed: () {
+                    String requestText = _controller.text;
+                    if (requestText.isNotEmpty) {
+                      print('User request: $requestText');
+                      // You can add any further logic here, like sending the request
+                    }
+                    // Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
           ],
         ),
       ),
-      // actions: [
-      //   TextButton(
-      //     onPressed: () => Navigator.of(context).pop(),
-      //     child: const Text('Cancel'),
-      //   ),
-      //   TextButton(
-      //     onPressed: () {
-      //       String requestText = _controller.text;
-      //       if (requestText.isNotEmpty) {
-      //         print('User request: $requestText');
-      //       }
-      //       Navigator.of(context).pop();
-      //     },
-      //     child: const Text('Submit'),
-      //   ),
-      // ],
     );
   }
 }

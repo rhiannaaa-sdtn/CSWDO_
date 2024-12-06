@@ -258,13 +258,13 @@ class NextStep extends StatelessWidget {
                     heightcell: 30,
                   ),
                   TcellHeader(
-                    txtcell: 'REMasdsARK DATE',
+                    txtcell: 'REMARK DATE',
                     heightcell: 30,
                   ),
-                  TcellHeader(
-                    txtcell: 'REMARK BY',
-                    heightcell: 30,
-                  ),
+                  // TcellHeader(
+                  //   txtcell: 'REMARK BY',
+                  //   heightcell: 30,
+                  // ),
                 ],
               ),
             ];
@@ -287,11 +287,11 @@ class NextStep extends StatelessWidget {
                         heightcell: 50,
                         pad: 10,
                         fsize: 15),
-                    TcellData(
-                        txtcell: client['REMARK BY'],
-                        heightcell: 50,
-                        pad: 10,
-                        fsize: 15),
+                    // TcellData(
+                    //     txtcell: client['REMARK BY'],
+                    //     heightcell: 50,
+                    //     pad: 10,
+                    //     fsize: 15),
                   ],
                 );
                 remarkTable.add(clientWidget);
