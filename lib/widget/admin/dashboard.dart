@@ -52,7 +52,7 @@ class Dashboard extends StatelessWidget {
         print(docs2.length);
 
         return Padding(
-          padding: EdgeInsets.all(1),
+          padding: EdgeInsets.all(3),
           child: Column(
             children: [
               // const Row(
@@ -75,7 +75,7 @@ class Dashboard extends StatelessWidget {
                   DashboardBox(
                       title: 'Total Registered Beneficiary',
                       count: '${docs2.length}',
-                      link: '/beneficiarylist'),
+                      link: '/listbns'),
                 DashboardBox(
                       title: 'Ongoing Assistance',
                       count:
