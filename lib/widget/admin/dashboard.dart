@@ -2,7 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+// import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
+
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 class DashboardMain extends StatefulWidget {
   const DashboardMain({super.key});
 
@@ -45,6 +50,8 @@ class Dashboard extends StatelessWidget {
             snapshot.data!.isEmpty) {
           return Center(child: Text('No data available'));
         }
+
+
 
         final docs1 = snapshot.data![0].docs;
         final docs2 = snapshot.data![1].docs;
@@ -89,7 +96,30 @@ class Dashboard extends StatelessWidget {
           
                 ],
               ),
-          
+          Expanded(
+      child: FlutterMap(
+      options: MapOptions(
+        initialCenter: LatLng(14.0642, 121.3233), // Center the map over London
+        initialZoom: 13,
+      ),
+      children: [
+        TileLayer( // Display map tiles from any source
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSMF's Tile Server
+          userAgentPackageName: 'com.example.app',
+          // And many more recommended properties!
+        ),
+        // RichAttributionWidget( // Include a stylish prebuilt attribution widget that meets all requirments
+        //   attributions: [
+        //     TextSourceAttribution(
+        //       'OpenStreetMap contributors',
+        //       onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')), // (external)
+        //     ),
+        //     // Also add images...
+        //   ],
+        // ),
+      ],
+        ),
+    )
             ],
           ),
         );
@@ -163,12 +193,13 @@ class _DashboardBoxState extends State<DashboardBox> {
                     ],
                   ),
                 ),
-                Container(
-                  width: double.infinity,
-                  height: 10,
-                  color: Colors.amber,
-                ),
-              ],
+                // Container(
+                //   width: double.infinity,
+                //   height: 10,
+                //   color: Colors.amber,
+                // ),
+    
+],
             ),
           ),
         ),

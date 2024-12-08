@@ -39,15 +39,14 @@ dependencies:
   # flutter_web_storage: ^1.0.0
   fl_chart: ^0.40.0
   google_maps_flutter: ^2.2.0  # Ensure this is added
-  # google_maps_heatmap: ^0.3.0 # Heatmap plugin
-  flutter_map: 4.0.0
+ 
   maplibre_gl: ^0.19.0
-  # flutter_heatmap: ^0.2.0  # Check for the latest version on pub.dev
-  # flutter_map_heatmap: any # or the latest version on Pub
-  # flutter_map: ^0.16.0 # Adjust version based on your Flutter version
-  flutter_map_heatmap: ^0.0.5
-  latlong2: ^0.8.0
-  google_fonts: ^2.1.0 
+  url_launcher: ^6.0.9  # check for the latest version on pub.dev
+
+  flutter_map: ^6.2.1
+  latlong2: ^0.9.1
+  
+  # google_fonts: ^2.0.0 
   flutter:
     sdk: flutter
   flutter_web_plugins:
