@@ -39,6 +39,7 @@ dependencies:
   # flutter_web_storage: ^1.0.0
   fl_chart: ^0.40.0
   flutter_map: 4.0.0
+  flutter_heatmap: ^0.2.0  # Check for the latest version on pub.dev
   flutter_map_heatmap: any # or the latest version on Pub
 
   google_fonts: ^2.1.0 

@@ -75,7 +75,7 @@ class Dashboard extends StatelessWidget {
                   DashboardBox(
                       title: 'Total Registered Beneficiary',
                       count: '${docs2.length}',
-                      link: '/listbns'),
+                      link: '/beneficiarylist'),
                 DashboardBox(
                       title: 'Ongoing Assistance',
                       count:
