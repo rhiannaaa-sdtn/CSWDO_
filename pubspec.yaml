@@ -43,7 +43,13 @@ dependencies:
   maplibre_gl: ^0.19.0
   url_launcher: ^6.0.9  # check for the latest version on pub.dev
 
+  # flutter_map: ^6.2.1
+  # flutter_map_heatmap: ^0.0.7
   flutter_map: ^6.2.1
+  flutter_map_marker_cluster: ^1.0.0
+
+  # flutter_map: ^0.14.0  # Make sure this is the correct version you're using
+  # flutter_map_heatmap: ^0.0.7
   latlong2: ^0.9.1
   
   # google_fonts: ^2.0.0 

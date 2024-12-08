@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
-
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 class DashboardMain extends StatefulWidget {
   const DashboardMain({super.key});
 
@@ -51,75 +50,87 @@ class Dashboard extends StatelessWidget {
           return Center(child: Text('No data available'));
         }
 
-
-
         final docs1 = snapshot.data![0].docs;
         final docs2 = snapshot.data![1].docs;
         print(docs1.length);
         print(docs2.length);
 
+        // Prepare markers based on sample data or Firestore data
+        List<Marker> markers = [];
+        for (var doc in docs2) {
+          var lat = 14.0642; // Default latitude if none found
+          var lng = 121.3233; // Default longitude if none found
+          markers.add(
+            Marker(
+              width: 80.0,
+              height: 80.0,
+              point: LatLng(lat, lng),
+              child: Icon(
+                Icons.location_on,
+                color: Colors.red,
+                size: 40.0,
+              ),
+            ),
+          );
+        }
+
         return Padding(
           padding: EdgeInsets.all(1),
           child: Column(
             children: [
-              // const Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     Expanded(
-              //       child: Text(
-              //         'Dashboard',
-              //         style:
-              //             TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              //       ),
-              //     ),
-              //   ],
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DashboardBox(
-                      title: 'Total Registered Beneficiary',
-                      count: '${docs2.length}',
-                      link: '/beneficiarylist'),
-                DashboardBox(
-                      title: 'Ongoing Assistance',
-                      count:
-                          '${docs1.where((doc) => doc['status'] != 'Completed').length}',
-                      link: '/ongoingassistance'),
-                 DashboardBox(
-                      title: 'Total Completed Assistance',
-                      count:
-                          '${docs1.where((doc) => doc['status'] == 'Completed').length}',
-                      link: '/completedassitance'),
-          
+                    title: 'Total Registered Beneficiary',
+                    count: '${docs2.length}',
+                    link: '/beneficiarylist',
+                  ),
+                  DashboardBox(
+                    title: 'Ongoing Assistance',
+                    count:
+                        '${docs1.where((doc) => doc['status'] != 'Completed').length}',
+                    link: '/ongoingassistance',
+                  ),
+                  DashboardBox(
+                    title: 'Total Completed Assistance',
+                    count:
+                        '${docs1.where((doc) => doc['status'] == 'Completed').length}',
+                    link: '/completedassitance',
+                  ),
                 ],
               ),
-          Expanded(
-      child: FlutterMap(
-      options: MapOptions(
-        initialCenter: LatLng(14.0642, 121.3233), // Center the map over London
-        initialZoom: 13,
-      ),
-      children: [
-        TileLayer( // Display map tiles from any source
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSMF's Tile Server
-          userAgentPackageName: 'com.example.app',
-          // And many more recommended properties!
-        ),
-        // RichAttributionWidget( // Include a stylish prebuilt attribution widget that meets all requirments
-        //   attributions: [
-        //     TextSourceAttribution(
-        //       'OpenStreetMap contributors',
-        //       onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')), // (external)
-        //     ),
-        //     // Also add images...
-        //   ],
-        // ),
-      ],
-        ),
-    )
+              Expanded(
+                child: FlutterMap(
+                  options: MapOptions(
+                    center: LatLng(14.0642, 121.3233), // Center of the map
+                    zoom: 13,
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSM Tile Server
+                      userAgentPackageName: 'com.example.app',
+                    ),
+                    MarkerClusterLayerWidget(
+                      options: MarkerClusterLayerOptions(
+                        markers: markers,
+                        polygonOptions: PolygonOptions(
+                          borderColor: Colors.blueAccent,
+                          // borderWidth: 3,
+                          color: Colors.blue.withOpacity(0.4),
+                        ),
+                        builder: (context, markers) {
+                          return FloatingActionButton(
+                            onPressed: () {},
+                            child: Text(markers.length.toString()),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         );
@@ -148,22 +159,6 @@ class _DashboardBoxState extends State<DashboardBox> {
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
           onTap: () {
-            // showDialog(
-            //   context: context,
-            //   builder: (context) {
-            //     return AlertDialog(
-            //       title: const Text('Detail'),
-            //       content: Text(count),
-            //       actions: <Widget>[
-            //         TextButton(
-            //           onPressed: () => Navigator.of(context).pop(),
-            //           child: const Text('OK'),
-            //         ),
-            //       ],
-            //     );
-            //   },
-            // );
-
             Navigator.pushNamed(context, widget.link);
           },
           child: Container(
@@ -193,13 +188,7 @@ class _DashboardBoxState extends State<DashboardBox> {
                     ],
                   ),
                 ),
-                // Container(
-                //   width: double.infinity,
-                //   height: 10,
-                //   color: Colors.amber,
-                // ),
-    
-],
+              ],
             ),
           ),
         ),
