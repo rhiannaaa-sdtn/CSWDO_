@@ -115,11 +115,11 @@ class _TableDataListState extends State<TableDataList> {
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Needs Type',
+                txtcell: 'Type of Needs',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Date Registered',
+                txtcell: 'Request Date',
                 heightcell: 50,
               ),
               TcellHeader(

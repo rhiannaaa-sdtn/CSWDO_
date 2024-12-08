@@ -41,7 +41,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
 
   String? _selectedCivilStatus;
   String? _selectedBarangay; // Add selectedBarangay to store the dropdown value
-  String? _selectedNeedsType; // New variable for Needs Type
+  String? _selectedNeedsType; // New variable for Type of Needs
   String? _selectedGender; // New variable for Gender dropdown
 
   PlatformFile? pickedfile1;
@@ -284,7 +284,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
               _genderDropdown(), // Gender Dropdown
               _inputBox('Address', 'Enter Address', _address),
               _barangayDropdown(),
-              // _datePickerField('Date Registered', _dateRegistered),
+              // _datePickerField('Request Date', _dateRegistered),
             ],
           ),
         ),
@@ -302,7 +302,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _needsTypeDropdown(),
-            _datePickerField('Date Registered', _dateRegistered),
+            _datePickerField('Request Date', _dateRegistered),
             const SizedBox(height: 30),
             _fileUploadRow('Document', pickedfile1, 'type1'),
             _fileUploadRow('Indigency *', pickedfile2, 'type2'),
@@ -326,7 +326,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
         DropdownMenuItem(value: 'Medical Assistance', child: Text('Medical Assistance')),
         DropdownMenuItem(value: 'Food Assistance', child: Text('Food Assistance')),
       ],
-      decoration: const InputDecoration(labelText: 'Needs Type'),
+      decoration: const InputDecoration(labelText: 'Type of Needs'),
     );
   }
 

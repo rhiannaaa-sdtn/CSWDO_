@@ -150,7 +150,7 @@ class NextStep extends StatelessWidget {
           personalinfo('BARANGAY', clients['barangay']);
           needsinfo('ORDER NUMBER', clients.id);
           needsinfo('NEED TYPE', clients['needs']);
-          needsinfo('DATE REGISTERED', clients['date']);
+          needsinfo('Request Date', clients['date']);
           needsinfo('NEEDS STATUS', clients['status']);
           needsinfo('REPORT', clients['Reportstatus']);
         }

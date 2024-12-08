@@ -461,7 +461,7 @@ class _NeedsInputState extends State<NeedsInput> {
                   children: [
                     const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text('Needs Type',
+                      child: Text('Type of Needs',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(

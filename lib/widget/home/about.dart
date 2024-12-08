@@ -97,9 +97,9 @@ class Row1 extends StatelessWidget {
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 30),
-                _buildAssistanceOption('Medical Assistance'),
-                _buildAssistanceOption('Food Assistance'),
-                _buildAssistanceOption('Other Assistance...'),
+                _buildAssistanceOption('Medical Assistance','images/medicalassist.png'),
+                _buildAssistanceOption('Food Assistance','images/foodassist.png'),
+                _buildAssistanceOption('Other Assistance...','images/otherassist.png'),
                 const SizedBox(height: 30),
                 _buildRequestTrackerButton(context),
               ],
@@ -111,10 +111,27 @@ class Row1 extends StatelessWidget {
   }
 
   // Helper function to avoid repetition in assistance options
-  Widget _buildAssistanceOption(String title) {
-    return Text(
-      title,
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  Widget _buildAssistanceOption(String title,String imgurl) {
+    return Row(
+      children: [
+
+           Container(
+            // height: MediaQuery.of(context).size.height * .9,
+            // height: double.maxFinite,
+            width: 80,
+            height: 80,
+            decoration:  BoxDecoration(
+              image: DecorationImage(
+                alignment: Alignment.topCenter,
+                image: AssetImage(imgurl),
+                fit: BoxFit.fitWidth,
+              ),
+            )),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ],
     );
   }
 

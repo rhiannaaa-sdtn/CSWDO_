@@ -40,11 +40,11 @@ class _TableSampleState extends State<TableSample> {
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Needs Type',
+                txtcell: 'Type of Needs',
                 heightcell: 50,
               ),
               TcellHeader(
-                txtcell: 'Date Registered',
+                txtcell: 'Request Date',
                 heightcell: 50,
               ),
               TcellHeader(
