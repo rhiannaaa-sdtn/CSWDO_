@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cwsdo/constatns/navitem.dart'; // Import navitem.dart for bgrgyList
 import 'dart:math';
+import 'package:intl/intl.dart';
+
 
 class AddBeneficiaryMain extends StatefulWidget {
   const AddBeneficiaryMain({super.key});
@@ -63,6 +65,39 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     }
   }
 
+Future<bool> _hasRecentRequest(String fullname) async {
+  try {
+    // Calculate the date 90 days ago from today
+    DateTime today = DateTime.now();
+    DateTime ninetyDaysAgo = today.subtract(Duration(days: 90));
+
+    // Query Firestore to find all beneficiaries with the same fullname
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('beneficiaries')
+        .where('fullname', isEqualTo: fullname)
+        // .orderBy('dateRegistered', descending: true) // Order by dateRegistered
+        .get();
+
+    // Loop through the results to find if any dateRegistered is within the last 90 days
+    for (var doc in querySnapshot.docs) {
+      String dateRegisteredString = doc['dateRegistered'] as String;
+
+      // Convert the string to DateTime
+      DateTime dateRegistered = DateFormat('yyyy-MM-dd').parse(dateRegisteredString);
+
+      // Check if the date is within the last 90 days
+      if (dateRegistered.isAfter(ninetyDaysAgo)) {
+        return true; // Found a recent request
+      }
+    }
+
+    return false; // No recent request
+  } catch (e) {
+    _showErrorDialog("Error checking recent requests: $e");
+    return false;
+  }
+}
+
   void _onSubmit() async {
     if (_fullname.text.isEmpty || _mobilenum.text.isEmpty || _selectedCivilStatus == null || _selectedBarangay == null || _selectedGender == null) {
       _showErrorDialog("Please fill all required fields");
@@ -73,6 +108,14 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     if (pickedfile1 == null || pickedfile2 == null) {
       _showErrorDialog("Please upload both Valid ID and Indigency documents");
       return;
+    }
+
+    // Check if the user has made a request in the last 90 days
+    bool hasRecentRequest = await _hasRecentRequest(_fullname.text);
+
+    if (hasRecentRequest) {
+      _showErrorDialog("You have already made a request within the last 90 days.");
+      return; // Stop further processing
     }
 
     setState(() {
@@ -305,8 +348,9 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
             _datePickerField('Request Date', _dateRegistered),
             const SizedBox(height: 30),
             _fileUploadRow('Document', pickedfile1, 'type1'),
-            _fileUploadRow('Indigency *', pickedfile2, 'type2'),
+            _fileUploadRow('Indigency', pickedfile2, 'type2'),
             const SizedBox(height: 20),
+           
             _submitButton(),
           ],
         ),
@@ -317,44 +361,74 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
   Widget _needsTypeDropdown() {
     return DropdownButtonFormField<String>(
       value: _selectedNeedsType,
-      onChanged: (newValue) {
+      decoration: const InputDecoration(labelText: 'Type of Needs'),
+      items: ['Medical Assistance', 'Food Assistance', 'Other Assistance']
+          .map((needs) => DropdownMenuItem(
+                value: needs,
+                child: Text(needs),
+              ))
+          .toList(),
+      onChanged: (value) {
         setState(() {
-          _selectedNeedsType = newValue;
+          _selectedNeedsType = value;
         });
       },
-      items: const [
-        DropdownMenuItem(value: 'Medical Assistance', child: Text('Medical Assistance')),
-        DropdownMenuItem(value: 'Food Assistance', child: Text('Food Assistance')),
-        DropdownMenuItem(value: 'Other Assistance', child: Text('Other Assistance')),
-      ],
-      decoration: const InputDecoration(labelText: 'Type of Needs'),
     );
   }
 
-  Widget _fileUploadRow(String label, PlatformFile? pickedFile, String type) {
-    return Row(
-      children: [
-        const Icon(size: 40, Icons.image),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label),
-            pickedFile != null
-                ? Text(
-                    pickedFile.name,
-                    style: const TextStyle(fontSize: 12, color: Colors.blue),
-                  )
-                : const Text(
-                    'No file selected',
-                    style: TextStyle(fontSize: 12, color: Colors.red),
-                  ),
-          ],
-        ),
-        IconButton(
-          onPressed: () => _selectedFile(type),
-          icon: const Icon(Icons.upload_file),
-        ),
-      ],
+
+
+  Widget _dropdownField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: DropdownButtonFormField<String>(
+        value: _selectedCivilStatus,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedCivilStatus = newValue;
+          });
+        },
+        items: ['Single', 'Married', 'Widowed', 'Separated'].map((option) {
+          return DropdownMenuItem(value: option, child: Text(option));
+        }).toList(),
+        decoration: InputDecoration(labelText: 'Civil Status'),
+      ),
+    );
+  }
+
+  Widget _genderDropdown() {
+    return DropdownButtonFormField<String>(
+      value: _selectedGender,
+      decoration: const InputDecoration(labelText: 'Gender'),
+      items: ['Male', 'Female']
+          .map((gender) => DropdownMenuItem(
+                value: gender,
+                child: Text(gender),
+              ))
+          .toList(),
+      onChanged: (value) {
+        setState(() {
+          _selectedGender = value;
+        });
+      },
+    );
+  }
+
+  Widget _barangayDropdown() {
+    return DropdownButtonFormField<String>(
+      value: _selectedBarangay,
+      decoration: const InputDecoration(labelText: 'Barangay'),
+      items: bgrgyList
+          .map((barangay) => DropdownMenuItem(
+                value: barangay,
+                child: Text(barangay),
+              ))
+          .toList(),
+      onChanged: (value) {
+        setState(() {
+          _selectedBarangay = value;
+        });
+      },
     );
   }
 
@@ -383,82 +457,50 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     );
   }
 
-  Widget _inputBox(String label, String hint, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(labelText: label, hintText: hint),
-      ),
-    );
-  }
-
   Widget _datePickerField(String label, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: InkWell(
-        onTap: () => selectedDate(controller),
-        child: IgnorePointer(
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(labelText: label, hintText: 'Pick a date'),
-          ),
+    return TextFormField(
+      controller: controller,
+      readOnly: true,
+      decoration: InputDecoration(labelText: label),
+      onTap: () => selectedDate(controller),
+    );
+  }
+
+  Widget _inputBox(String label, String hint, TextEditingController controller) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+      ),
+    );
+  }
+
+   Widget _fileUploadRow(String label, PlatformFile? pickedFile, String type) {
+    return Row(
+      children: [
+        const Icon(size: 40, Icons.image),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label),
+            pickedFile != null
+                ? Text(
+                    pickedFile.name,
+                    style: const TextStyle(fontSize: 12, color: Colors.blue),
+                  )
+                : const Text(
+                    'No file selected',
+                    style: TextStyle(fontSize: 12, color: Colors.red),
+                  ),
+          ],
         ),
-      ),
+        IconButton(
+          onPressed: () => _selectedFile(type),
+          icon: const Icon(Icons.upload_file),
+        ),
+      ],
     );
   }
 
-  Widget _dropdownField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: DropdownButtonFormField<String>(
-        value: _selectedCivilStatus,
-        onChanged: (newValue) {
-          setState(() {
-            _selectedCivilStatus = newValue;
-          });
-        },
-        items: ['Single', 'Married', 'Widowed', 'Separated'].map((option) {
-          return DropdownMenuItem(value: option, child: Text(option));
-        }).toList(),
-        decoration: InputDecoration(labelText: 'Civil Status'),
-      ),
-    );
-  }
-
-  Widget _barangayDropdown() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: DropdownButtonFormField<String>(
-        value: _selectedBarangay,
-        onChanged: (newValue) {
-          setState(() {
-            _selectedBarangay = newValue;
-          });
-        },
-        items: bgrgyList.map((barangay) {
-          return DropdownMenuItem(value: barangay, child: Text(barangay));
-        }).toList(),
-        decoration: const InputDecoration(labelText: 'Barangay'),
-      ),
-    );
-  }
-
-  Widget _genderDropdown() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: DropdownButtonFormField<String>(
-        value: _selectedGender,
-        onChanged: (newValue) {
-          setState(() {
-            _selectedGender = newValue;
-          });
-        },
-        items: ['Male', 'Female', 'Other'].map((gender) {
-          return DropdownMenuItem(value: gender, child: Text(gender));
-        }).toList(),
-        decoration: const InputDecoration(labelText: 'Gender'),
-      ),
-    );
-  }
 }

@@ -29,9 +29,15 @@ class OngoingList extends StatefulWidget {
 class _OngoingListState extends State<OngoingList> {
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = "";
-  int _currentPage = 1;
-  final int _itemsPerPage = 10;
+  int _currentPage = 1; // Store the current page here
+  final int _itemsPerPage = 5;
   String? _selectedNeed = null; // This will hold the selected need filter
+
+  void _onPageChanged(int newPage) {
+    setState(() {
+      _currentPage = newPage; // Update the current page
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +91,6 @@ class _OngoingListState extends State<OngoingList> {
                               });
                             },
                             items: <String>[
-                              'All', // Added 'All' option
                               'Medical Assistance',
                               'Food Assistance',
                               'Other Assistance'
@@ -105,16 +110,7 @@ class _OngoingListState extends State<OngoingList> {
                         currentPage: _currentPage,
                         itemsPerPage: _itemsPerPage,
                         selectedNeed: _selectedNeed, // Pass selectedNeed to filter
-                      ),
-                      PaginationControls(
-                        currentPage: _currentPage,
-                        itemsPerPage: _itemsPerPage,
-                        searchQuery: _searchQuery,
-                        onPageChanged: (int page) {
-                          setState(() {
-                            _currentPage = page;
-                          });
-                        },
+                        onPageChanged: _onPageChanged, // Use the callback
                       ),
                     ],
                   ),
@@ -135,12 +131,14 @@ class TableDataList extends StatefulWidget {
     required this.currentPage,
     required this.itemsPerPage,
     required this.selectedNeed, // Add selectedNeed parameter
+    required this.onPageChanged, // Add onPageChanged callback
   });
 
   final String searchQuery;
   final int currentPage;
   final int itemsPerPage;
   final String? selectedNeed;
+  final ValueChanged<int> onPageChanged; // This is a callback
 
   @override
   State<TableDataList> createState() => _TableDataListState();
@@ -211,8 +209,8 @@ class _TableDataListState extends State<TableDataList> {
           final needs = client['needs'].toString().toLowerCase();
           bool matchesSearchQuery = name.contains(widget.searchQuery) || barangay.contains(widget.searchQuery);
 
-          // Filter by selected need if not null, or show all if "All" is selected
-          bool matchesNeed = widget.selectedNeed == null || widget.selectedNeed == 'All' || needs.contains(widget.selectedNeed!.toLowerCase());
+          // Filter by selected need if not null
+          bool matchesNeed = widget.selectedNeed == null || needs.contains(widget.selectedNeed!.toLowerCase());
 
           return matchesSearchQuery && matchesNeed;
         }).toList();
@@ -269,11 +267,11 @@ class _TableDataListState extends State<TableDataList> {
                   fsize: 12),
               ElevatedButton(
                 style: ButtonStyle(
-                      backgroundColor: const WidgetStatePropertyAll(
-                        Color.fromRGBO(33, 79, 215, 1)),
-                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ))),
+                  backgroundColor: const WidgetStatePropertyAll(
+                      Color.fromRGBO(33, 79, 215, 1)),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ))),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
@@ -292,19 +290,30 @@ class _TableDataListState extends State<TableDataList> {
           clientWidgets.add(clientWidget);
         }
 
-        return Table(
-          border: TableBorder.all(),
-          columnWidths: const <int, TableColumnWidth> {
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(1),
-            2: FlexColumnWidth(1),
-            3: FlexColumnWidth(1),
-            4: FlexColumnWidth(1),
-            5: FlexColumnWidth(1),
-            6: FlexColumnWidth(1),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: clientWidgets,
+        return Column(
+          children: [
+            Table(
+              border: TableBorder.all(),
+              columnWidths: const <int, TableColumnWidth> {
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(1),
+                2: FlexColumnWidth(1),
+                3: FlexColumnWidth(1),
+                4: FlexColumnWidth(1),
+                5: FlexColumnWidth(1),
+                6: FlexColumnWidth(1),
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: clientWidgets,
+            ),
+            PaginationControls(
+              currentPage: widget.currentPage,
+              itemsPerPage: widget.itemsPerPage,
+              searchQuery: widget.searchQuery,
+              filteredClients: filteredClients,  // Pass the filtered clients here
+              onPageChanged: widget.onPageChanged, // Use the callback to update page
+            ),
+          ],
         );
       },
     );
@@ -318,17 +327,18 @@ class PaginationControls extends StatelessWidget {
     required this.itemsPerPage,
     required this.searchQuery,
     required this.onPageChanged,
+    required this.filteredClients,  // Add filteredClients here
   }) : super(key: key);
 
   final int currentPage;
   final int itemsPerPage;
   final String searchQuery;
   final Function(int) onPageChanged;
+  final List<DocumentSnapshot> filteredClients;  // Accept filteredClients here
 
   @override
   Widget build(BuildContext context) {
     // Calculate total number of pages based on filtered clients.
-    final filteredClients = []; // Add the actual list of filtered clients here
     final totalPages = (filteredClients.length / itemsPerPage).ceil();
 
     return Row(

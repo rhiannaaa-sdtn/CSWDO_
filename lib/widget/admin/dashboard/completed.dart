@@ -30,8 +30,8 @@ class _OngoingListState extends State<OngoingList> {
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = "";
   int _currentPage = 1;
-  final int _itemsPerPage = 10;
-  String? _selectedNeed = null; // This will hold the selected need filter
+  final int _itemsPerPage = 5;
+  String? _selectedNeed = null;
 
   @override
   Widget build(BuildContext context) {
@@ -213,13 +213,9 @@ class _TableDataListState extends State<TableDataList> {
           return matchesSearchQuery && matchesNeed;
         }).toList();
 
-        final startIndex =
-            (widget.currentPage - 1) * widget.itemsPerPage;
+        final startIndex = (widget.currentPage - 1) * widget.itemsPerPage;
         final endIndex = startIndex + widget.itemsPerPage;
-        final paginatedClients = filteredClients
-            .sublist(startIndex, endIndex > filteredClients.length
-                ? filteredClients.length
-                : endIndex);
+        final paginatedClients = filteredClients.sublist(startIndex, endIndex > filteredClients.length ? filteredClients.length : endIndex);
 
         for (var client in paginatedClients) {
           var index = filteredClients.indexOf(client) + 1;
@@ -227,53 +223,23 @@ class _TableDataListState extends State<TableDataList> {
           final clientWidget = TableRow(
             children: <Widget>[
               TcellData(txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
-              TcellData(
-                  txtcell: client['barangay'],  // This now just shows the value of barangay
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 15),
-              TcellData(
-                  txtcell: client['fullname'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 15),
-              TcellData(
-                  txtcell: client['gender'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 15),
-              TcellData(
-                  txtcell: client['civilStatus'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 15),
-              TcellData(
-                  txtcell: client['dob'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 15),
-              TcellData(
-                  txtcell: client['mobilenum'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 15),
-              TcellData(
-                  txtcell: client['needs'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 15),
-              ElevatedButton(
-                style: ButtonStyle(
-                      backgroundColor: const WidgetStatePropertyAll(
-                        Color.fromRGBO(33, 79, 215, 1)),
-                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ))),
+              TcellData(txtcell: client['barangay'], heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['fullname'], heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['gender'], heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['civilStatus'], heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['dob'], heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['mobilenum'], heightcell: 50, pad: 15, fsize: 15),
+              TcellData(txtcell: client['needs'], heightcell: 50, pad: 15, fsize: 15),
+              ElevatedButton(  style: ButtonStyle(
+                  backgroundColor: const WidgetStatePropertyAll(
+                      Color.fromRGBO(33, 79, 215, 1)),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ))),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          NextStepMain(requestID: client.id),
+                      builder: (context) => NextStepMain(requestID: client.id),
                     ),
                   );
                 },
@@ -289,7 +255,7 @@ class _TableDataListState extends State<TableDataList> {
 
         return Table(
           border: TableBorder.all(),
-          columnWidths: const <int, TableColumnWidth> {
+          columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(1),
             1: FlexColumnWidth(1),
             2: FlexColumnWidth(1),
