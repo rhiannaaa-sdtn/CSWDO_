@@ -8,6 +8,7 @@ import 'dart:html' as html; // Import dart:html for web storage
 import 'dart:io'; // For platform-specific checks
 import 'package:flutter/foundation.dart'; // For web-specific checks
 import 'package:firebase_core/firebase_core.dart'; // For Firebase initialization
+import 'package:flutter/services.dart';
 
 class Resident extends StatefulWidget {
   const Resident({super.key});
@@ -240,7 +241,10 @@ class _AddResidentFormState extends State<AddResidentForm> {
             labelText: 'Income',
             border: OutlineInputBorder(),
           ),
-          keyboardType: TextInputType.number,
+  keyboardType: TextInputType.number,
+   inputFormatters: [
+    FilteringTextInputFormatter.digitsOnly, // Accepts digits only
+  ],
         ),
         const SizedBox(height: 10),
         // Gender Dropdown
