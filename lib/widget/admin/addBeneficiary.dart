@@ -304,7 +304,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
             _needsTypeDropdown(),
             _datePickerField('Date Registered', _dateRegistered),
             const SizedBox(height: 30),
-            _fileUploadRow('Valid ID *', pickedfile1, 'type1'),
+            _fileUploadRow('Document', pickedfile1, 'type1'),
             _fileUploadRow('Indigency *', pickedfile2, 'type2'),
             const SizedBox(height: 20),
             _submitButton(),

@@ -746,7 +746,7 @@ class _CredentialsInputState extends State<CredentialsInput> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Valid ID *'),
+                              const Text('Document'),
                               pickedfile1 != null
                                   ? Text(pickedfile1!.name)
                                   : const Text('Clear Picure of your Valid ID'),

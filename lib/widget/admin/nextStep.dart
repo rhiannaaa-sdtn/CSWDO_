@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cwsdo/services/firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
-
+String globalvariableindigency = '';
+String globalvariableid = '';
 class NextStepMain extends StatefulWidget {
   final String requestID;
   const NextStepMain({super.key, required this.requestID});
@@ -68,7 +70,6 @@ class NextStep extends StatelessWidget {
             ],
           ),
         ];
-
         List<TableRow> personalWidgets = [
           const TableRow(
             children: <Widget>[
@@ -83,7 +84,6 @@ class NextStep extends StatelessWidget {
             ],
           ),
         ];
-
         List<TableRow> needsWidgets = [
           const TableRow(
             children: <Widget>[
@@ -152,6 +152,9 @@ class NextStep extends StatelessWidget {
           needsinfo('NEED TYPE', clients['needs']);
           needsinfo('DATE REGISTERED', clients['dateRegistered']);
           needsinfo('NEEDS STATUS', clients['status']);
+
+          globalvariableindigency =  clients['indigency'];
+          globalvariableid =  clients['validId'];
         }
 
         Future<void> _saveRemarks(
@@ -229,8 +232,8 @@ class NextStep extends StatelessWidget {
                     onPressed: () {
                       _saveRemarks(status, remarks.text);
                       remarks.text = '';
-                      _updateStatus();  // Update the status when "OK" is pressed
-                      Navigator.pop(context); // Close the dialog
+                      _updateStatus(); 
+                      Navigator.pop(context); 
                     },
                     child: const Text('OK'),
                   ),
@@ -261,10 +264,7 @@ class NextStep extends StatelessWidget {
                     txtcell: 'REMARK DATE',
                     heightcell: 30,
                   ),
-                  // TcellHeader(
-                  //   txtcell: 'REMARK BY',
-                  //   heightcell: 30,
-                  // ),
+                
                 ],
               ),
             ];
@@ -287,11 +287,6 @@ class NextStep extends StatelessWidget {
                         heightcell: 50,
                         pad: 10,
                         fsize: 15),
-                    // TcellData(
-                    //     txtcell: client['REMARK BY'],
-                    //     heightcell: 50,
-                    //     pad: 10,
-                    //     fsize: 15),
                   ],
                 );
                 remarkTable.add(clientWidget);
@@ -304,17 +299,18 @@ class NextStep extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 8,
-                        child: Text(
-                          'Client Remarks',
-                          style: TextStyle(fontSize: 25),
-                        ),
-                      ),
-                    ],
-                  ),
+                  SizedBox(height: 10,),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       flex: 8,
+                  //       // child: Text(
+                  //       //   'Client Remarks',
+                  //       //   style: TextStyle(fontSize: 25),
+                  //       // ),
+                  //     ),
+                  //   ],
+                  // ),
                   Expanded(
                     flex: 8,
                     child: Row(
@@ -410,36 +406,106 @@ class NextStep extends StatelessWidget {
                                               children: needsWidgets,
                                             ),
                                             SizedBox(height: 5),
-                                            // Conditionally show the button if status is not 'Completed'
                                             if (status1 != 'Completed')
                                               SizedBox(
                                                 height: 50,
-                                                width: 150,
-                                                child: ElevatedButton(
-                                                  style: ButtonStyle(
-                                                      shape: MaterialStateProperty.all(
-                                                          RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  )),
-                                                      backgroundColor:
-                                                          MaterialStateProperty.all(
-                                                              const Color.fromARGB(255, 71, 42, 230))),
-                                                  child: const Row(
-                                                    children: [
-                                                      Text(
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                        'Take Action',
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  onPressed: () {
-                                                    _actionButton();
-                                                  },
-                                                ),
+                                                child: Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,  // Align buttons at opposite sides
+  children: [
+    ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(
+          const Color.fromARGB(255, 71, 42, 230),
+        ),
+      ),
+      child: const Row(
+        children: [
+          Text(
+            style: TextStyle(
+              fontSize: 15,
+              color: Color.fromRGBO(255, 255, 255, 1),
+              fontWeight: FontWeight.bold,
+            ),
+            "Indigency",
+          ),
+        ],
+      ),
+      onPressed: () {
+        openIndigencyFile(globalvariableindigency); // Open the URL
+      },
+    ),
+
+    SizedBox(width: 20,),
+    ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(
+          const Color.fromARGB(255, 71, 42, 230),
+        ),
+      ),
+      child: const Row(
+        children: [
+          Text(
+            style: TextStyle(
+              fontSize: 15,
+              color: Color.fromRGBO(255, 255, 255, 1),
+              fontWeight: FontWeight.bold,
+            ),
+            "Document",
+          ),
+        ],
+      ),
+      onPressed: () {
+        openIndigencyFile(globalvariableid); // Open the URL
+      },
+    ),
+    // Wrapping the "Take Action" button with an Expanded widget to push it to the right
+    Expanded(
+      child: Align(
+        alignment: Alignment.centerRight,  // Align the button to the right
+        child: Container(width: 200,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              backgroundColor: MaterialStateProperty.all(
+               const Color.fromARGB(255, 45, 127, 226),
+              ),
+            ),
+            child: const Row(
+              children: [
+                Text(
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  'Take Action',
+                ),
+              ],
+            ),
+            onPressed: () {
+              _actionButton();
+            },
+          ),
+        ),
+      ),
+    ),
+  ],
+)
+
                                               ),
                                           ],
                                         ),
@@ -482,7 +548,6 @@ class NextStep extends StatelessWidget {
   }
 }
 
-
 class DropdownButtonExample extends StatefulWidget {
   TextEditingController status;
   String status1;
@@ -494,27 +559,33 @@ class DropdownButtonExample extends StatefulWidget {
 }
 
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  String dropdownValue = ''; // To hold the selected value
+  String dropdownValue = ''; 
   List<String> items = ['Ongoing', 'Ready', 'Completed'];
 
   @override
   void initState() {
     super.initState();
-    // Initialize dropdownValue from widget.status1
     dropdownValue = widget.status1.isNotEmpty ? widget.status1 : items.first;
-    widget.status.text = dropdownValue; // Update the controller text
+    widget.status.text = dropdownValue; 
   }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.status,
-      enabled: false, // Disable user interaction with the TextField
+      enabled: false, 
       decoration: InputDecoration(
-        labelText: 'Status', // You can add a label to make it more like a TextField
+        labelText: 'Status', 
         border: OutlineInputBorder(),
-        suffixIcon: Icon(Icons.lock), // Optional: Add a lock icon to indicate it's disabled
+        suffixIcon: Icon(Icons.lock), 
       ),
     );
+  }
+}
+void openIndigencyFile(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);  // This opens the URL in the browser.
+  } else {
+    throw 'Could not launch $url';
   }
 }
