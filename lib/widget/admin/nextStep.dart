@@ -423,7 +423,7 @@ class NextStep extends StatelessWidget {
                                                   )),
                                                       backgroundColor:
                                                           MaterialStateProperty.all(
-                                                              const Color.fromRGBO(78, 222, 97, 1))),
+                                                              const Color.fromARGB(255, 71, 42, 230))),
                                                   child: const Row(
                                                     children: [
                                                       Text(
@@ -455,7 +455,8 @@ class NextStep extends StatelessWidget {
                     ),
                   ),
                  Container(
-                          color: Colors.white,
+  height: 250, // Fill the available space
+                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Table(
