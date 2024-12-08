@@ -66,11 +66,11 @@ class Sidebuttons extends StatelessWidget {
                   //   btnlogo: 'images/ReliefRequest.png',
                   //   btnlink: '/reliefrequest',
                   // ),
-                 const Sbutton(
-                    btndesc: 'Heat Map',
-                    btnlogo: 'images/HeatMap.png',
-                    btnlink: '/heatmap',
-                  ),
+                //  const Sbutton(
+                //     btndesc: 'Heat Map',
+                //     btnlogo: 'images/HeatMap.png',
+                //     btnlink: '/heatmap',
+                //   ),
                  const Sbutton(
                     btndesc: 'User Setting',
                     btnlogo: 'images/Union.png',

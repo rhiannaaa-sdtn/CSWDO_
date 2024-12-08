@@ -54,7 +54,13 @@ class _LoginScreenState extends State<LoginScreen> {
           print('FullName: $fullName, Office: $office');
 
           // Navigate to the dashboard screen
+          if(office == "CWSDO"){
+
           Navigator.pushNamed(context, '/dashboard');
+          }else{
+
+          Navigator.pushNamed(context, '/resident');
+          }
         } else {
           _showErrorDialog('User data not found');
         }
@@ -92,14 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
         height: double.maxFinite,
         width: double.maxFinite,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/bg1.png"),
-            fit: BoxFit.cover,
-          ),
+          // image: DecorationImage(
+          //   image: AssetImage("images/bg1.png"),
+          //   fit: BoxFit.cover,
+          // ),
         ),
         child: Container(
           decoration: const BoxDecoration(
-            color: Color(0x9C2196F3),
+            color: Color.fromARGB(255, 3, 94, 168),
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -259,8 +265,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              const Expanded(
-                                  flex: 5, child: Center(child: Text(''))),
+                            Expanded(
+                                  flex: 5,
+                                  child: Center(
+                                      child: GestureDetector(
+                                    onTap: () =>
+                                        Navigator.pushNamed(context, '/'),
+                                    child: const Text(
+                                      'Forgot Password',
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 15),
+                                    ),
+                                  ))),
                               Expanded(
                                   flex: 5,
                                   child: Center(

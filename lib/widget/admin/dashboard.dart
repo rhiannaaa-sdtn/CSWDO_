@@ -52,22 +52,22 @@ class Dashboard extends StatelessWidget {
         print(docs2.length);
 
         return Padding(
-          padding: EdgeInsets.all(50),
+          padding: EdgeInsets.all(1),
           child: Column(
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Dashboard',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
+              // const Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Expanded(
+              //       child: Text(
+              //         'Dashboard',
+              //         style:
+              //             TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +75,7 @@ class Dashboard extends StatelessWidget {
                   DashboardBox(
                       title: 'Total Registered Beneficiary',
                       count: '${docs2.length}',
-                      link: '/beneficiarylist'),
+                      link: '/listbns'),
                 DashboardBox(
                       title: 'Ongoing Assistance',
                       count:
