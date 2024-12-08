@@ -302,6 +302,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.1"
+  flutter_map_heatmap:
+    dependency: "direct main"
+    description:
+      name: flutter_map_heatmap
+      sha256: "0544a980da9d29ec41bd27f507e46655306d0499dfb98379497f9360a139da39"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   flutter_map_marker_cluster:
     dependency: "direct main"
     description:
@@ -425,13 +433,13 @@ packages:
     source: hosted
     version: "4.3.0"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
-      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.19.0"
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
