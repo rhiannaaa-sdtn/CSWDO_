@@ -57,9 +57,6 @@ class _OngoingListState extends State<OngoingList> {
                       // Search Bar
                       Row(
                         children: [
-                          // const Text('Show'),
-                          // NumberInputWidget(),
-                          // SizedBox(width: 20),
                           Expanded(
                             child: TextField(
                               controller: _searchController,
@@ -86,6 +83,8 @@ class _OngoingListState extends State<OngoingList> {
                       ),
                       PaginationControls(
                         currentPage: _currentPage,
+                        itemsPerPage: _itemsPerPage,
+                        searchQuery: _searchQuery,
                         onPageChanged: (int page) {
                           setState(() {
                             _currentPage = page;
@@ -121,6 +120,8 @@ class TableDataList extends StatefulWidget {
 }
 
 class _TableDataListState extends State<TableDataList> {
+  late List<DocumentSnapshot> filteredClients = [];
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -177,15 +178,16 @@ class _TableDataListState extends State<TableDataList> {
         ];
 
         final clients = snapshot.data?.docs.toList();
-        final filteredClients = clients!.where((client) {
+        filteredClients = clients!.where((client) {
           final name = client['fullname'].toString().toLowerCase();
           final barangay = client['barangay'].toString().toLowerCase();
           return name.contains(widget.searchQuery) ||
               barangay.contains(widget.searchQuery);
         }).toList();
 
-        final startIndex =
-            (widget.currentPage - 1) * widget.itemsPerPage;
+        final totalPages = (filteredClients.length / widget.itemsPerPage).ceil();
+
+        final startIndex = (widget.currentPage - 1) * widget.itemsPerPage;
         final endIndex = startIndex + widget.itemsPerPage;
         final paginatedClients = filteredClients
             .sublist(startIndex, endIndex > filteredClients.length
@@ -199,7 +201,7 @@ class _TableDataListState extends State<TableDataList> {
             children: <Widget>[
               TcellData(txtcell: client.id, heightcell: 50, pad: 15, fsize: 15),
               TcellData(
-                  txtcell: client['barangay'],  // This now just shows the value of barangay
+                  txtcell: client['barangay'], // Shows the value of barangay
                   heightcell: 50,
                   pad: 15,
                   fsize: 15),
@@ -277,19 +279,26 @@ class _TableDataListState extends State<TableDataList> {
   }
 }
 
-
 class PaginationControls extends StatelessWidget {
   const PaginationControls({
     Key? key,
     required this.currentPage,
+    required this.itemsPerPage,
+    required this.searchQuery,
     required this.onPageChanged,
   }) : super(key: key);
 
   final int currentPage;
+  final int itemsPerPage;
+  final String searchQuery;
   final Function(int) onPageChanged;
 
   @override
   Widget build(BuildContext context) {
+    // Calculate total number of pages based on filtered clients.
+    final filteredClients = []; // Add the actual list of filtered clients here
+    final totalPages = (filteredClients.length / itemsPerPage).ceil();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -302,7 +311,9 @@ class PaginationControls extends StatelessWidget {
         Text('Page $currentPage'),
         IconButton(
           icon: Icon(Icons.arrow_forward),
-          onPressed: () => onPageChanged(currentPage + 1),
+          onPressed: currentPage < totalPages
+              ? () => onPageChanged(currentPage + 1)
+              : null,
         ),
       ],
     );

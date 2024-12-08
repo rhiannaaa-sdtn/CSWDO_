@@ -1,4 +1,5 @@
 import 'package:cwsdo/views/food_assistance.dart';
+import 'package:cwsdo/views/forgotPasswordScreen.dart';
 import 'package:cwsdo/views/medical_assistance.dart';
 import 'package:cwsdo/views/request_releif.dart';
 import 'package:cwsdo/views/login.dart';
@@ -96,6 +97,10 @@ class MyApp extends StatelessWidget {
         return _authGuard(isAuthenticated, const RequestRelief(), settings);
       case '/login':
         return _authGuard(isAuthenticated, const LoginScreen(), settings);
+      case '/forgotpassword':
+        return _authGuard(isAuthenticated, const ForgotPasswordScreen(), settings);
+
+        
       // -------------------------ADMIN ROUTE--------------------
 
       case '/reliefrequest':
