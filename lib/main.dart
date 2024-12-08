@@ -124,9 +124,9 @@ class MyApp extends StatelessWidget {
       case '/foodassistancelist':
         return _authGuardAdmin(
             isAuthenticated, const TotalFoodAssistanceMain(), settings);
-      case '/completedassitance':
-        return _authGuardAdmin(
-            isAuthenticated, const TotalCompletedMain(), settings);
+      // case '/completedassitance':
+      //   return _authGuardAdmin(
+      //       isAuthenticated, const TotalCompletedMain(), settings);
       case '/medicalassistancelist':
         return _authGuardAdmin(
             isAuthenticated, const TotalMedicalAssistanceMain(), settings);

@@ -31,6 +31,7 @@ class _OngoingListState extends State<OngoingList> {
   String _searchQuery = "";
   int _currentPage = 1;
   final int _itemsPerPage = 10;
+  String? _selectedNeed = null; // This will hold the selected need filter
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +55,9 @@ class _OngoingListState extends State<OngoingList> {
                   padding: EdgeInsets.all(18),
                   child: Column(
                     children: [
-                      // Search Bar
+                      // Search Bar and Filter Dropdown
                       Row(
                         children: [
-                          // const Text('Show'),
-                          // NumberInputWidget(),
-                          // SizedBox(width: 20),
                           Expanded(
                             child: TextField(
                               controller: _searchController,
@@ -76,6 +74,29 @@ class _OngoingListState extends State<OngoingList> {
                               },
                             ),
                           ),
+                          const SizedBox(width: 10),
+                          // Add the dropdown filter for "Needs"
+                          DropdownButton<String>(
+                            hint: Text("Select Needs"),
+                            value: _selectedNeed,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedNeed = newValue;
+                              });
+                            },
+                            items: <String>[
+                              'All', // Added 'All' option
+                              'Medical Assistance',
+                              'Food Assistance',
+                              'Other Assistance'
+                            ]
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -83,6 +104,7 @@ class _OngoingListState extends State<OngoingList> {
                         searchQuery: _searchQuery,
                         currentPage: _currentPage,
                         itemsPerPage: _itemsPerPage,
+                        selectedNeed: _selectedNeed, // Pass selectedNeed to filter
                       ),
                       PaginationControls(
                         currentPage: _currentPage,
@@ -110,11 +132,13 @@ class TableDataList extends StatefulWidget {
     required this.searchQuery,
     required this.currentPage,
     required this.itemsPerPage,
+    required this.selectedNeed, // Add selectedNeed parameter
   });
 
   final String searchQuery;
   final int currentPage;
   final int itemsPerPage;
+  final String? selectedNeed;
 
   @override
   State<TableDataList> createState() => _TableDataListState();
@@ -180,8 +204,13 @@ class _TableDataListState extends State<TableDataList> {
         final filteredClients = clients!.where((client) {
           final name = client['fullname'].toString().toLowerCase();
           final barangay = client['barangay'].toString().toLowerCase();
-          return name.contains(widget.searchQuery) ||
-              barangay.contains(widget.searchQuery);
+          final needs = client['needs'].toString().toLowerCase();
+          bool matchesSearchQuery = name.contains(widget.searchQuery) || barangay.contains(widget.searchQuery);
+
+          // Filter by selected need if not null, or show all if "All" is selected
+          bool matchesNeed = widget.selectedNeed == null || widget.selectedNeed == 'All' || needs.contains(widget.selectedNeed!.toLowerCase());
+
+          return matchesSearchQuery && matchesNeed;
         }).toList();
 
         final startIndex =
@@ -235,11 +264,11 @@ class _TableDataListState extends State<TableDataList> {
                   fsize: 15),
               ElevatedButton(
                 style: ButtonStyle(
+                      backgroundColor: const WidgetStatePropertyAll(
+                        Color.fromRGBO(33, 79, 215, 1)),
                     shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                    )),
-                    backgroundColor: const WidgetStatePropertyAll(
-                        Color.fromRGBO(33, 79, 215, 1))),
+                    ))),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
@@ -260,7 +289,7 @@ class _TableDataListState extends State<TableDataList> {
 
         return Table(
           border: TableBorder.all(),
-          columnWidths: const <int, TableColumnWidth>{
+          columnWidths: const <int, TableColumnWidth> {
             0: FlexColumnWidth(1),
             1: FlexColumnWidth(1),
             2: FlexColumnWidth(1),
@@ -276,7 +305,6 @@ class _TableDataListState extends State<TableDataList> {
     );
   }
 }
-
 
 class PaginationControls extends StatelessWidget {
   const PaginationControls({

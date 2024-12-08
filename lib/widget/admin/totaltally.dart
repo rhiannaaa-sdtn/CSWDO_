@@ -141,6 +141,7 @@ class _TotalTallyState extends State<TotalTally> {
                                   TcellHeader(txtcell: 'TOTAL BENEFICIARY', heightcell: 50),
                                   TcellHeader(txtcell: 'FOOD ASSISTANCE', heightcell: 50),
                                   TcellHeader(txtcell: 'MEDICAL ASSISTANCE', heightcell: 50),
+                                  TcellHeader(txtcell: 'Other ASSISTANCE', heightcell: 50),
                                 ],
                               ),
                             ],
@@ -162,6 +163,7 @@ class _TotalTallyState extends State<TotalTally> {
                               3: FlexColumnWidth(1),
                               4: FlexColumnWidth(1),
                               5: FlexColumnWidth(1),
+                              5: FlexColumnWidth(1),
                             },
                             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                             children: <TableRow>[
@@ -172,6 +174,7 @@ class _TotalTallyState extends State<TotalTally> {
                                   TcellHeader(txtcell: 'TOTAL BENEFICIARY', heightcell: 0),
                                   TcellHeader(txtcell: 'FOOD ASSISTANCE', heightcell: 0),
                                   TcellHeader(txtcell: 'MEDICAL ASSISTANCE', heightcell: 0),
+                                  TcellHeader(txtcell: 'Other ASSISTANCE', heightcell: 0),
                                 ],
                               ),
                               for (int i = 0; i < filteredBarangayList.length; i++)
@@ -206,6 +209,12 @@ class _TotalTallyState extends State<TotalTally> {
                                     TcellData(
                                       txtcell:
                                           '${docs1.where((doc) => doc['needs'] == 'Medical Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length}',
+                                      heightcell: 50,
+                                      pad: 15,
+                                      fsize: 15,
+                                    ),TcellData(
+                                      txtcell:
+                                          '${docs1.where((doc) => doc['needs'] == 'Other Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length}',
                                       heightcell: 50,
                                       pad: 15,
                                       fsize: 15,

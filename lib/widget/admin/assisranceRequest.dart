@@ -331,6 +331,7 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
       items: const [
         DropdownMenuItem(value: 'Medical Assistance', child: Text('Medical Assistance')),
         DropdownMenuItem(value: 'Food Assistance', child: Text('Food Assistance')),
+        DropdownMenuItem(value: 'Other Assistance', child: Text('Other Assistance')),
       ],
       decoration: const InputDecoration(labelText: 'Type of Needs'),
     );
