@@ -93,8 +93,8 @@ children: [
     )
   else
     Icon(
-      Icons.audiotrack,
-      color: Colors.green,
+      Icons.image,
+      color: Colors.white,
       size: 30.0,
     ),
   const SizedBox(width: 10),  // Add space between the icon/image and the text

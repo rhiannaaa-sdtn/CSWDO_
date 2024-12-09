@@ -133,6 +133,9 @@ class MyApp extends StatelessWidget {
       case '/beneficiarylist':
         return _authGuardAdmin(
             isAuthenticated, const TotalBeneficiaryMain(), settings);
+        case '/reqeustlist':
+        return _authGuardAdmin(
+            isAuthenticated, const TotalBeneficiaryMain(), settings);
       case '/addbeneficiary':
         return _authGuardAdmin(
             isAuthenticated, const AddBeneficiaryMain(), settings);

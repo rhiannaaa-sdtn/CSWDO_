@@ -303,9 +303,9 @@ Future<bool> _hasRecentRequest(String fullname) async {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DashboardBox(
-                    title: 'Total Registered Beneficiary',
-                    count: '${docs2.length}',
-                    link: '/listbns',
+                    title: 'Total Request',
+                    count: '${docs1.length}',
+                    link: '/reqeustlist',
                   ),
                   DashboardBox(
                     title: 'Ongoing Assistance',

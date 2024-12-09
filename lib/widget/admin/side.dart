@@ -46,17 +46,17 @@ class Sidebuttons extends StatelessWidget {
                     btnlink: '/dashboard',
                   ),
                  const Sbutton(
-                    btndesc: 'Total Tally',
+                    btndesc: 'Assistance Overview',
                     btnlogo: 'images/TotalTally.png',
                     btnlink: '/totaltally',
                   ),
                  const Sbutton(
-                    btndesc: 'Add Benificiary',
+                    btndesc: 'Manage Request',
                     btnlogo: 'images/AddBeneficiary.png',
                     btnlink: '/addbeneficiary',
                   ),
                  const Sbutton(
-                    btndesc: 'List of BNS',
+                    btndesc: 'List of Resident',
                     btnlogo: 'images/TotalTally.png',
                     btnlink: '/listbns',
                   ),
@@ -76,11 +76,11 @@ class Sidebuttons extends StatelessWidget {
                     btnlogo: 'images/Union.png',
                     btnlink: '/usersetting',
                   ),
-                //  const Sbutton(
-                //     btndesc: 'Carousel',
-                //     btnlogo: 'carousel',
-                //     btnlink: '/carousel',
-                //   ),
+                 const Sbutton(
+                    btndesc: 'Carousel',
+                    btnlogo: 'carousel',
+                    btnlink: '/carousel',
+                  ),
                 ] 
                  else ...[
                     const Sbutton(

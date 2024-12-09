@@ -101,10 +101,10 @@ class Dashboard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DashboardBox(
-                    title: 'Total Registered Beneficiary',
-                    count: '${docs2.length}',
-                    link: '/listbns',
+                    DashboardBox(
+                    title: 'Total Request',
+                    count: '${docs1.length}',
+                    link: '/reqeustlist',
                   ),
                   DashboardBox(
                     title: 'Ongoing Assistance',

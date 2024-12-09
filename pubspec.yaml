@@ -73,7 +73,20 @@ dependencies:
   cloud_firestore: ^4.8.2
   flutter_map_heatmap: ^0.0.7
 
+  # html: ^0.15.0 # Update to a compatible version or try using the latest
+  # excel: ^2.0.4
+  # path_provider: ^2.0.11
+  # # permission_handler: ^10.2.0
+  # permission_handler: ^10.0.0
 
+ 
+  html: ^0.15.0  # Add this package
+  excel: ^2.0.9 # Add this for generating excel files
+  file_saver: ^0.0.3 # Add this for file download functionality
+
+  # # excel: ^2.0.8
+  # # path_provider: ^2.0.9
+  # html: ^0.15.0  # Add this for web download functionality
 
 dev_dependencies:
   flutter_test:

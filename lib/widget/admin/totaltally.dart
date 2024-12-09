@@ -3,6 +3,10 @@ import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:excel/excel.dart'; // Import the excel package
+import 'package:file_saver/file_saver.dart'; // Import the file_saver package
+import 'dart:typed_data'; // Add this import to use Uint8List
+import 'dart:html' as html;  // Import the html package for file download
 
 class TotalTallyMain extends StatefulWidget {
   const TotalTallyMain({super.key});
@@ -14,7 +18,7 @@ class TotalTallyMain extends StatefulWidget {
 class _TotalTallyMainState extends State<TotalTallyMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: TotalTally(),title: "Assistance Combine Tally",);
+    return const Sidebar(content: TotalTally(), title: "Assistance Combine Tally");
   }
 }
 
@@ -43,11 +47,7 @@ class _TotalTallyState extends State<TotalTally> {
     final s2 = FirebaseFirestore.instance.collection('residents').snapshots();
 
     return StreamBuilder<List<QuerySnapshot>>(
-      stream: Rx.combineLatest2(
-        s1,
-        s2,
-        (QuerySnapshot snap1, QuerySnapshot snap2) => [snap1, snap2],
-      ),
+      stream: Rx.combineLatest2(s1, s2, (QuerySnapshot snap1, QuerySnapshot snap2) => [snap1, snap2]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -78,20 +78,14 @@ class _TotalTallyState extends State<TotalTally> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Row for Title and Search Bar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Total Tally',
-                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 20), // Space between title and search bar
-                      // Search Bar
+                      const SizedBox(width: 20),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          width: 300, // You can adjust this width
+                          width: 300,
                           child: TextField(
                             controller: searchController,
                             onChanged: (value) {
@@ -107,8 +101,28 @@ class _TotalTallyState extends State<TotalTally> {
                           ),
                         ),
                       ),
+                      SizedBox(width: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: ElevatedButton(
+                       style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          backgroundColor: const MaterialStatePropertyAll(
+                            Color.fromRGBO(78, 115, 222, 1),
+                          ),
+                        ),
+                      onPressed: () => _generateExcelReport(docs1, docs2, filteredBarangayList),
+                      child: Text('Generate Report', style: TextStyle(color: Colors.white),),
+                    ),
+                  ),
                     ],
                   ),
+                  // Add a button to generate and download the Excel file
+              
                   Container(
                     width: MediaQuery.of(context).size.width * .78,
                     color: const Color.fromARGB(255, 22, 97, 152),
@@ -163,7 +177,6 @@ class _TotalTallyState extends State<TotalTally> {
                               3: FlexColumnWidth(1),
                               4: FlexColumnWidth(1),
                               5: FlexColumnWidth(1),
-                              5: FlexColumnWidth(1),
                             },
                             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                             children: <TableRow>[
@@ -212,7 +225,8 @@ class _TotalTallyState extends State<TotalTally> {
                                       heightcell: 50,
                                       pad: 15,
                                       fsize: 15,
-                                    ),TcellData(
+                                    ),
+                                    TcellData(
                                       txtcell:
                                           '${docs1.where((doc) => doc['needs'] == 'Other Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length}',
                                       heightcell: 50,
@@ -235,6 +249,59 @@ class _TotalTallyState extends State<TotalTally> {
       },
     );
   }
+
+  // Method to generate the Excel file
+
+
+void _generateExcelReport(List<QueryDocumentSnapshot> docs1, List<QueryDocumentSnapshot> docs2, List<String> filteredBarangayList) async {
+  var excel = Excel.createExcel(); // Create new Excel file
+
+  // Create the first sheet
+  Sheet sheet = excel['Sheet1'];
+  sheet.appendRow(['BARANGAY NO.', 'NAME OF BARANGAY', 'TOTAL BENEFICIARY', 'FOOD ASSISTANCE', 'MEDICAL ASSISTANCE', 'OTHER ASSISTANCE']);
+
+  for (int i = 0; i < filteredBarangayList.length; i++) {
+    sheet.appendRow([
+      (i + 1).toString(),
+      filteredBarangayList[i],
+      docs2.where((doc) => doc['barangay'] == filteredBarangayList[i]).length.toString(),
+      docs1.where((doc) => doc['needs'] == 'Food Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length.toString(),
+      docs1.where((doc) => doc['needs'] == 'Medical Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length.toString(),
+      docs1.where((doc) => doc['needs'] == 'Other Assistance').where((doc) => doc['barangay'] == filteredBarangayList[i]).length.toString(),
+    ]);
+  }
+
+  // Encode the Excel file and then save it if it's non-null
+  var fileBytes = await excel.encode();
+
+  if (fileBytes != null) {
+    // Convert List<int> to Uint8List
+    Uint8List uint8List = Uint8List.fromList(fileBytes);
+    
+    // Create a Blob from the bytes
+    final blob = html.Blob([uint8List]);
+
+    // Create a download link
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    
+    // Create an anchor element to download the file
+    final anchor = html.AnchorElement(href: url)
+      ..target = 'blank'
+      ..download = "Assistance_Tally_Report.xlsx";  // Set the filename
+
+    // Trigger the download
+    anchor.click();
+
+    // Clean up the URL
+    html.Url.revokeObjectUrl(url);
+    
+    print("File saved successfully!");
+  } else {
+    print("Error: Failed to generate the Excel file.");
+  }
+}
+
+
 }
 
 class TcellHeader extends StatelessWidget {
