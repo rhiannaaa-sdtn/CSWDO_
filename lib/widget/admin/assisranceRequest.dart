@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cwsdo/constatns/navitem.dart'; // Import navitem.dart for bgrgyList
 import 'dart:math';
+import 'package:intl/intl.dart';
 
 import 'dart:html' as html; // Import dart:html for web storage
 import 'dart:io'; // For platform-specific checks
@@ -67,10 +68,55 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     }
   }
 
+Future<bool> _hasRecentRequest(String fullname) async {
+  try {
+    // Calculate the date 90 days ago from today
+    DateTime today = DateTime.now();
+    DateTime ninetyDaysAgo = today.subtract(Duration(days: 90));
+
+    // Query Firestore to find all beneficiaries with the same fullname
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('beneficiaries')
+        .where('fullname', isEqualTo: fullname)
+        // .orderBy('dateRegistered', descending: true) // Order by dateRegistered
+        .get();
+
+    // Loop through the results to find if any dateRegistered is within the last 90 days
+    for (var doc in querySnapshot.docs) {
+      String dateRegisteredString = doc['dateRegistered'] as String;
+
+      // Convert the string to DateTime
+      DateTime dateRegistered = DateFormat('yyyy-MM-dd').parse(dateRegisteredString);
+
+      // Check if the date is within the last 90 days
+      if (dateRegistered.isAfter(ninetyDaysAgo)) {
+        return true; // Found a recent request
+      }
+    }
+
+    return false; // No recent request
+  } catch (e) {
+    _showErrorDialog("Error checking recent requests: $e");
+    return false;
+  }
+}
+
+
+
+
   void _onSubmit() async {
     if (_fullname.text.isEmpty || _mobilenum.text.isEmpty || _selectedCivilStatus == null || _selectedBarangay == null || _selectedGender == null) {
       _showErrorDialog("Please fill all required fields");
       return;
+    }
+
+
+    // Check if the user has made a request in the last 90 days
+    bool hasRecentRequest = await _hasRecentRequest(_fullname.text);
+
+    if (hasRecentRequest) {
+      _showErrorDialog("You have already made a request within the last 90 days.");
+      return; // Stop further processing
     }
 
     // Check if the files are uploaded (Valid ID and Indigency)

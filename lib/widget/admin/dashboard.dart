@@ -151,6 +151,22 @@ class _DashboardBoxState extends State<DashboardBox> {
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
           onTap: () {
+            // showDialog(
+            //   context: context,
+            //   builder: (context) {
+            //     return AlertDialog(
+            //       title: const Text('Detail'),
+            //       content: Text(count),
+            //       actions: <Widget>[
+            //         TextButton(
+            //           onPressed: () => Navigator.of(context).pop(),
+            //           child: const Text('OK'),
+            //         ),
+            //       ],
+            //     );
+            //   },
+            // );
+
             Navigator.pushNamed(context, widget.link);
           },
           child: Container(
@@ -180,6 +196,11 @@ class _DashboardBoxState extends State<DashboardBox> {
                     ],
                   ),
                 ),
+                Container(
+                  width: double.infinity,
+                  height: 10,
+                  color: Colors.amber,
+                ),
               ],
             ),
           ),
@@ -188,10 +209,6 @@ class _DashboardBoxState extends State<DashboardBox> {
     );
   }
 }
-
-
-
-
 
 
 

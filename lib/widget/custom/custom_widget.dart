@@ -82,19 +82,32 @@ class Sbutton extends StatelessWidget {
             mainAxisAlignment:
                 MainAxisAlignment.start, //Center Column contents vertically,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(btnlogo, width: 40, height: 40, fit: BoxFit.fill),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                btndesc,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.white),
-              ),
-            ],
+children: [
+  // Conditionally render the Image.asset or Icon based on btnlogo
+  if (btnlogo != "carousel")
+    Image.asset(
+      btnlogo,
+      width: 40,
+      height: 40,
+      fit: BoxFit.fill,
+    )
+  else
+    Icon(
+      Icons.audiotrack,
+      color: Colors.green,
+      size: 30.0,
+    ),
+  const SizedBox(width: 10),  // Add space between the icon/image and the text
+  // Text widget that displays the description
+  Text(
+    btndesc,
+    style: const TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+      color: Colors.white,
+    ),
+  ),
+]
           ),
           const SizedBox(
             height: 10,

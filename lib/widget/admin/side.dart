@@ -76,7 +76,12 @@ class Sidebuttons extends StatelessWidget {
                     btnlogo: 'images/Union.png',
                     btnlink: '/usersetting',
                   ),
-                ]
+                 const Sbutton(
+                    btndesc: 'Carousel',
+                    btnlogo: 'carousel',
+                    btnlink: '/carousel',
+                  ),
+                ] 
                  else ...[
                     const Sbutton(
                     btndesc: 'List of Resident',
