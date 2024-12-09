@@ -20,7 +20,7 @@ class Resident extends StatefulWidget {
 class _ResidentState extends State<Resident> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: OngoingList());
+    return const Sidebar(content: OngoingList(),title: " ",);
   }
 }
 

@@ -14,7 +14,7 @@ class TotalTallyMain extends StatefulWidget {
 class _TotalTallyMainState extends State<TotalTallyMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: TotalTally());
+    return const Sidebar(content: TotalTally(),title: "Assistance Combine Tally",);
   }
 }
 

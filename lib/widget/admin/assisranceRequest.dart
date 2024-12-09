@@ -9,6 +9,7 @@ import 'package:cwsdo/constatns/navitem.dart'; // Import navitem.dart for bgrgyL
 import 'dart:math';
 import 'package:intl/intl.dart';
 
+import 'package:flutter/services.dart';
 import 'dart:html' as html; // Import dart:html for web storage
 import 'dart:io'; // For platform-specific checks
 import 'package:flutter/foundation.dart'; // For web-specific checks
@@ -23,7 +24,7 @@ class AssistanceRequest extends StatefulWidget {
 class _AssistanceRequestState extends State<AssistanceRequest> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: AddBeneficiary());
+    return const Sidebar(content: AddBeneficiary(),title: "Assistance Request",);
   }
 }
 
@@ -328,7 +329,17 @@ Future<bool> _hasRecentRequest(String fullname) async {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _inputBox('Full name', 'Enter Full Name', _fullname),
-              _inputBox('Mobile Number', 'Enter Mobile Number', _mobilenum),
+                TextFormField(
+  controller: _mobilenum,
+  decoration: InputDecoration(
+    labelText: 'Mobile Number',
+    hintText: 'Enter Mobile Number',
+  ),
+  keyboardType: TextInputType.number, // This will show a numeric keyboard.
+  inputFormatters: <TextInputFormatter>[
+    FilteringTextInputFormatter.digitsOnly, // This ensures only digits are allowed.
+  ],
+),
               _datePickerField('Date of Birth', _dob),
               _dropdownField(),
               _genderDropdown(), // Gender Dropdown

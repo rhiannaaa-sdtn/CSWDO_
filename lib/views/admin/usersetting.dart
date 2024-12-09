@@ -15,7 +15,7 @@ class UserSetting extends StatefulWidget {
 class _UserSettingState extends State<UserSetting> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: AddBeneficiary());
+    return const Sidebar(content: AddBeneficiary(),title: 'User Setting');
   }
 }
 

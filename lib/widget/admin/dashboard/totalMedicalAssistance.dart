@@ -23,7 +23,7 @@ class _TotalMedicalAssistanceMainState
     extends State<TotalMedicalAssistanceMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: TotalMedicalList());
+    return const Sidebar(content: TotalMedicalList(),title: " ",);
   }
 }
 

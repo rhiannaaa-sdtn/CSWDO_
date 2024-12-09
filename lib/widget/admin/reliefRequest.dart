@@ -16,7 +16,7 @@ class ReliefrequestMain extends StatefulWidget {
 class _ReliefrequestMainState extends State<ReliefrequestMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: Reliefrequest());
+    return const Sidebar(content: Reliefrequest(),title: "Relief Request",);
   }
 }
 

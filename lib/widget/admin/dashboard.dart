@@ -24,7 +24,7 @@ class _DashboardMainState extends State<DashboardMain> {
   
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: Dashboard());
+    return const Sidebar(content: Dashboard() ,title: "Dashboard",);
   }
 }
 

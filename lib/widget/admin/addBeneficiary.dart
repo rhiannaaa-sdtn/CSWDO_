@@ -9,7 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cwsdo/constatns/navitem.dart'; // Import navitem.dart for bgrgyList
 import 'dart:math';
 import 'package:intl/intl.dart';
-
+import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AddBeneficiaryMain extends StatefulWidget {
@@ -22,7 +22,7 @@ class AddBeneficiaryMain extends StatefulWidget {
 class _AddBeneficiaryMainState extends State<AddBeneficiaryMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: AddBeneficiary());
+    return const Sidebar(content: AddBeneficiary(), title:" ");
   }
 }
 
@@ -264,8 +264,8 @@ Future<bool> _hasRecentRequest(String fullname) async {
   Widget build(BuildContext context) {
 
 
-    final s1 = FirebaseFirestore.instance.collection('Request').snapshots();
-    final s2 = FirebaseFirestore.instance.collection('Beneficiary').snapshots();
+       final s1 = FirebaseFirestore.instance.collection('beneficiaries').snapshots();
+    final s2 = FirebaseFirestore.instance.collection('residents').snapshots();
 
     return StreamBuilder<List<QuerySnapshot>>(
       stream: Rx.combineLatest2(
@@ -402,7 +402,18 @@ Future<bool> _hasRecentRequest(String fullname) async {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _inputBox('Full name', 'Enter Full Name', _fullname),
-              _inputBox('Mobile Number', 'Enter Mobile Number', _mobilenum),
+              
+                TextFormField(
+  controller: _mobilenum,
+  decoration: InputDecoration(
+    labelText: 'Mobile Number',
+    hintText: 'Enter Mobile Number',
+  ),
+  keyboardType: TextInputType.number, // This will show a numeric keyboard.
+  inputFormatters: <TextInputFormatter>[
+    FilteringTextInputFormatter.digitsOnly, // This ensures only digits are allowed.
+  ],
+),
               _datePickerField('Date of Birth', _dob),
               _dropdownField(),
               _genderDropdown(), // Gender Dropdown

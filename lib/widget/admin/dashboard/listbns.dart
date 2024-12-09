@@ -20,7 +20,7 @@ class Listbns extends StatefulWidget {
 class _ListbnsState extends State<Listbns> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: OngoingList());
+    return const Sidebar(content: OngoingList(), title: "List of Resident");
   }
 }
 
@@ -293,6 +293,40 @@ class TableDataList extends StatelessWidget {
     required this.onPageChange,
   });
 
+  // Function to delete a resident from Firestore
+  Future<void> _deleteResident(String documentId, BuildContext context) async {
+    try {
+      print('Attempting to delete document with ID: $documentId');
+      DocumentSnapshot doc = await FirebaseFirestore.instance.collection('residents').doc(documentId).get();
+
+      if (doc.exists) {
+        await FirebaseFirestore.instance.collection('residents').doc(documentId).delete();
+
+        // Check if the widget is still mounted before showing the SnackBar or calling setState
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Resident deleted successfully')),
+          );
+        }
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Resident not found')),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error deleting resident: $e'); // Log the error for debugging
+
+      // Check if the widget is still mounted before showing the SnackBar
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting resident: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Firestore query with conditional filtering
@@ -354,6 +388,7 @@ class TableDataList extends StatelessWidget {
                 DataColumn(label: Text('Civil Status')),
                 DataColumn(label: Text('Income')),
                 DataColumn(label: Text('Barangay')),
+                DataColumn(label: Text('Actions')), // Add an "Actions" column for delete button
               ],
               rows: currentPageData
                   .map((resident) => DataRow(cells: [
@@ -363,6 +398,39 @@ class TableDataList extends StatelessWidget {
                         DataCell(Text(resident['civilStatus'])),
                         DataCell(Text(resident['income'])),
                         DataCell(Text(resident['barangay'])),
+                        DataCell(
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: () {
+                              // Show confirmation dialog before deleting
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Confirm Deletion'),
+                                    content: const Text('Are you sure you want to delete this resident?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          // Call the delete function with the document ID
+                                          _deleteResident(resident.id, context);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Delete'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
                       ]))
                   .toList(),
             ),
@@ -378,7 +446,7 @@ class TableDataList extends StatelessWidget {
                         }
                       : null,
                 ),
-                Text('Page ${currentPage + 1} of $totalPages'),
+                Text('Page ${currentPage + 1}'),
                 IconButton(
                   icon: Icon(Icons.arrow_forward),
                   onPressed: currentPage < totalPages - 1

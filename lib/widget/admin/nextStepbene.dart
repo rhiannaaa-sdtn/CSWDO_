@@ -25,7 +25,7 @@ class _NextStepMainbeneState extends State<NextStepMainbene> {
     return Sidebar(
         content: NextStep(
       requestID: widget.requestID,
-    ));
+    ),title: " ",);
   }
 }
 

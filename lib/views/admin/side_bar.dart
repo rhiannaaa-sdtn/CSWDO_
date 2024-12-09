@@ -9,7 +9,8 @@ import 'package:flutter/foundation.dart'; // For web-specific checks
 
 class Sidebar extends StatefulWidget {
   final Widget content;
-  const Sidebar({super.key, required this.content});
+  final String title;
+  const Sidebar({super.key, required this.content, required this.title});
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -20,8 +21,7 @@ class _SidebarState extends State<Sidebar> {
   Widget build(BuildContext context) {
     String _selectedValue = html.window.localStorage['office'].toString();
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    //  html.window.localStorage['fullName'] = fullName;
-    //         html.window.localStorage['office'] = office;
+
     void _onDropdownChanged(String? newValue) async {
       setState(() {
         _selectedValue = newValue!;
@@ -38,11 +38,10 @@ class _SidebarState extends State<Sidebar> {
           print('Settings selected');
           break;
         case 'Logout':
-
           // Perform action for Logout
           await _auth.signOut();
           Navigator.pushNamed(context, '/');
-          print('Logout seleasdcted');
+          print('Logout selected');
           break;
       }
     }
@@ -52,7 +51,7 @@ class _SidebarState extends State<Sidebar> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // sidebar,
+            // Sidebar
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
@@ -63,7 +62,7 @@ class _SidebarState extends State<Sidebar> {
               child: const Sidebuttons(),
             ),
 
-            // main content
+            // Main content
             Expanded(
               flex: 5,
               child: Container(
@@ -73,7 +72,7 @@ class _SidebarState extends State<Sidebar> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    //  header
+                    // Header
                     SizedBox(
                       height: 80,
                       child: Container(
@@ -81,76 +80,82 @@ class _SidebarState extends State<Sidebar> {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 50),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(
-                                Icons.notifications,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              const VerticalDivider(
-                                color: Colors.white,
-                                thickness: 2,
-                                endIndent: 10,
-                                indent: 10,
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
+                              // Title on the left
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: DropdownButton<String>(
-                                  
-                                  dropdownColor:
-                                      const Color.fromARGB(255, 43, 43, 43),
-                                  value: _selectedValue,
-                                  onChanged: _onDropdownChanged,
-                                  items: <String>[
-                                    html.window.localStorage['office'].toString(),
-                                    // 'Settings',
-                                    'Logout'
-                                  ].map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  underline:
-                                      Container(), // Removes the underline
-                                  // You can use any icon you prefer
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Text(
+                                 widget.title, // Set your title here
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 15,
+
+                              // Dropdown and account icon on the right
+                              Row(
+                                children: [
+                                  // Uncomment the following lines for notification icon if needed
+                                  // const Icon(
+                                  //   Icons.notifications,
+                                  //   color: Colors.white,
+                                  //   size: 30,
+                                  // ),
+                                  const SizedBox(width: 15),
+                                  const VerticalDivider(
+                                    color: Colors.white,
+                                    thickness: 2,
+                                    endIndent: 10,
+                                    indent: 10,
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: DropdownButton<String>(
+                                      dropdownColor: const Color.fromARGB(255, 43, 43, 43),
+                                      value: _selectedValue,
+                                      onChanged: _onDropdownChanged,
+                                      items: <String>[
+                                        html.window.localStorage['office'].toString(),
+                                        // 'Settings',
+                                        'Logout'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(
+                                            value,
+                                            style: const TextStyle(
+                                                color: Colors.white, fontSize: 20),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      underline: Container(), // Removes the underline
+                                    ),
+                                  ),
+                                  const SizedBox(width: 15),
+                                  const Icon(
+                                    Icons.account_circle,
+                                    color: Colors.white,
+                                    size: 50,
+                                  ),
+                                ],
                               ),
-                              const Icon(
-                                Icons.account_circle,
-                                color: Colors.white,
-                                size: 50,
-                              )
                             ],
                           ),
                         ),
                       ),
                     ),
-                    // content
+
+                    // Content
                     Expanded(
                       flex: 8,
-                      child: Container(
-                          // child: const TotalTally(),
-                          // child: const Addbeneficiary(),
-                          // child: Reliefrequest()
-                          child: widget.content),
-                    )
+                      child: widget.content,
+                    ),
                   ],
                 ),
               ),

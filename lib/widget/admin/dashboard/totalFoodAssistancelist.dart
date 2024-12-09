@@ -22,7 +22,7 @@ class TotalFoodAssistanceMain extends StatefulWidget {
 class _TotalFoodAssistanceMainState extends State<TotalFoodAssistanceMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: TotalFoodList());
+    return const Sidebar(content: TotalFoodList(),title: " ",);
   }
 }
 

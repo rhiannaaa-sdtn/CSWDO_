@@ -22,7 +22,7 @@ class TotalBeneficiaryMain extends StatefulWidget {
 class _TotalBeneficiaryMainState extends State<TotalBeneficiaryMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: TotalBeneficiaryList());
+    return const Sidebar(content: TotalBeneficiaryList(),title: " ",);
   }
 }
 

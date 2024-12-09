@@ -21,7 +21,7 @@ class TotalCompletedMain extends StatefulWidget {
 class _TotalCompletedMainState extends State<TotalCompletedMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: CompletedList());
+    return const Sidebar(content: CompletedList(),title: " asd",);
   }
 }
 
