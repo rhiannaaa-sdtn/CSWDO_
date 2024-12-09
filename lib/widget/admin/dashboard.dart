@@ -170,7 +170,7 @@ class _DashboardBoxState extends State<DashboardBox> {
             Navigator.pushNamed(context, widget.link);
           },
           child: Container(
-            height: 100,
+            height: 80,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.black),

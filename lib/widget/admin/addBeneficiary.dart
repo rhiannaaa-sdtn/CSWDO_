@@ -1,6 +1,7 @@
 import 'package:cwsdo/views/admin/side_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cwsdo/services/firestore.dart';
+import 'package:cwsdo/widget/admin/dashboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,7 @@ import 'package:cwsdo/constatns/navitem.dart'; // Import navitem.dart for bgrgyL
 import 'dart:math';
 import 'package:intl/intl.dart';
 
+import 'package:rxdart/rxdart.dart';
 
 class AddBeneficiaryMain extends StatefulWidget {
   const AddBeneficiaryMain({super.key});
@@ -260,37 +262,116 @@ Future<bool> _hasRecentRequest(String fullname) async {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
-      child: Row(
-        children: [
-          // Left Column: Personal Information
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 50.0),
-              child: Column(
-                children: [
-                  _sectionHeader('Personal Information'),
-                  _personalInformationForm(),
-                ],
-              ),
-            ),
-          ),
-          // Right Column: Needs Information and File Uploads
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 50.0),
-              child: Column(
-                children: [
-                  _sectionHeader('Needs Information'),
-                  _needsInformationForm(),
-                ],
-              ),
-            ),
-          ),
-        ],
+
+
+    final s1 = FirebaseFirestore.instance.collection('Request').snapshots();
+    final s2 = FirebaseFirestore.instance.collection('Beneficiary').snapshots();
+
+    return StreamBuilder<List<QuerySnapshot>>(
+      stream: Rx.combineLatest2(
+        s1,
+        s2,
+        (QuerySnapshot snap1, QuerySnapshot snap2) => [snap1, snap2],
       ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (!snapshot.hasData ||
+            snapshot.data == null ||
+            snapshot.data!.isEmpty) {
+          return Center(child: Text('No data available'));
+        }
+
+        final docs1 = snapshot.data![0].docs;
+        final docs2 = snapshot.data![1].docs;
+        print(docs1.length);
+        print(docs2.length);
+
+
+    return Padding(
+          padding: EdgeInsets.all(0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DashboardBox(
+                    title: 'Total Registered Beneficiary',
+                    count: '${docs2.length}',
+                    link: '/listbns',
+                  ),
+                  DashboardBox(
+                    title: 'Ongoing Assistance',
+                    count:
+                        '${docs1.where((doc) => doc['status'] != 'Completed').length}',
+                    link: '/ongoingassistance',
+                  ),
+                  DashboardBox(
+                    title: 'Total Completed Assistance',
+                    count:
+                        '${docs1.where((doc) => doc['status'] == 'Completed').length}',
+                    link: '/completedassitance',
+                  ),
+                ],
+              ),
+              Expanded(
+ child:
+     Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 0.0),
+      child:
+          Row(
+            children: [
+              // Left Column: Personal Information
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 50.0),
+                  child: Column(
+                    children: [
+                      _sectionHeader('Personal Information'),
+                      _personalInformationForm(),
+                    ],
+                  ),
+                ),
+              ),
+              // Right Column: Needs Information and File Uploads
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 50.0),
+                  child: Column(
+                    children: [
+                      _sectionHeader('Needs Information'),
+                      _needsInformationForm(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+       
+    ),
+              ),
+            ],
+          ),
+        );
+    
+    
+    
+    
+
+
+        },
     );
+
+
+
+
   }
 
   Widget _sectionHeader(String title) {
@@ -312,7 +393,7 @@ Future<bool> _hasRecentRequest(String fullname) async {
   Widget _personalInformationForm() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * .8,
-      height: MediaQuery.of(context).size.height * .67,
+      height: MediaQuery.of(context).size.height * .60,
       child: SingleChildScrollView(
         child: Container(
           color: Colors.white,
