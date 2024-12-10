@@ -79,6 +79,12 @@ class _HomePageState extends State<HomePage> {
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
+                    } else if (navTitles[i] == 'Request Tracker') {
+                      _scrollController.animateTo(
+                        MediaQuery.of(context).size.height * 1.4,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
                     } else if (navTitles[i] == 'Admin') {
                       Navigator.pushNamed(context, '/login');
                     } else {

@@ -3,7 +3,9 @@
 List<String> navTitles = [
   "Home",
   "About",
+  "Request Tracker",
   "Contact",
+  
   // "Request Relief",
   // "Admin",
 ];
