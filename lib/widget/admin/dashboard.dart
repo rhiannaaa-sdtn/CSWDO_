@@ -107,13 +107,13 @@ class Dashboard extends StatelessWidget {
                     link: '/reqeustlist',
                   ),
                   DashboardBox(
-                    title: 'Ongoing Assistance',
+                    title: 'Processing Assistance',
                     count:
                         '${docs1.where((doc) => doc['status'] != 'Completed').length}',
                     link: '/ongoingassistance',
                   ),
                   DashboardBox(
-                    title: 'Total Completed Assistance',
+                    title: 'Completed Assistance',
                     count:
                         '${docs1.where((doc) => doc['status'] == 'Completed').length}',
                     link: '/completedassitance',

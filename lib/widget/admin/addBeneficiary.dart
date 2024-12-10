@@ -308,13 +308,13 @@ Future<bool> _hasRecentRequest(String fullname) async {
                     link: '/reqeustlist',
                   ),
                   DashboardBox(
-                    title: 'Ongoing Assistance',
+                    title: 'Processing Assistance',
                     count:
                         '${docs1.where((doc) => doc['status'] != 'Completed').length}',
                     link: '/ongoingassistance',
                   ),
                   DashboardBox(
-                    title: 'Total Completed Assistance',
+                    title: 'Completed Assistance',
                     count:
                         '${docs1.where((doc) => doc['status'] == 'Completed').length}',
                     link: '/completedassitance',

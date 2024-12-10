@@ -148,9 +148,9 @@ class NextStep extends StatelessWidget {
           personalinfo('Gender', clients['gender']);
           personalinfo('FULL ADDRESS', clients['address']);
           personalinfo('BARANGAY', clients['barangay']);
-          needsinfo('ORDER NUMBER', clients.id);
-          needsinfo('NEED TYPE', clients['needs']);
-          needsinfo('Request Date', clients['dateRegistered']);
+          // needsinfo('ORDER NUMBER', clients.id);
+          needsinfo('Type of Needs', clients['needs']);
+          needsinfo('Request Registered', clients['dateRegistered']);
           needsinfo('NEEDS STATUS', clients['status']);
 
           globalvariableindigency =  clients['indigency'];
@@ -378,7 +378,7 @@ class NextStep extends StatelessWidget {
                                       color: const Color.fromARGB(255, 44, 68, 227),
                                       child: const Center(
                                         child: Text(
-                                          'Needs Information',
+                                          'Request History',
                                           style: TextStyle(
                                             fontSize: 15,
                                             color: Colors.white,
