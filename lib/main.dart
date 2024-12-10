@@ -5,6 +5,7 @@ import 'package:cwsdo/views/request_releif.dart';
 import 'package:cwsdo/views/login.dart';
 import 'package:cwsdo/widget/admin/addBeneficiary.dart';
 import 'package:cwsdo/widget/admin/assisranceRequest.dart';
+import 'package:cwsdo/widget/admin/carousel.dart';
 import 'package:cwsdo/widget/admin/dashboard.dart';
 import 'package:cwsdo/widget/admin/dashboard/completed.dart';
 import 'package:cwsdo/widget/admin/dashboard/listbns.dart';
@@ -136,6 +137,10 @@ class MyApp extends StatelessWidget {
         case '/reqeustlist':
         return _authGuardAdmin(
             isAuthenticated, const TotalBeneficiaryMain(), settings);
+        case '/carousel':
+        return _authGuardAdmin(
+            isAuthenticated, const CarouselMain(), settings);
+            
       case '/addbeneficiary':
         return _authGuardAdmin(
             isAuthenticated, const AddBeneficiaryMain(), settings);

@@ -79,7 +79,10 @@ dependencies:
   # # permission_handler: ^10.2.0
   # permission_handler: ^10.0.0
 
+  # image_picker: ^0.8.5+3
+  image_picker_web: ^2.0.0 # Add this for web support
  
+  image_picker: ^0.8.7+4
   html: ^0.15.0  # Add this package
   excel: ^2.0.9 # Add this for generating excel files
   file_saver: ^0.0.3 # Add this for file download functionality

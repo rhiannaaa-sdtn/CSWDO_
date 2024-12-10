@@ -176,6 +176,18 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                   errorMessages.add('Passwords do not match');
                 }
 
+final snapshot = await FirebaseFirestore.instance.collection('users')
+  .where('office', isEqualTo: selectedOffice)
+  .get();
+
+// Check if any documents were returned (i.e., office already exists)
+if (snapshot.docs.isNotEmpty) {
+  errorMessages.add('Office duplicate');
+}
+
+
+
+
                 if (errorMessages.isNotEmpty) {
                   // Show error dialog with all issues
                   _showErrorDialog(context, errorMessages);
@@ -357,18 +369,35 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                       child: ListTile(
                         title: Text(user['fullName']),
                         subtitle: Text('${user['email']}\nOffice: ${user['office']}'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () async {
-                            // Delete user from Firestore
-                            try {
-                              await FirebaseFirestore.instance.collection('users').doc(user.id).delete();
-                              _showSuccessDialog(context, 'User deleted successfully');
-                            } catch (e) {
-                              _showErrorDialog(context, ['Error deleting user: $e']);
-                            }
-                          },
-                        ),
+                       trailing: IconButton(
+  icon: const Icon(Icons.delete, color: Colors.red),
+  onPressed: () async {
+    try {
+      // Get the current authenticated user
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Get the user UID for the current user
+        String userId = user.uid; // This is the correct way to access the user ID
+ 
+     // Delete the user from Firebase Authentication
+        await user.delete();
+
+        // After deleting the user from Firebase Authentication, delete the user document from Firestore
+        await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+
+        _showSuccessDialog(context, 'User deleted successfully');
+      }
+    } on FirebaseAuthException catch (e) {
+      // Handle errors from Firebase Authentication
+      _showErrorDialog(context, ['Error deleting user from Authentication: ${e.message}']);
+    } catch (e) {
+      // Handle other types of errors (like Firestore errors)
+      _showErrorDialog(context, ['Error deleting user: $e']);
+    }
+  },
+),
+
                       ),
                     );
                   },
