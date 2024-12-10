@@ -156,7 +156,6 @@ class _DashboardState extends State<Dashboard> {
                         height: 50,
                         fit: BoxFit.cover,
                       ),
-                      title: Text(imageUrl),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
