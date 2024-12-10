@@ -15,7 +15,7 @@ class TotalOngoingMain extends StatefulWidget {
 class _TotalOngoingMainState extends State<TotalOngoingMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: OngoingList(),title: "Ongoing",);
+    return const Sidebar(content: OngoingList(),title: "Processing",);
   }
 }
 
