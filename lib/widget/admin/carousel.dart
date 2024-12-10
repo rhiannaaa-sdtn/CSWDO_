@@ -17,21 +17,22 @@ class CarouselMain extends StatefulWidget {
 class _CarouselMainState extends State<CarouselMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: Dashboard(), title: "Dashboard");
+    return const Sidebar(content: Carousel(), title: "Carousel");
   }
 }
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+class Carousel extends StatefulWidget {
+  const Carousel({super.key});
 
   @override
-  _DashboardState createState() => _DashboardState();
+  _CarouselState createState() => _CarouselState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _CarouselState extends State<Carousel> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<String> imageUrls = [];
+  bool isDeleting = false; // Track if the deletion is in progress
 
   @override
   void initState() {
@@ -108,7 +109,21 @@ class _DashboardState extends State<Dashboard> {
 
   // Delete image from Firebase Storage and Firestore
   Future<void> _deleteImage(String imageUrl) async {
+    setState(() {
+      isDeleting = true; // Show loading indicator
+    });
+
     try {
+      // Show confirmation dialog before deleting
+      bool? confirmDelete = await _showDeleteDialog();
+
+      if (confirmDelete != true) {
+        setState(() {
+          isDeleting = false; // Hide loading if the user cancels
+        });
+        return;
+      }
+
       // Find the image document in Firestore
       QuerySnapshot snapshot = await _firestore
           .collection('images')
@@ -126,11 +141,42 @@ class _DashboardState extends State<Dashboard> {
         // Update the UI by removing the image from the list
         setState(() {
           imageUrls.remove(imageUrl);
+          isDeleting = false; // Hide loading after deletion
         });
       }
     } catch (e) {
       print("Error deleting image: $e");
+      setState(() {
+        isDeleting = false; // Hide loading if an error occurs
+      });
     }
+  }
+
+  // Show a confirmation dialog before deleting the image
+  Future<bool?> _showDeleteDialog() async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Are you sure?"),
+          content: const Text("Do you want to delete this image?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // User canceled
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // User confirmed
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -138,8 +184,9 @@ class _DashboardState extends State<Dashboard> {
     return Column(
       children: [
         ElevatedButton(
+          style: ButtonStyle(backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(78, 115, 222, 1))),
           onPressed: _uploadImage,
-          child: const Text('Upload Image'),
+          child: const Text('Upload Image',style: TextStyle(color: Colors.white),),
         ),
         const SizedBox(height: 10),
         Expanded(
@@ -169,16 +216,20 @@ class _DashboardState extends State<Dashboard> {
                         Positioned(
                           bottom: 5,
                           right: 5,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: 30.0,
-                            ),
-                            onPressed: () {
-                              _deleteImage(imageUrl);
-                            },
-                          ),
+                          child: isDeleting
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 30.0,
+                                  ),
+                                  onPressed: () {
+                                    _deleteImage(imageUrl);
+                                  },
+                                ),
                         ),
                       ],
                     );
