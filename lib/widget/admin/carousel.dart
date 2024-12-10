@@ -145,23 +145,42 @@ class _DashboardState extends State<Dashboard> {
         Expanded(
           child: imageUrls.isEmpty
               ? const Center(child: Text("No images found"))
-              : ListView.builder(
+              : GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, // 3 images per row (you can adjust)
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                    childAspectRatio: 1.0, // Makes the grid cells square
+                  ),
                   itemCount: imageUrls.length,
                   itemBuilder: (context, index) {
                     String imageUrl = imageUrls[index];
-                    return ListTile(
-                      leading: Image.network(
-                        imageUrl,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          _deleteImage(imageUrl);
-                        },
-                      ),
+                    return Stack(
+                      clipBehavior: Clip.none, // Allow the delete button to overlay
+                      children: [
+                        // Image widget with a border radius for rounded corners
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 5,
+                          right: 5,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: 30.0,
+                            ),
+                            onPressed: () {
+                              _deleteImage(imageUrl);
+                            },
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
