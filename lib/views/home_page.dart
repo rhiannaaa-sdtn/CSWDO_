@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:cwsdo/widget/custom/custom_widget.dart';
 import 'package:cwsdo/constatns/navitem.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker_web/image_picker_web.dart'; // Web image picker
+import 'dart:typed_data';
+import 'dart:html'; // Import for web file handling
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +20,32 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final ScrollController _scrollController = ScrollController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // This list will hold URLs of images
+  List<String> imageUrls = [];
+
+  // Fetch images from Firestore
+  Future<void> _loadImages() async {
+    try {
+      QuerySnapshot snapshot = await _firestore
+          .collection('images')
+          .orderBy('timestamp', descending: true)
+          .get();
+
+      setState(() {
+        imageUrls = snapshot.docs.map((doc) => doc['url'] as String).toList();
+      });
+    } catch (e) {
+      print("Error loading images: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImages(); // Load images initially when the widget is created
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +121,9 @@ class _HomePageState extends State<HomePage> {
                               });
                             },
                           ),
-                          items: [
-                            buildCarouselSlide("images/carousel1.jpg"),
-                            buildCarouselSlide("images/carousel2.jpg"),
-                            buildCarouselSlide("images/carousel3.jpg"),
-                          ],
+                          items: imageUrls.isEmpty
+                              ? [buildCarouselSlide("images/placeholder.jpg")] // Placeholder if no images are available
+                              : imageUrls.map((imageUrl) => buildCarouselSlide(imageUrl)).toList(),
                         ),
                         
                         // Blue background with low opacity
@@ -115,13 +144,13 @@ class _HomePageState extends State<HomePage> {
                           top: 100, // Adjust to position text
                           child: Column(
                             children: [
-                                CustomWidg(txt: 'Community Needs Assesment', fsize: 50),
-                    CustomWidg(txt: 'Management System', fsize: 50),
-                    SizedBox(height: 20),
-                    CustomWidg(txt: 'City of San Pablo', fsize: 30),
-                    CustomWidg(
-                        txt: 'City Social Welfare and Development Office',
-                        fsize: 30),
+                              CustomWidg(txt: 'Community Needs Assesment', fsize: 50),
+                              CustomWidg(txt: 'Management System', fsize: 50),
+                              SizedBox(height: 20),
+                              CustomWidg(txt: 'City of San Pablo', fsize: 30),
+                              CustomWidg(
+                                  txt: 'City Social Welfare and Development Office',
+                                  fsize: 30),
                             ],
                           ),
                         ),
@@ -131,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                           bottom: 20, // Adjust the position as needed
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(3, (index) {
+                            children: List.generate(imageUrls.isEmpty ? 1 : imageUrls.length, (index) {
                               return AnimatedContainer(
                                 duration: const Duration(milliseconds: 300),
                                 margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -160,15 +189,16 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
 
-Widget buildCarouselSlide(String imagePath) {
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 5),
-    child: Image.asset(
-      imagePath,
-      fit: BoxFit.cover,
-      width: double.infinity,
-    ),
-  );
+  // This function will load image URLs dynamically
+  Widget buildCarouselSlide(String imageUrl) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      child: Image.network(
+        imageUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+      ),
+    );
+  }
 }
