@@ -15,7 +15,7 @@ class UserSetting extends StatefulWidget {
 class _UserSettingState extends State<UserSetting> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: AddBeneficiary(),title: 'User Setting');
+    return const Sidebar(content: AddBeneficiary(), title: 'User Setting');
   }
 }
 
@@ -36,7 +36,8 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     List<DocumentSnapshot> filtered = _allUsers.where((user) {
       String fullName = user['fullName'].toLowerCase();
       String email = user['email'].toLowerCase();
-      return fullName.contains(query.toLowerCase()) || email.contains(query.toLowerCase());
+      return fullName.contains(query.toLowerCase()) ||
+          email.contains(query.toLowerCase());
     }).toList();
 
     setState(() {
@@ -49,11 +50,13 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     final TextEditingController fullNameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    final TextEditingController confirmPasswordController = TextEditingController();
+    final TextEditingController confirmPasswordController =
+        TextEditingController();
 
     String? selectedOffice;
 
-    List<String> offices = officeList; // Assuming officeList is a List<String> in navitem.dart
+    List<String> offices =
+        officeList; // Assuming officeList is a List<String> in navitem.dart
 
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -87,7 +90,8 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                           onChanged: (String? newValue) {
                             selectedOffice = newValue;
                           },
-                          items: offices.map<DropdownMenuItem<String>>((String value) {
+                          items: offices
+                              .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
@@ -176,17 +180,16 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
                   errorMessages.add('Passwords do not match');
                 }
 
-final snapshot = await FirebaseFirestore.instance.collection('users')
-  .where('office', isEqualTo: selectedOffice)
-  .get();
+                final snapshot = await FirebaseFirestore.instance
+                    .collection('users')
+                    .where('office', isEqualTo: selectedOffice)
+                    .get();
 
 // Check if any documents were returned (i.e., office already exists)
-if (snapshot.docs.isNotEmpty) {
-  errorMessages.add('Office duplicate');
-}
-
-
-
+                if (snapshot.docs.isNotEmpty) {
+                  errorMessages
+                      .add('There are existing account for this office');
+                }
 
                 if (errorMessages.isNotEmpty) {
                   // Show error dialog with all issues
@@ -194,13 +197,17 @@ if (snapshot.docs.isNotEmpty) {
                 } else {
                   try {
                     // Step 1: Create a new user with Firebase Authentication
-                    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    UserCredential userCredential = await FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
                       email: emailController.text,
                       password: passwordController.text,
                     );
 
                     // Step 2: Store additional user details in Firestore (no 'role' field)
-                    await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userCredential.user?.uid)
+                        .set({
                       'fullName': fullNameController.text,
                       'email': emailController.text,
                       'office': selectedOffice,
@@ -282,30 +289,36 @@ if (snapshot.docs.isNotEmpty) {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
+      padding:
+          const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // White Container with text and button, and the search bar inside it
           Container(
             color: Colors.white, // White background for the entire section
-            padding: const EdgeInsets.all(20.0), // Padding inside the white container
+            padding: const EdgeInsets.all(
+                20.0), // Padding inside the white container
             child: Column(
               children: [
                 // Row for "Manage Users" text, search bar and "Add New User" button
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // Center the children horizontally
-                  crossAxisAlignment: CrossAxisAlignment.center, // Vertically align items in the center
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, // Center the children horizontally
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Vertically align items in the center
                   children: [
                     // Manage Users Text
                     const Expanded(
                       flex: 1,
                       child: Padding(
                         padding: EdgeInsets.only(left: 50.0),
-                        child: Text('Manage users', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        child: Text('Manage users',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
                       ),
                     ),
-                    
+
                     // Search Bar (in the middle)
                     // Padding(
                     //   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -336,19 +349,22 @@ if (snapshot.docs.isNotEmpty) {
                       ),
                       child: const Text(
                         'Add New User',
-                        style: TextStyle(color: Colors.white), // White text color
+                        style:
+                            TextStyle(color: Colors.white), // White text color
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20), // Space between the row and the user list
+                const SizedBox(
+                    height: 20), // Space between the row and the user list
               ],
             ),
           ),
-          const SizedBox(height: 20), // Space between the white container and user list
+          const SizedBox(
+              height: 20), // Space between the white container and user list
 
           // User List
-          StreamBuilder<QuerySnapshot>( 
+          StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection('users').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -356,7 +372,7 @@ if (snapshot.docs.isNotEmpty) {
               }
 
               var users = snapshot.data!.docs;
-              _allUsers = users;  // Storing the all users for filtering
+              _allUsers = users; // Storing the all users for filtering
               _filteredUsers = users; // Initially show all users
 
               return Expanded(
@@ -365,39 +381,48 @@ if (snapshot.docs.isNotEmpty) {
                   itemBuilder: (context, index) {
                     var user = _filteredUsers[index];
                     return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 20),
                       child: ListTile(
                         title: Text(user['fullName']),
-                        subtitle: Text('${user['email']}\nOffice: ${user['office']}'),
-                       trailing: IconButton(
-  icon: const Icon(Icons.delete, color: Colors.red),
-  onPressed: () async {
-    try {
-      // Get the current authenticated user
-      User? user = FirebaseAuth.instance.currentUser;
+                        subtitle:
+                            Text('${user['email']}\nOffice: ${user['office']}'),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () async {
+                            try {
+                              // Get the current authenticated user
+                              User? user = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
-        // Get the user UID for the current user
-        String userId = user.uid; // This is the correct way to access the user ID
- 
-     // Delete the user from Firebase Authentication
-        await user.delete();
+                              if (user != null) {
+                                // Get the user UID for the current user
+                                String userId = user
+                                    .uid; // This is the correct way to access the user ID
 
-        // After deleting the user from Firebase Authentication, delete the user document from Firestore
-        await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+                                // Delete the user from Firebase Authentication
+                                await user.delete();
 
-        _showSuccessDialog(context, 'User deleted successfully');
-      }
-    } on FirebaseAuthException catch (e) {
-      // Handle errors from Firebase Authentication
-      _showErrorDialog(context, ['Error deleting user from Authentication: ${e.message}']);
-    } catch (e) {
-      // Handle other types of errors (like Firestore errors)
-      _showErrorDialog(context, ['Error deleting user: $e']);
-    }
-  },
-),
+                                // After deleting the user from Firebase Authentication, delete the user document from Firestore
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userId)
+                                    .delete();
 
+                                _showSuccessDialog(
+                                    context, 'User deleted successfully');
+                              }
+                            } on FirebaseAuthException catch (e) {
+                              // Handle errors from Firebase Authentication
+                              _showErrorDialog(context, [
+                                'Error deleting user from Authentication: ${e.message}'
+                              ]);
+                            } catch (e) {
+                              // Handle other types of errors (like Firestore errors)
+                              _showErrorDialog(
+                                  context, ['Error deleting user: $e']);
+                            }
+                          },
+                        ),
                       ),
                     );
                   },

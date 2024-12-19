@@ -15,7 +15,10 @@ class TotalOngoingMain extends StatefulWidget {
 class _TotalOngoingMainState extends State<TotalOngoingMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: OngoingList(),title: "Processing",);
+    return const Sidebar(
+      content: OngoingList(),
+      title: "Processing Assistance",
+    );
   }
 }
 
@@ -42,7 +45,8 @@ class _OngoingListState extends State<OngoingList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
+      padding:
+          const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,8 +98,7 @@ class _OngoingListState extends State<OngoingList> {
                               'Medical Assistance',
                               'Food Assistance',
                               'Other Assistance'
-                            ]
-                                .map<DropdownMenuItem<String>>((String value) {
+                            ].map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -109,7 +112,8 @@ class _OngoingListState extends State<OngoingList> {
                         searchQuery: _searchQuery,
                         currentPage: _currentPage,
                         itemsPerPage: _itemsPerPage,
-                        selectedNeed: _selectedNeed, // Pass selectedNeed to filter
+                        selectedNeed:
+                            _selectedNeed, // Pass selectedNeed to filter
                         onPageChanged: _onPageChanged, // Use the callback
                       ),
                     ],
@@ -207,20 +211,24 @@ class _TableDataListState extends State<TableDataList> {
           final name = client['fullname'].toString().toLowerCase();
           final barangay = client['barangay'].toString().toLowerCase();
           final needs = client['needs'].toString().toLowerCase();
-          bool matchesSearchQuery = name.contains(widget.searchQuery) || barangay.contains(widget.searchQuery);
+          bool matchesSearchQuery = name.contains(widget.searchQuery) ||
+              barangay.contains(widget.searchQuery);
 
           // Filter by selected need if not null
-          bool matchesNeed = widget.selectedNeed == null || needs.contains(widget.selectedNeed!.toLowerCase());
+          bool matchesNeed = widget.selectedNeed == null ||
+              needs.contains(widget.selectedNeed!.toLowerCase());
 
           return matchesSearchQuery && matchesNeed;
         }).toList();
 
-        final totalPages = (filteredClients.length / widget.itemsPerPage).ceil();
+        final totalPages =
+            (filteredClients.length / widget.itemsPerPage).ceil();
 
         final startIndex = (widget.currentPage - 1) * widget.itemsPerPage;
         final endIndex = startIndex + widget.itemsPerPage;
-        final paginatedClients = filteredClients
-            .sublist(startIndex, endIndex > filteredClients.length
+        final paginatedClients = filteredClients.sublist(
+            startIndex,
+            endIndex > filteredClients.length
                 ? filteredClients.length
                 : endIndex);
 
@@ -251,32 +259,25 @@ class _TableDataListState extends State<TableDataList> {
                   pad: 15,
                   fsize: 12),
               TcellData(
-                  txtcell: client['dob'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 12),
+                  txtcell: client['dob'], heightcell: 50, pad: 15, fsize: 12),
               TcellData(
                   txtcell: client['mobilenum'],
                   heightcell: 50,
                   pad: 15,
                   fsize: 12),
               TcellData(
-                  txtcell: client['needs'],
-                  heightcell: 50,
-                  pad: 15,
-                  fsize: 12),
+                  txtcell: client['needs'], heightcell: 50, pad: 15, fsize: 12),
               ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: const WidgetStatePropertyAll(
-                      Color.fromRGBO(33, 79, 215, 1)),
-                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ))),
+                    backgroundColor: const WidgetStatePropertyAll(
+                        Color.fromRGBO(33, 79, 215, 1)),
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ))),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          NextStepMain(requestID: client.id),
+                      builder: (context) => NextStepMain(requestID: client.id),
                     ),
                   );
                 },
@@ -294,7 +295,7 @@ class _TableDataListState extends State<TableDataList> {
           children: [
             Table(
               border: TableBorder.all(),
-              columnWidths: const <int, TableColumnWidth> {
+              columnWidths: const <int, TableColumnWidth>{
                 0: FlexColumnWidth(1),
                 1: FlexColumnWidth(1),
                 2: FlexColumnWidth(1),
@@ -310,8 +311,10 @@ class _TableDataListState extends State<TableDataList> {
               currentPage: widget.currentPage,
               itemsPerPage: widget.itemsPerPage,
               searchQuery: widget.searchQuery,
-              filteredClients: filteredClients,  // Pass the filtered clients here
-              onPageChanged: widget.onPageChanged, // Use the callback to update page
+              filteredClients:
+                  filteredClients, // Pass the filtered clients here
+              onPageChanged:
+                  widget.onPageChanged, // Use the callback to update page
             ),
           ],
         );
@@ -327,14 +330,14 @@ class PaginationControls extends StatelessWidget {
     required this.itemsPerPage,
     required this.searchQuery,
     required this.onPageChanged,
-    required this.filteredClients,  // Add filteredClients here
+    required this.filteredClients, // Add filteredClients here
   }) : super(key: key);
 
   final int currentPage;
   final int itemsPerPage;
   final String searchQuery;
   final Function(int) onPageChanged;
-  final List<DocumentSnapshot> filteredClients;  // Accept filteredClients here
+  final List<DocumentSnapshot> filteredClients; // Accept filteredClients here
 
   @override
   Widget build(BuildContext context) {
@@ -346,9 +349,8 @@ class PaginationControls extends StatelessWidget {
       children: [
         IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: currentPage > 1
-              ? () => onPageChanged(currentPage - 1)
-              : null,
+          onPressed:
+              currentPage > 1 ? () => onPageChanged(currentPage - 1) : null,
         ),
         Text('Page $currentPage'),
         IconButton(

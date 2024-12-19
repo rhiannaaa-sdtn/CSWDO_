@@ -86,6 +86,8 @@ dependencies:
   html: ^0.15.0  # Add this package
   excel: ^2.0.9 # Add this for generating excel files
   file_saver: ^0.0.3 # Add this for file download functionality
+  flutter_map_marker_popup: ^6.1.2
+  widget_to_marker: ^1.0.6
 
   # # excel: ^2.0.8
   # # path_provider: ^2.0.9

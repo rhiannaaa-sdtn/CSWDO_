@@ -16,7 +16,7 @@ import 'package:cwsdo/widget/admin/dashboard/totalBeneficiarylist.dart';
 import 'package:cwsdo/widget/admin/dashboard/totalCompleted.dart';
 import 'package:cwsdo/widget/admin/dashboard/totalFoodAssistancelist.dart';
 import 'package:cwsdo/widget/admin/dashboard/totalMedicalAssistance.dart';
-import 'package:cwsdo/widget/admin/reliefRequest.dart';
+import 'package:cwsdo/widget/admin/reliefRequest';
 import 'package:cwsdo/widget/admin/totaltally.dart';
 import 'package:cwsdo/widget/notFound.dart';
 import "package:cwsdo/views/admin/usersetting.dart";
@@ -99,9 +99,9 @@ class MyApp extends StatelessWidget {
       case '/login':
         return _authGuard(isAuthenticated, const LoginScreen(), settings);
       case '/forgotpassword':
-        return _authGuard(isAuthenticated, const ForgotPasswordScreen(), settings);
+        return _authGuard(
+            isAuthenticated, const ForgotPasswordScreen(), settings);
 
-        
       // -------------------------ADMIN ROUTE--------------------
 
       case '/reliefrequest':
@@ -110,18 +110,14 @@ class MyApp extends StatelessWidget {
       case '/ongoingassistance':
         return _authGuardAdmin(
             isAuthenticated, const TotalOngoingMain(), settings);
-             case '/completedassitance':
-        return _authGuardAdmin(
-            isAuthenticated, const Completed(), settings);
+      case '/completedassitance':
+        return _authGuardAdmin(isAuthenticated, const Completed(), settings);
       case '/listrequest':
-        return _authGuardAdmin(
-            isAuthenticated, const RequestList(), settings); 
-            case '/resident':
-        return _authGuardAdmin(
-            isAuthenticated, const Resident(), settings);
-            case '/listbns':
-        return _authGuardAdmin(
-            isAuthenticated, const Listbns(), settings);
+        return _authGuardAdmin(isAuthenticated, const RequestList(), settings);
+      case '/resident':
+        return _authGuardAdmin(isAuthenticated, const Resident(), settings);
+      case '/listbns':
+        return _authGuardAdmin(isAuthenticated, const Listbns(), settings);
       case '/foodassistancelist':
         return _authGuardAdmin(
             isAuthenticated, const TotalFoodAssistanceMain(), settings);
@@ -134,13 +130,12 @@ class MyApp extends StatelessWidget {
       case '/beneficiarylist':
         return _authGuardAdmin(
             isAuthenticated, const TotalBeneficiaryMain(), settings);
-        case '/reqeustlist':
+      case '/reqeustlist':
         return _authGuardAdmin(
             isAuthenticated, const TotalBeneficiaryMain(), settings);
-        case '/carousel':
-        return _authGuardAdmin(
-            isAuthenticated, const CarouselMain(), settings);
-            
+      case '/carousel':
+        return _authGuardAdmin(isAuthenticated, const CarouselMain(), settings);
+
       case '/addbeneficiary':
         return _authGuardAdmin(
             isAuthenticated, const AddBeneficiaryMain(), settings);
@@ -154,8 +149,7 @@ class MyApp extends StatelessWidget {
         return _authGuardAdmin(
             isAuthenticated, const DashboardMain(), settings);
       case '/usersetting':
-        return _authGuardAdmin(
-            isAuthenticated, const UserSetting(), settings);
+        return _authGuardAdmin(isAuthenticated, const UserSetting(), settings);
 
       default:
         return MaterialPageRoute(builder: (context) => NotFoundPage());

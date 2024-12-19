@@ -21,31 +21,22 @@ class DashboardMain extends StatefulWidget {
 }
 
 class _DashboardMainState extends State<DashboardMain> {
-  
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: Dashboard() ,title: "Dashboard",);
+    return const Sidebar(
+      content: Dashboard(),
+      title: "Dashboard",
+    );
   }
 }
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    
-
-
-
-
-
-
-
-    
-    final s1 = FirebaseFirestore.instance.collection('beneficiaries').snapshots();
+    final s1 =
+        FirebaseFirestore.instance.collection('beneficiaries').snapshots();
     final s2 = FirebaseFirestore.instance.collection('residents').snapshots();
 
     return StreamBuilder<List<QuerySnapshot>>(
@@ -101,7 +92,7 @@ class Dashboard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    DashboardBox(
+                  DashboardBox(
                     title: 'Total Request',
                     count: '${docs1.length}',
                     link: '/reqeustlist',
@@ -121,7 +112,7 @@ class Dashboard extends StatelessWidget {
                 ],
               ),
               Expanded(
- child:Heatmap() ,
+                child: Heatmap(),
               ),
             ],
           ),
@@ -210,10 +201,10 @@ class _DashboardBoxState extends State<DashboardBox> {
   }
 }
 
-
-
 class Heatmap extends StatefulWidget {
-  Heatmap({Key? key,}) : super(key: key);
+  Heatmap({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _HeatmapState createState() => _HeatmapState();
@@ -240,49 +231,47 @@ class _HeatmapState extends State<Heatmap> {
     super.dispose();
   }
 
+  _loadData() async {
+    var now = DateTime.now();
+    var formatter = DateFormat('yyyy-MM-dd');
+    var today = formatter.format(now);
+    var thirtyDaysAgo = now.subtract(Duration(days: 30));
+    var thirtyDaysAgoFormatted = formatter.format(thirtyDaysAgo);
 
-_loadData() async {
-  var now = DateTime.now();
-  var formatter = DateFormat('yyyy-MM-dd');
-  var today = formatter.format(now);
-  var thirtyDaysAgo = now.subtract(Duration(days: 30));
-  var thirtyDaysAgoFormatted = formatter.format(thirtyDaysAgo);
+    var beneficiaryData = await FirebaseFirestore.instance
+        .collection('beneficiaries')
+        .where('dateRegistered', isGreaterThanOrEqualTo: thirtyDaysAgoFormatted)
+        .get();
 
-  var beneficiaryData = await FirebaseFirestore.instance
-      .collection('beneficiaries')
-      .where('dateRegistered', isGreaterThanOrEqualTo: thirtyDaysAgoFormatted)
-      .get();
+    var coor = "";
 
-  var coor = "";
+    for (var i = 0; i < beneficiaryData.docs.length; i++) {
+      var doc = beneficiaryData.docs[i];
+      var barangay = doc['barangay'].toString();
+      print(brgycoor[barangay]);
 
-  for (var i = 0; i < beneficiaryData.docs.length; i++) {
-    var doc = beneficiaryData.docs[i];
-    var barangay = doc['barangay'].toString();
-    print(brgycoor[barangay]);
+      if (i == 0) {
+        coor = "[" + brgycoor[barangay].toString() + "]";
+      } else {
+        coor = coor + ",[" + brgycoor[barangay].toString() + "]";
+      }
+    }
 
-    if (i == 0) {
-      coor = "[" + brgycoor[barangay].toString() + "]";
-    } else {
-      coor = coor + ",[" + brgycoor[barangay].toString() + "]";
+    var str = "[" + coor + "]";
+    print(str);
+
+    List<dynamic> result = jsonDecode(str);
+
+    // Ensure the widget is still mounted before calling setState
+    if (mounted) {
+      setState(() {
+        data = result
+            .map((e) => e as List<dynamic>)
+            .map((e) => WeightedLatLng(LatLng(e[0], e[1]), 1))
+            .toList();
+      });
     }
   }
-
-  var str = "[" + coor + "]";
-  print(str);
-
-  List<dynamic> result = jsonDecode(str);
-
-  // Ensure the widget is still mounted before calling setState
-  if (mounted) {
-    setState(() {
-      data = result
-          .map((e) => e as List<dynamic>)
-          .map((e) => WeightedLatLng(LatLng(e[0], e[1]), 1))
-          .toList();
-    });
-  }
-}
-
 
   void _incrementCounter() {
     setState(() {
@@ -301,23 +290,30 @@ _loadData() async {
 
     final map = new FlutterMap(
       options: new MapOptions(
-          initialCenter: new LatLng(14.06351681625969, 121.31892008458746), initialZoom: 14.0),
+        initialCenter: new LatLng(14.06351681625969, 121.31892008458746),
+        initialZoom: 14.0,
+        minZoom: 14.0,
+        maxZoom: 18.0,
+      ),
       children: [
         TileLayer(
-            urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
+          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        ),
         if (data.isNotEmpty)
           HeatMapLayer(
             heatMapDataSource: InMemoryHeatMapDataSource(data: data),
             heatMapOptions: HeatMapOptions(
-                gradient: this.gradients[this.index], minOpacity: 0.1),
+              gradient: this.gradients[this.index],
+              minOpacity: 11.0,
+            ),
             reset: _rebuildStream.stream,
-          )
+          ),
       ],
     );
-    return  Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Container(child: map),
-      );
+    return Center(
+      // Center is a layout widget. It takes a single child and positions it
+      // in the middle of the parent.
+      child: Container(child: map),
+    );
   }
 }

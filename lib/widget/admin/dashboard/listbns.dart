@@ -61,7 +61,8 @@ class _OngoingListState extends State<OngoingList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
+      padding:
+          const EdgeInsets.only(top: 10.0, left: 50.0, right: 50, bottom: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +92,8 @@ class _OngoingListState extends State<OngoingList> {
                                 onChanged: (query) {
                                   setState(() {
                                     searchQuery = query;
-                                    currentPage = 0; // Reset to first page when search query changes
+                                    currentPage =
+                                        0; // Reset to first page when search query changes
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -101,7 +103,9 @@ class _OngoingListState extends State<OngoingList> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 10), // Space between search bar and dropdown
+                            SizedBox(
+                                width:
+                                    10), // Space between search bar and dropdown
                             // Add Resident Dropdown for Barangay Selection (filtering)
                             DropdownButton<String>(
                               value: selectedBarangay,
@@ -110,7 +114,10 @@ class _OngoingListState extends State<OngoingList> {
                                   selectedBarangay = newValue!;
                                 });
                               },
-                              items: ['All', ...bgrgyList].map<DropdownMenuItem<String>>((String value) {
+                              items: [
+                                'All',
+                                ...bgrgyList
+                              ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value),
@@ -125,7 +132,8 @@ class _OngoingListState extends State<OngoingList> {
                         searchQuery: searchQuery,
                         currentPage: currentPage,
                         recordsPerPage: recordsPerPage,
-                        selectedBarangay: selectedBarangay, // Pass selected barangay for filtering
+                        selectedBarangay:
+                            selectedBarangay, // Pass selected barangay for filtering
                         onPageChange: (page) {
                           setState(() {
                             currentPage = page;
@@ -185,7 +193,8 @@ class _AddResidentFormState extends State<AddResidentForm> {
           'income': income,
           'gender': gender,
           'barangay': barangay, // Use the selected barangay
-          'createdAt': FieldValue.serverTimestamp(), // Timestamp for record creation
+          'createdAt':
+              FieldValue.serverTimestamp(), // Timestamp for record creation
         });
 
         // Close the dialog
@@ -297,10 +306,16 @@ class TableDataList extends StatelessWidget {
   Future<void> _deleteResident(String documentId, BuildContext context) async {
     try {
       print('Attempting to delete document with ID: $documentId');
-      DocumentSnapshot doc = await FirebaseFirestore.instance.collection('residents').doc(documentId).get();
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('residents')
+          .doc(documentId)
+          .get();
 
       if (doc.exists) {
-        await FirebaseFirestore.instance.collection('residents').doc(documentId).delete();
+        await FirebaseFirestore.instance
+            .collection('residents')
+            .doc(documentId)
+            .delete();
 
         // Check if the widget is still mounted before showing the SnackBar or calling setState
         if (context.mounted) {
@@ -332,9 +347,8 @@ class TableDataList extends StatelessWidget {
     // Firestore query with conditional filtering
     Stream<QuerySnapshot> queryStream;
     if (selectedBarangay == 'All') {
-      queryStream = FirebaseFirestore.instance
-          .collection('residents')
-          .snapshots();
+      queryStream =
+          FirebaseFirestore.instance.collection('residents').snapshots();
     } else {
       queryStream = FirebaseFirestore.instance
           .collection('residents')
@@ -372,8 +386,9 @@ class TableDataList extends StatelessWidget {
         // Get the data for the current page
         final startIndex = currentPage * recordsPerPage;
         final endIndex = startIndex + recordsPerPage;
-        final currentPageData = filteredResidents
-            .sublist(startIndex, endIndex > filteredResidents.length
+        final currentPageData = filteredResidents.sublist(
+            startIndex,
+            endIndex > filteredResidents.length
                 ? filteredResidents.length
                 : endIndex);
 
@@ -388,7 +403,9 @@ class TableDataList extends StatelessWidget {
                 DataColumn(label: Text('Civil Status')),
                 DataColumn(label: Text('Income')),
                 DataColumn(label: Text('Barangay')),
-                DataColumn(label: Text('Actions')), // Add an "Actions" column for delete button
+                DataColumn(
+                    label: Text(
+                        'Actions')), // Add an "Actions" column for delete button
               ],
               rows: currentPageData
                   .map((resident) => DataRow(cells: [
@@ -408,7 +425,8 @@ class TableDataList extends StatelessWidget {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: const Text('Confirm Deletion'),
-                                    content: const Text('Are you sure you want to delete this resident?'),
+                                    content: const Text(
+                                        'Are you sure you want to delete this resident?'),
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () {

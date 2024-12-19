@@ -5,7 +5,7 @@ List<String> navTitles = [
   "About",
   "Request Tracker",
   "Contact",
-  
+
   // "Request Relief",
   // "Admin",
 ];
@@ -183,8 +183,6 @@ List<String> bgrgyList = [
   'BARANGAY STO. CRISTO',
 ];
 
-
-
 const Map<String, String> brgycoor = {
   'BARANGAY I-A': '14.072718227071375, 121.31653413633451',
   'BARANGAY I-B': '14.069685300325865, 121.31632307921889',
@@ -267,20 +265,6 @@ const Map<String, String> brgycoor = {
   'BARANGAY STA.CRUZ': '14.024945176411608, 121.35149274151276',
   'BARANGAY STO. CRISTO': '14.064140313107924, 121.32980241117555',
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 List<String> officeList = [
   'CWSDO',
@@ -365,8 +349,6 @@ List<String> officeList = [
   'BARANGAY STA.CRUZ',
   'BARANGAY STO. CRISTO',
 ];
-
-
 
 //
 //

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cwsdo/widget/admin/totaltally.dart';  // Assuming TcellData and TcellHeader are defined here
+import 'package:cwsdo/widget/admin/totaltally.dart'; // Assuming TcellData and TcellHeader are defined here
 
 // Global variable to store the request text
 String requestText = '';
@@ -16,7 +16,6 @@ const TextStyle boldTitleStyle2 = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-
 const TextStyle bodyTextStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.bold,
@@ -27,31 +26,30 @@ class About extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
-      padding:  const EdgeInsets.symmetric(horizontal: 50.0, vertical: 0.0),
-      child:  Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 0.0),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start  ,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-              const Text('ABOUT US', style: boldTitleStyle),
-             const  SizedBox(height: 20),
-             const  Text(
-                'The City Social Welfare and Development Office (CWSDO) is the local social welfare arm of '
-                'the City Government of San Pablo mandated to provide basic social welfare programs to its '
-                'disadvantage citizenry. CWSDO was devolved and decentralized to the City Government of San Pablo '
-                'on October 1, 1992, in pursuant to RA 7160 and City Ordinance No. 2374 Series of 1994.',
-                style: bodyTextStyle,
-                textAlign: TextAlign.justify,
-              ),
-      const Text('Program Objectives', style: boldTitleStyle),
+          const Text('ABOUT US', style: boldTitleStyle),
           const SizedBox(height: 20),
-          const  Text(
-              'The objectives of the City Social Welfare and Development Office (CWSDO) are to help and provide '
-               'food and medical assistance for disadvantaged citizens of San Pablo.',
-              style: bodyTextStyle,
-              textAlign: TextAlign.justify,
-            ),
-
+          const Text(
+            'The City Social Welfare and Development Office (CWSDO) is the local social welfare arm of '
+            'the City Government of San Pablo mandated to provide basic social welfare programs to its '
+            'disadvantage citizenry. CWSDO was devolved and decentralized to the City Government of San Pablo '
+            'on October 1, 1992, in pursuant to RA 7160 and City Ordinance No. 2374 Series of 1994.',
+            style: bodyTextStyle,
+            textAlign: TextAlign.justify,
+          ),
+          const Text('Program Objectives', style: boldTitleStyle),
+          const SizedBox(height: 20),
+          const Text(
+            'The objectives of the City Social Welfare and Development Office (CWSDO) are to help and provide '
+            'food and medical assistance for disadvantaged citizens of San Pablo.',
+            style: bodyTextStyle,
+            textAlign: TextAlign.justify,
+          ),
           Padding(
             padding: const EdgeInsets.all(50.0),
             child: Row(
@@ -63,32 +61,37 @@ class About extends StatelessWidget {
                   children: [
                     const Text(
                       'CWSDO ASSISTANCE OFFERS',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 30),
-                    _buildAssistanceOption('Medical Assistance','images/medicalassist.png'),
-                    _buildAssistanceOption('Food Assistance','images/foodassist.png'),
-                    _buildAssistanceOption('Other Assistance...','images/otherassist.png'),
+                    _buildAssistanceOption(
+                        'Medical Assistance', 'images/medicalassist.png'),
+                    _buildAssistanceOption(
+                        'Food Assistance', 'images/foodassist.png'),
+                    _buildAssistanceOption(
+                        'Other Assistance...', 'images/otherassist.png'),
                     const SizedBox(height: 30),
                   ],
                 ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                          const   Text(
-          'Track you request here!',
-          style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 40, ),
-                        _buildRequestTrackerButton(context),
-                      ],
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Track you request here!',
+                      style: const TextStyle(
+                          fontSize: 40, fontWeight: FontWeight.bold),
                     ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    _buildRequestTrackerButton(context),
+                  ],
+                ),
               ],
             ),
           ),
-
-
           Row2(),
           SizedBox(height: 50),
           Contact(),
@@ -98,18 +101,16 @@ class About extends StatelessWidget {
     );
   }
 
-
   // Helper function to avoid repetition in assistance options
-  Widget _buildAssistanceOption(String title,String imgurl) {
+  Widget _buildAssistanceOption(String title, String imgurl) {
     return Row(
       children: [
-
-           Container(
+        Container(
             // height: MediaQuery.of(context).size.height * .9,
             // height: double.maxFinite,
             width: 80,
             height: 80,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
                 alignment: Alignment.topCenter,
                 image: AssetImage(imgurl),
@@ -134,16 +135,18 @@ class About extends StatelessWidget {
           shape: MaterialStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           ),
-          backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(78, 115, 222, 1)),
+          backgroundColor:
+              const MaterialStatePropertyAll(Color.fromRGBO(78, 115, 222, 1)),
         ),
         child: const Center(
           child: Text(
             'Request Tracker',
-            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
         onPressed: () {
-          print('Opening Request Tracker Dialog');  // Debugging line
+          print('Opening Request Tracker Dialog'); // Debugging line
           showDialog(
             context: context,
             builder: (context) => const RequestTrackerDialog(),
@@ -152,8 +155,6 @@ class About extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 // About Us section
@@ -161,7 +162,6 @@ class Abt extends StatelessWidget {
   const Abt({super.key});
 
   @override
-
   Widget build(BuildContext context) {
     return const Expanded(
       child: Padding(
@@ -170,7 +170,6 @@ class Abt extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20),
-           
           ],
         ),
       ),
@@ -215,7 +214,8 @@ class Contact extends StatelessWidget {
             padding: const EdgeInsets.all(30.0),
             child: Row(
               children: [
-                SvgPicture.asset("images/SpcLogo.svg", width: 200, height: 200, fit: BoxFit.cover),
+                SvgPicture.asset("images/SpcLogo.svg",
+                    width: 200, height: 200, fit: BoxFit.cover),
                 const SizedBox(width: 20),
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +255,7 @@ class Contact extends StatelessWidget {
 class RequestTrackerDialog extends StatefulWidget {
   const RequestTrackerDialog({super.key});
 
-  @override  
+  @override
   _RequestTrackerDialogState createState() => _RequestTrackerDialogState();
 }
 
@@ -316,7 +316,7 @@ class _RequestTrackerDialogState extends State<RequestTrackerDialog> {
     );
   }
 }
- 
+
 class RemarkTable extends StatelessWidget {
   const RemarkTable({Key? key}) : super(key: key);
 
@@ -391,7 +391,6 @@ class RemarkTable extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-           
               SizedBox(
                 width: MediaQuery.of(context).size.width * .8,
                 height: 380,
@@ -421,7 +420,8 @@ class RemarkTable extends StatelessWidget {
                           1: FlexColumnWidth(1),
                           2: FlexColumnWidth(1),
                         },
-                        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                        defaultVerticalAlignment:
+                            TableCellVerticalAlignment.middle,
                         children: remarkTable,
                       ),
                     ),

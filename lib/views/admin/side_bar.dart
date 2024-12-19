@@ -4,8 +4,8 @@ import 'package:cwsdo/widget/admin/side.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/src/material/dropdown_menu.dart';
 import 'dart:html' as html; // Import dart:html for web storage
-import 'dart:io'; // For platform-specific checks
-import 'package:flutter/foundation.dart'; // For web-specific checks
+// For platform-specific checks
+// For web-specific checks
 
 class Sidebar extends StatefulWidget {
   final Widget content;
@@ -86,7 +86,7 @@ class _SidebarState extends State<Sidebar> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Text(
-                                 widget.title, // Set your title here
+                                  widget.title, // Set your title here
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -116,11 +116,13 @@ class _SidebarState extends State<Sidebar> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16.0),
                                     child: DropdownButton<String>(
-                                      dropdownColor: const Color.fromARGB(255, 43, 43, 43),
+                                      dropdownColor:
+                                          const Color.fromARGB(255, 43, 43, 43),
                                       value: _selectedValue,
                                       onChanged: _onDropdownChanged,
                                       items: <String>[
-                                        html.window.localStorage['office'].toString(),
+                                        html.window.localStorage['office']
+                                            .toString(),
                                         // 'Settings',
                                         'Logout'
                                       ].map<DropdownMenuItem<String>>(
@@ -130,11 +132,13 @@ class _SidebarState extends State<Sidebar> {
                                           child: Text(
                                             value,
                                             style: const TextStyle(
-                                                color: Colors.white, fontSize: 20),
+                                                color: Colors.white,
+                                                fontSize: 20),
                                           ),
                                         );
                                       }).toList(),
-                                      underline: Container(), // Removes the underline
+                                      underline:
+                                          Container(), // Removes the underline
                                     ),
                                   ),
                                   const SizedBox(width: 15),

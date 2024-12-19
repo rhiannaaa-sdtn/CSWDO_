@@ -22,7 +22,7 @@ class AddBeneficiaryMain extends StatefulWidget {
 class _AddBeneficiaryMainState extends State<AddBeneficiaryMain> {
   @override
   Widget build(BuildContext context) {
-    return const Sidebar(content: AddBeneficiary(), title:" ");
+    return const Sidebar(content: AddBeneficiary(), title: " ");
   }
 }
 
@@ -56,8 +56,8 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      firstDate: DateTime(1930),
+      lastDate: DateTime(2030),
     );
 
     if (picked != null) {
@@ -67,41 +67,46 @@ class _AddBeneficiaryState extends State<AddBeneficiary> {
     }
   }
 
-Future<bool> _hasRecentRequest(String fullname) async {
-  try {
-    // Calculate the date 90 days ago from today
-    DateTime today = DateTime.now();
-    DateTime ninetyDaysAgo = today.subtract(Duration(days: 90));
+  Future<bool> _hasRecentRequest(String fullname) async {
+    try {
+      // Calculate the date 90 days ago from today
+      DateTime today = DateTime.now();
+      DateTime ninetyDaysAgo = today.subtract(Duration(days: 90));
 
-    // Query Firestore to find all beneficiaries with the same fullname
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('beneficiaries')
-        .where('fullname', isEqualTo: fullname)
-        // .orderBy('dateRegistered', descending: true) // Order by dateRegistered
-        .get();
+      // Query Firestore to find all beneficiaries with the same fullname
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('beneficiaries')
+          .where('fullname', isEqualTo: fullname)
+          // .orderBy('dateRegistered', descending: true) // Order by dateRegistered
+          .get();
 
-    // Loop through the results to find if any dateRegistered is within the last 90 days
-    for (var doc in querySnapshot.docs) {
-      String dateRegisteredString = doc['dateRegistered'] as String;
+      // Loop through the results to find if any dateRegistered is within the last 90 days
+      for (var doc in querySnapshot.docs) {
+        String dateRegisteredString = doc['dateRegistered'] as String;
 
-      // Convert the string to DateTime
-      DateTime dateRegistered = DateFormat('yyyy-MM-dd').parse(dateRegisteredString);
+        // Convert the string to DateTime
+        DateTime dateRegistered =
+            DateFormat('yyyy-MM-dd').parse(dateRegisteredString);
 
-      // Check if the date is within the last 90 days
-      if (dateRegistered.isAfter(ninetyDaysAgo)) {
-        return true; // Found a recent request
+        // Check if the date is within the last 90 days
+        if (dateRegistered.isAfter(ninetyDaysAgo)) {
+          return true; // Found a recent request
+        }
       }
-    }
 
-    return false; // No recent request
-  } catch (e) {
-    _showErrorDialog("Error checking recent requests: $e");
-    return false;
+      return false; // No recent request
+    } catch (e) {
+      _showErrorDialog("Error checking recent requests: $e");
+      return false;
+    }
   }
-}
 
   void _onSubmit() async {
-    if (_fullname.text.isEmpty || _mobilenum.text.isEmpty || _selectedCivilStatus == null || _selectedBarangay == null || _selectedGender == null) {
+    if (_fullname.text.isEmpty ||
+        _mobilenum.text.isEmpty ||
+        _selectedCivilStatus == null ||
+        _selectedBarangay == null ||
+        _selectedGender == null) {
       _showErrorDialog("Please fill all required fields");
       return;
     }
@@ -116,7 +121,8 @@ Future<bool> _hasRecentRequest(String fullname) async {
     bool hasRecentRequest = await _hasRecentRequest(_fullname.text);
 
     if (hasRecentRequest) {
-      _showErrorDialog("You have already made a request within the last 90 days.");
+      _showErrorDialog(
+          "You have already made a request within the last 90 days.");
       return; // Stop further processing
     }
 
@@ -130,13 +136,15 @@ Future<bool> _hasRecentRequest(String fullname) async {
       String? indigencyUrl = await _uploadFile(pickedfile2, 'indigency');
 
       // Add beneficiary data to Firestore and get documentId
-      String documentId = await _addBeneficiaryToFirestore(validIdUrl, indigencyUrl);
+      String documentId =
+          await _addBeneficiaryToFirestore(validIdUrl, indigencyUrl);
 
       // Clear the fields after saving
       _clearFields();
 
       // Show success dialog with documentId
-      _showSuccessDialog("Beneficiary added successfully!\nDocument ID: $documentId");
+      _showSuccessDialog(
+          "Beneficiary added successfully!\nDocument ID: $documentId");
     } catch (e) {
       _showErrorDialog("Error adding beneficiary: $e");
     } finally {
@@ -150,7 +158,9 @@ Future<bool> _hasRecentRequest(String fullname) async {
     if (file == null) return null;
 
     try {
-      final storageRef = FirebaseStorage.instance.ref().child('beneficiaries/$fileType/${file.name}');
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('beneficiaries/$fileType/${file.name}');
       final uploadTask = storageRef.putData(file.bytes!);
       final snapshot = await uploadTask.whenComplete(() => null);
       final downloadUrl = await snapshot.ref.getDownloadURL();
@@ -161,15 +171,24 @@ Future<bool> _hasRecentRequest(String fullname) async {
     }
   }
 
-  Future<String> _addBeneficiaryToFirestore(String? validIdUrl, String? indigencyUrl) async {
+  Future<String> _addBeneficiaryToFirestore(
+      String? validIdUrl, String? indigencyUrl) async {
     try {
       // Firestore document structure for the beneficiary
-      String dateToday = DateTime.now().toIso8601String().substring(0, 10).replaceAll('-', ''); // Get date in yyyyMMdd format
-      int randomFourDigitNumber = Random().nextInt(9000) + 1000; // Generate a random 4-digit number
+      String dateToday = DateTime.now()
+          .toIso8601String()
+          .substring(0, 10)
+          .replaceAll('-', ''); // Get date in yyyyMMdd format
+      int randomFourDigitNumber =
+          Random().nextInt(9000) + 1000; // Generate a random 4-digit number
 
-      String documentId = '$dateToday$randomFourDigitNumber'; // Combine both to form the document ID
+      String documentId =
+          '$dateToday$randomFourDigitNumber'; // Combine both to form the document ID
 
-      await FirebaseFirestore.instance.collection('beneficiaries').doc(documentId).set({
+      await FirebaseFirestore.instance
+          .collection('beneficiaries')
+          .doc(documentId)
+          .set({
         'fullname': _fullname.text,
         'mobilenum': _mobilenum.text,
         'dob': _dob.text,
@@ -262,9 +281,8 @@ Future<bool> _hasRecentRequest(String fullname) async {
 
   @override
   Widget build(BuildContext context) {
-
-
-       final s1 = FirebaseFirestore.instance.collection('beneficiaries').snapshots();
+    final s1 =
+        FirebaseFirestore.instance.collection('beneficiaries').snapshots();
     final s2 = FirebaseFirestore.instance.collection('residents').snapshots();
 
     return StreamBuilder<List<QuerySnapshot>>(
@@ -293,8 +311,7 @@ Future<bool> _hasRecentRequest(String fullname) async {
         print(docs1.length);
         print(docs2.length);
 
-
-    return Padding(
+        return Padding(
           padding: EdgeInsets.all(0),
           child: Column(
             children: [
@@ -322,56 +339,44 @@ Future<bool> _hasRecentRequest(String fullname) async {
                 ],
               ),
               Expanded(
- child:
-     Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 0.0),
-      child:
-          Row(
-            children: [
-              // Left Column: Personal Information
-              Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 50.0),
-                  child: Column(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 50.0, vertical: 0.0),
+                  child: Row(
                     children: [
-                      _sectionHeader('Personal Information'),
-                      _personalInformationForm(),
+                      // Left Column: Personal Information
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 50.0),
+                          child: Column(
+                            children: [
+                              _sectionHeader('Personal Information'),
+                              _personalInformationForm(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Right Column: Needs Information and File Uploads
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 50.0),
+                          child: Column(
+                            children: [
+                              _sectionHeader('Needs Information'),
+                              _needsInformationForm(),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              // Right Column: Needs Information and File Uploads
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50.0),
-                  child: Column(
-                    children: [
-                      _sectionHeader('Needs Information'),
-                      _needsInformationForm(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-       
-    ),
               ),
             ],
           ),
         );
-    
-    
-    
-    
-
-
-        },
+      },
     );
-
-
-
-
   }
 
   Widget _sectionHeader(String title) {
@@ -402,18 +407,20 @@ Future<bool> _hasRecentRequest(String fullname) async {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _inputBox('Full name', 'Enter Full Name', _fullname),
-              
-                TextFormField(
-  controller: _mobilenum,
-  decoration: InputDecoration(
-    labelText: 'Mobile Number',
-    hintText: 'Enter Mobile Number',
-  ),
-  keyboardType: TextInputType.number, // This will show a numeric keyboard.
-  inputFormatters: <TextInputFormatter>[
-    FilteringTextInputFormatter.digitsOnly, // This ensures only digits are allowed.
-  ],
-),
+
+              TextFormField(
+                controller: _mobilenum,
+                decoration: InputDecoration(
+                  labelText: 'Mobile Number',
+                  hintText: 'Enter Mobile Number',
+                ),
+                keyboardType:
+                    TextInputType.number, // This will show a numeric keyboard.
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter
+                      .digitsOnly, // This ensures only digits are allowed.
+                ],
+              ),
               _datePickerField('Date of Birth', _dob),
               _dropdownField(),
               _genderDropdown(), // Gender Dropdown
@@ -442,7 +449,6 @@ Future<bool> _hasRecentRequest(String fullname) async {
             _fileUploadRow('Document', pickedfile1, 'type1'),
             _fileUploadRow('Indigency', pickedfile2, 'type2'),
             const SizedBox(height: 20),
-           
             _submitButton(),
           ],
         ),
@@ -467,8 +473,6 @@ Future<bool> _hasRecentRequest(String fullname) async {
       },
     );
   }
-
-
 
   Widget _dropdownField() {
     return Padding(
@@ -532,17 +536,20 @@ Future<bool> _hasRecentRequest(String fullname) async {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
-                  ),
-                  backgroundColor:
-                      const MaterialStatePropertyAll(Color.fromRGBO(78, 115, 222, 1))),
+                    backgroundColor: const MaterialStatePropertyAll(
+                        Color.fromRGBO(78, 115, 222, 1))),
                 onPressed: _onSubmit,
                 child: const Text(
                   'Submit',
-                  style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
       ],
@@ -558,7 +565,8 @@ Future<bool> _hasRecentRequest(String fullname) async {
     );
   }
 
-  Widget _inputBox(String label, String hint, TextEditingController controller) {
+  Widget _inputBox(
+      String label, String hint, TextEditingController controller) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -568,7 +576,7 @@ Future<bool> _hasRecentRequest(String fullname) async {
     );
   }
 
-   Widget _fileUploadRow(String label, PlatformFile? pickedFile, String type) {
+  Widget _fileUploadRow(String label, PlatformFile? pickedFile, String type) {
     return Row(
       children: [
         const Icon(size: 40, Icons.image),
@@ -594,5 +602,4 @@ Future<bool> _hasRecentRequest(String fullname) async {
       ],
     );
   }
-
 }

@@ -1,6 +1,6 @@
 import 'package:cwsdo/services/firestore.dart';
 import 'package:cwsdo/views/admin/side_bar.dart';
-import 'package:cwsdo/widget/admin/reliefRequest.dart';
+import 'package:cwsdo/widget/admin/reliefRequest';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,14 +30,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user != null) {
         // Retrieve user data (full name, office) from Firestore
-        final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
 
         if (userDoc.exists) {
           // Assuming the Firestore document has 'fullName' and 'office' fields
           final fullName = userDoc['fullName'];
           final office = userDoc['office'];
-            html.window.localStorage['fullName'] = fullName;
-            html.window.localStorage['office'] = office;
+          html.window.localStorage['fullName'] = fullName;
+          html.window.localStorage['office'] = office;
           // Store these values in localStorage (for web)
           // if (kIsWeb) {
           //   // Use window.localStorage to store data for web platforms
@@ -54,12 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
           print('FullName: $fullName, Office: $office');
 
           // Navigate to the dashboard screen
-          if(office == "CWSDO"){
-
-          Navigator.pushNamed(context, '/dashboard');
-          }else{
-
-          Navigator.pushNamed(context, '/resident');
+          if (office == "CWSDO") {
+            Navigator.pushNamed(context, '/dashboard');
+          } else {
+            Navigator.pushNamed(context, '/resident');
           }
         } else {
           _showErrorDialog('User data not found');
@@ -98,11 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
         height: double.maxFinite,
         width: double.maxFinite,
         decoration: const BoxDecoration(
-          // image: DecorationImage(
-          //   image: AssetImage("images/bg1.png"),
-          //   fit: BoxFit.cover,
-          // ),
-        ),
+            // image: DecorationImage(
+            //   image: AssetImage("images/bg1.png"),
+            //   fit: BoxFit.cover,
+            // ),
+            ),
         child: Container(
           decoration: const BoxDecoration(
             color: Color.fromARGB(255, 3, 94, 168),
@@ -126,14 +127,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   offset: Offset(1, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  offset: Offset(1, -.5),
-                                  color: Colors.black),
+                                  offset: Offset(1, -.5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(1, .5),
-                                  color: Colors.black),
+                                  offset: Offset(1, .5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(1, .5),
-                                  color: Colors.black),
+                                  offset: Offset(1, .5), color: Colors.black),
                             ],
                             color: Colors.white,
                             fontSize: 20,
@@ -147,14 +145,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   offset: Offset(1, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  offset: Offset(1, -.5),
-                                  color: Colors.black),
+                                  offset: Offset(1, -.5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(1, .5),
-                                  color: Colors.black),
+                                  offset: Offset(1, .5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(1, .5),
-                                  color: Colors.black),
+                                  offset: Offset(1, .5), color: Colors.black),
                             ],
                             color: Colors.white,
                             fontSize: 20,
@@ -175,14 +170,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   offset: Offset(.2, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  offset: Offset(.2, -.5),
-                                  color: Colors.black),
+                                  offset: Offset(.2, -.5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(.2, .5),
-                                  color: Colors.black),
+                                  offset: Offset(.2, .5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(.2, .5),
-                                  color: Colors.black),
+                                  offset: Offset(.2, .5), color: Colors.black),
                             ],
                             color: Colors.white,
                             fontSize: 20,
@@ -196,14 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   offset: Offset(.2, -.5),
                                   color: Color.fromARGB(255, 0, 0, 0)),
                               Shadow(
-                                  offset: Offset(.2, -.5),
-                                  color: Colors.black),
+                                  offset: Offset(.2, -.5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(.2, .5),
-                                  color: Colors.black),
+                                  offset: Offset(.2, .5), color: Colors.black),
                               Shadow(
-                                  offset: Offset(.2, .5),
-                                  color: Colors.black),
+                                  offset: Offset(.2, .5), color: Colors.black),
                             ],
                             color: Colors.white,
                             fontSize: 20,
@@ -251,7 +240,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 20),
                         ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               )),
                               backgroundColor: const MaterialStatePropertyAll(
@@ -265,12 +255,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                            Expanded(
+                              Expanded(
                                   flex: 5,
                                   child: Center(
                                       child: GestureDetector(
-                                    onTap: () =>
-                                        Navigator.pushNamed(context, '/forgotpassword'),
+                                    onTap: () => Navigator.pushNamed(
+                                        context, '/forgotpassword'),
                                     child: const Text(
                                       'Forgot Password',
                                       style: TextStyle(
